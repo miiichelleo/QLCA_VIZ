@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QLCA</title>
+
+<style>
+		:root {
+			--page-bg: #fdfdfd;
+			--text-color: #050505;
+			--header-height: 51px;
+			--rail-width: clamp(360px, 33.4vw, 481px);
+			--rail-padding: clamp(40px, 5.15vw, 74px);
+			--copy-width: 332px;
+			--scroll-thumb: #999;
+			--scroll-track: #ededed;
+		}
+
+		html {
+			scrollbar-gutter: stable;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Inter", sans-serif;
+			background: var(--page-bg);
+			color: var(--text-color);
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
+
+		.header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: var(--rail-width);
+			height: var(--header-height);
+			z-index: 100;
+			display: flex;
+			align-items: stretch;
+			background: #050505;
+			border-right: 1px solid #050505;
+		}
+
+		.Dropdownbutton {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			padding: 0 28px 0 42px;
+			background: #050505;
+			color: #fdfdfd;
+			border: 0;
+			cursor: pointer;
+			box-sizing: border-box;
+		}
+
+		.Dropdownbutton:hover {
+			background: #050505;
+			color: #fdfdfd;
+		}
+
+		.menu {
+			font-size: 20px;
+			font-weight: 600;
+			line-height: 1;
+			white-space: nowrap;
+		}
+
+		.Dropdown {
+			display: inline-flex;
+			align-items: center;
+			gap: 18px;
+			font-size: 15px;
+			font-weight: 300;
+			line-height: 1;
+		}
+
+		.openMenu {
+			display: inline;
+			font-size: 15px;
+		}
+
+		.closeMenu {
+			display: none;
+			font-size: 15px;
+		}
+
+		.DropdownSymbol {
+			width: 12px;
+			font-size: 16px;
+			line-height: 1;
+			text-align: center;
+		}
+
+		.DropdownSymbol::before {
+			content: "+";
+		}
+
+		.open .openMenu {
+			display: none;
+		}
+
+		.open .closeMenu {
+			display: inline;
+		}
+
+		.open .DropdownSymbol::before {
+			content: "×";
+		}
+
+		.Chapters {
+			display: none;
+			position: absolute;
+			top: var(--header-height);
+			left: 0;
+			width: var(--rail-width);
+			height: calc(100vh - var(--header-height));
+			padding: 38px 48px 32px;
+			background: #fdfdfd;
+			border: 1px solid rgba(5, 5, 5, 0.55);
+			border-top: 0;
+			box-sizing: border-box;
+			overflow-y: auto;
+			z-index: 99;
+		}
+
+		.open .Chapters {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.Chapters a {
+			display: block;
+			margin: 0 0 18px;
+			padding: 0;
+			color: #050505;
+			text-decoration: none;
+			font-size: 20px;
+			font-weight: 400;
+			line-height: 1.25;
+			opacity: 0.46;
+		}
+
+		.Chapters a:hover {
+			background: transparent;
+			color: #050505;
+		}
+
+		.Chapters a.subtitle {
+			font-size: 20px;
+			font-weight: 400;
+			opacity: 0.46;
+		}
+
+		.open .Chapters a:nth-child(1) {
+			display: inline-flex;
+			min-height: 38px;
+			min-width: 183px;
+			align-items: center;
+			padding: 0 16px;
+			background: #050505;
+			color: #fdfdfd;
+			border: 1px solid #050505;
+			border-radius: 0;
+			font-weight: 600;
+			opacity: 1;
+		}
+
+		.open .Chapters a:nth-child(2) {
+			margin-top: 30px;
+			margin-bottom: 26px;
+			opacity: 1;
+		}
+
+		.open .Chapters a:nth-child(3),
+		.open .Chapters a:nth-child(8) {
+			display: inline-flex;
+			min-height: 38px;
+			min-width: 183px;
+			align-items: center;
+			padding: 0 16px;
+			border: 1px solid rgba(5, 5, 5, 0.35);
+			border-radius: 2px;
+			font-weight: 600;
+			opacity: 0.58;
+		}
+
+		.open .Chapters a:nth-child(4) {
+			margin-top: 26px;
+		}
+
+		.open .Chapters a:nth-child(8) {
+			margin-top: 22px;
+			margin-bottom: 22px;
+		}
+
+		#intro {
+			position: relative;
+			min-height: 100vh;
+			display: grid;
+			grid-template-columns: var(--rail-width) 1fr;
+			align-items: center;
+			padding-top: var(--header-height);
+			box-sizing: border-box;
+			background: var(--page-bg);
+		}
+
+		#intro > * {
+			margin-left: var(--rail-padding);
+		}
+
+		.intro_hed {
+			grid-column: 1;
+			display: flex;
+			max-width: 435px;
+			flex-direction: column;
+			justify-content: center;
+			font-size: clamp(3.8rem, 5.56vw, 5rem);
+			font-weight: 600;
+			line-height: 0.92;
+			letter-spacing: -0.04em;
+		}
+
+		.intro_cap {
+			grid-column: 1;
+			display: flex;
+			max-width: 340px;
+			flex-direction: column;
+			justify-content: center;
+			font-size: 24px;
+			font-weight: 500;
+			line-height: 1.15;
+			text-transform: none;
+		}
+
+		.intro_nav {
+			grid-column: 1;
+			display: flex;
+			max-width: 180px;
+			flex-direction: column;
+			justify-content: center;
+			text-align: center;
+			font-size: 24px;
+			font-weight: 200;
+			line-height: 1;
+		}
+
+		.arrow {
+			animation: float 1.4s infinite ease-in-out;
+			display: inline-block;
+			font-weight: 400;
+		}
+
+		#horiz-scrolly {
+			height: 500vh;
+			position: relative;
+			background: #fff;
+		}
+
+		.sticky {
+			position: sticky;
+			top: 0;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		.model {
+			display: flex;
+			width: 500vw;
+			height: 100%;
+			transform: translateX(0);
+			transition: transform 0.2s linear;
+		}
+
+		.panel {
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 4rem;
+			color: black;
+			outline: 1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		.step {
+			height: 100vh;
+		}
+
+		#vertic-scrolly {
+			position: relative;
+			display: grid;
+			grid-template-columns: var(--rail-width) minmax(0, 1fr);
+			background: #fff;
+			min-height: 100vh;
+		}
+
+		.chapter-progress {
+			position: absolute;
+			top: 0;
+			left: var(--rail-width);
+			width: 14px;
+			height: 100%;
+			transform: translateX(-50%);
+			pointer-events: none;
+			z-index: 5;
+		}
+
+		.chapter-progress-inner {
+			position: sticky;
+			top: 76px;
+			height: calc(100vh - 152px);
+		}
+
+		.chapter-progress-inner::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 50%;
+			width: 1px;
+			height: 100%;
+			transform: translateX(-50%);
+			background: rgba(5, 5, 5, 0.08);
+		}
+
+		.chapter-progress-segments {
+			display: none;
+		}
+
+		.chapter-progress-segment {
+			width: 100%;
+		}
+
+		.chapter-progress-thumb {
+			position: absolute;
+			top: 0;
+			left: 3px;
+			width: 8px;
+			height: 58px;
+			border-radius: 3px;
+			background: #a6a6a6;
+			box-shadow: 0 0 0 1px rgba(5, 5, 5, 0.02);
+			transform: translate3d(0, 0, 0);
+			will-change: transform;
+		}
+
+		#vertic-scrolly article {
+			width: 100%;
+			min-width: 0;
+			max-width: var(--rail-width);
+			outline: 0;
+			border-right: 1px solid #efefef;
+			background: #fff;
+			font-size: 20px;
+			padding: 149px 40px 40px 56px;
+			box-sizing: border-box;
+			position: relative;
+		}
+
+		#vertic-scrolly figure {
+			position: sticky;
+			top: 0 !important;
+			height: 100vh !important;
+			width: 100%;
+			min-width: 0;
+			background: #fff;
+			display: flex;
+			align-items: stretch;
+			justify-content: stretch;
+			font-size: 1rem;
+			margin-left: 0;
+			overflow: hidden;
+		}
+
+		#vertic-scrolly .step {
+			margin: 0;
+			padding: 0;
+			color: #050505;
+			outline: 0;
+			text-align: left;
+			min-height: 558px;
+			display: flex;
+			align-items: flex-start;
+			line-height: 1.7;
+			max-width: var(--copy-width);
+		}
+
+		#vertic-scrolly .step:first-child {
+			margin-top: 0;
+		}
+
+		#vertic-scrolly .step.is-active {
+			font-weight: 400;
+		}
+
+		.model-view {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			width: 100%;
+			height: 100%;
+			padding: 86px 64px 48px;
+			box-sizing: border-box;
+			background: #fff;
+			color: black;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			opacity: 0;
+			transition: opacity 0.35s ease;
+			pointer-events: none;
+		}
+
+		.model-view.active {
+			opacity: 1;
+		}
+
+		.model-view img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			object-position: center center;
+		}
+
+		#vertic-scrolly .model-view::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+		}
+
+		body::-webkit-scrollbar,
+		.Chapters::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		body::-webkit-scrollbar-track,
+		.Chapters::-webkit-scrollbar-track {
+			background: var(--scroll-track);
+		}
+
+		body::-webkit-scrollbar-thumb,
+		.Chapters::-webkit-scrollbar-thumb {
+			background: var(--scroll-thumb);
+			border-radius: 999px;
+			border: 1px solid var(--scroll-track);
+		}
+
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+		}
+
+		@media (max-width: 640px) {
+			.header {
+				width: 100vw;
+			}
+
+			.Chapters {
+				width: 100vw;
+				height: calc(100vh - var(--header-height));
+				padding: 24px 32px;
+			}
+
+			.Dropdownbutton {
+				padding: 0 24px;
+			}
+
+			#intro {
+				grid-template-columns: 1fr;
+				padding-left: 0;
+				padding-right: 0;
+			}
+
+			#intro > * {
+				margin-left: 32px;
+				margin-right: 32px;
+			}
+
+			#vertic-scrolly {
+				grid-template-columns: 1fr;
+				min-height: auto;
+			}
+
+			#vertic-scrolly article {
+				max-width: none;
+				border-right: 0;
+				padding: 115px 32px 20px;
+			}
+
+			.chapter-progress {
+				display: none;
+			}
+
+			#vertic-scrolly figure {
+				position: relative;
+				top: 0 !important;
+				height: 62vh !important;
+			}
+
+			.model-view {
+				padding: 32px;
+			}
+
+			.intro_hed,
+			.intro_cap,
+			.intro_nav,
+			#vertic-scrolly .step {
+				max-width: 100%;
+			}
+		}
+
+		#outro {
+			height: 100vh;
+		}
+	</style>
+
+
+<body>
+
+<!--Header-->
+
+  <header class="header" id="headerDropdown">
+    <button class="Dropdownbutton">
+	<div class="menu" id="menuTitle">Introduction</div>
+
+		<div class="Dropdown">
+			<div class="openMenu">open</div>
+			<div class="closeMenu">close</div>
+			<div class="DropdownSymbol"></div>
+		</div>
+    </button>
+
+    <div class="Chapters">
+      <a href="#intro">Introduction</a>
+	  <a href="#">System Boundaries</a>
+	  <a href="#vertic-scrolly">Concept</a>
+	  <a href="#" class="subtitle">Modular approach</a>
+	  <a href="#" class="subtitle">Key Factors</a>
+	  <a href="#" class="subtitle">GWP</a>
+	  <a href="#" class="subtitle">Land use</a>
+      <a href="#outro">Compare</a>
+	  <a href="#" class="subtitle">Case 1</a>
+	  <a href="#" class="subtitle">Case 2</a>
+	  <a href="#" class="subtitle">Case 3</a>	 
+    </div>
+  </header>
+
+ <!--Section 0: Homepage-->
+
+	<main>
+		<section id="intro">
+			<h1 class="intro_hed">
+				SUSTAINABLE<br>URBAN<br>PLANNING
+			</h1>
+			<p class="intro_cap">
+				A modular approach to<br>Urban Life Cycle Assessments
+			</p>
+            <p class="intro_nav">
+				SCROLL ↓
+			</p>
+		</section>
+
+
+<!--Section 1: Intro-->
+
+		<section id="horiz-scrolly">
+
+			<div class="sticky">
+				<div class="model" id="model">
+					<section class="panel one">1</section>
+				</div>
+			</div>
+
+		</section>
+
+
+<!--Section 2: Concept-->
+
+	<section id="vertic-scrolly">
+
+		<article>
+			<div class="step" data-chapter="concept">This is a test text to test how wide the box will get an if the set boundaries fits the storytelling layout.</div>
+			<div class="step" data-chapter="concept">2</div>
+			<div class="step" data-chapter="concept">3</div>
+			<div class="step" data-chapter="compare">4</div>
+			<div class="step" data-chapter="compare">5</div>
+		</article>
+
+		<div class="chapter-progress" aria-hidden="true">
+			<div class="chapter-progress-inner">
+				<div class="chapter-progress-segments" id="chapterProgressSegments"></div>
+				<div class="chapter-progress-thumb" id="chapterProgressThumb"></div>
+			</div>
+		</div>
+
+		<figure> 
+            <!--Model O as a starting page (?)-->
+            <div class="model-view active" id="model-0">
+            </div>
+            <div class="model-view" id="model-1">
+            <img src="./Models(test)/Model1.png" alt="Model 1">
+            </div>
+            <div class="model-view" id="model-2">
+                <img src="./Models(test)/Model2.png" alt="Model 2">
+            </div>
+            <div class="model-view" id="model-3">Model 3</div>
+        </figure>
+
+	</section>
+	<section id="outro"></section>
+
+	</main>
+	
+
+	<script src="./scrollama/d3.v7.min.js"></script>
+	<script src="./scrollama/scrollama.js"></script>
+	<script>
+
+	const dropdown = document.getElementById("headerDropdown");
+	const button = dropdown.querySelector(".Dropdownbutton");
+	const menuTitle = document.getElementById("menuTitle");
+
+	button.addEventListener("click", () => {
+		dropdown.classList.toggle("open");
+	});
+
+	dropdown.addEventListener("click", (e) => {
+    	const item = e.target.closest(".Chapters a");
+    	if (!item) return;
+
+		menuTitle.textContent = item.textContent.trim();
+    	dropdown.classList.remove("open");
+	});
+
+	document.addEventListener("click", (e) => {
+   		if (!dropdown.contains(e.target)) {
+        	dropdown.classList.remove("open");
+    	}
+	});
+
+	// using d3 for convenience
+	const main = d3.select("main");
+	const scrolly = main.select("#vertic-scrolly");
+	const figure = scrolly.select("figure");
+	const article = scrolly.select("article");
+	const step = article.selectAll(".step");
+	const progressSegments = document.getElementById("chapterProgressSegments");
+	const progressThumb = document.getElementById("chapterProgressThumb");
+
+	const models = [
+		document.getElementById("model-0"),
+		document.getElementById("model-1"),
+		document.getElementById("model-2"),
+		document.getElementById("model-3")
+	];
+
+	// initialize the scrollama
+	const scroller = scrollama();
+	const stepNodes = step.nodes();
+	const chapterGroups = buildChapterGroups(stepNodes);
+	let currentStepIndex = 0;
+	let lastScrollY = -1;
+
+	function buildChapterGroups(nodes) {
+		const groups = [];
+
+		nodes.forEach((node, index) => {
+			const chapterKey = node.dataset.chapter || "0";
+			const previousGroup = groups[groups.length - 1];
+
+			if (!previousGroup || previousGroup.key !== chapterKey) {
+				groups.push({
+					key: chapterKey,
+					start: index,
+					end: index,
+					count: 1,
+					element: null
+				});
+				return;
+			}
+
+			previousGroup.end = index;
+			previousGroup.count += 1;
+		});
+
+		return groups;
+	}
+
+	function clamp(value, min, max) {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	function renderChapterProgress() {
+		if (!progressSegments || !progressThumb || !chapterGroups.length) return;
+
+		progressSegments.innerHTML = "";
+
+		chapterGroups.forEach((group) => {
+			const segment = document.createElement("div");
+			segment.className = "chapter-progress-segment";
+			progressSegments.appendChild(segment);
+			group.element = segment;
+		});
+
+		updateChapterProgressFromScroll();
+	}
+
+	function updateChapterProgressFromScroll() {
+		if (!progressThumb || !chapterGroups.length || !stepNodes.length) return;
+
+		const triggerLine = window.innerHeight * 0.33;
+		const scrollTop = window.scrollY;
+		const chapterMetrics = chapterGroups.map((group) => {
+			const firstStep = stepNodes[group.start];
+			const lastStep = stepNodes[group.end];
+			const firstTop = firstStep.getBoundingClientRect().top + window.scrollY;
+			const lastTop = lastStep.getBoundingClientRect().top + window.scrollY;
+			const start = firstTop - triggerLine;
+			const end = (lastTop + lastStep.offsetHeight) - triggerLine;
+
+			return {
+				...group,
+				start,
+				end
+			};
+		});
+
+		const activeChapter = chapterMetrics.find((group, index) => {
+			const nextGroup = chapterMetrics[index + 1];
+			return scrollTop >= group.start && (!nextGroup || scrollTop < nextGroup.start);
+		}) || chapterMetrics[0];
+
+		const chapterRange = Math.max(activeChapter.end - activeChapter.start, 1);
+		const chapterProgress = clamp((scrollTop - activeChapter.start) / chapterRange, 0, 0.999);
+		const totalTravel = Math.max(progressThumb.parentElement.offsetHeight - progressThumb.offsetHeight, 0);
+		const nextY = totalTravel * chapterProgress;
+
+		progressThumb.style.transform = `translate3d(0, ${Math.round(nextY)}px, 0)`;
+	}
+
+	function syncChapterProgress() {
+		if (window.scrollY !== lastScrollY) {
+			lastScrollY = window.scrollY;
+			updateChapterProgressFromScroll();
+		}
+
+		window.requestAnimationFrame(syncChapterProgress);
+	}
+
+	// generic window resize listener event
+	function handleResize() {
+		// 1. update height of step elements
+		const stepH = Math.floor(window.innerHeight * 0.75);
+		step.style("height", stepH + "px");
+
+		const figureTop = 51;
+		const figureHeight = Math.max(window.innerHeight - figureTop, 0);
+
+		figure
+			.style("height", figureHeight + "px")
+			.style("top", figureTop + "px");
+
+		renderChapterProgress();
+		updateChapterProgressFromScroll();
+
+		// 3. tell scrollama to update new element dimensions
+		scroller.resize();
+	}
+
+	// scrollama event handlers
+	function handleStepEnter(response) {
+		// response = { element, direction, index }
+
+		// add color to current step only
+		step.classed("is-active", (d, i) => i === response.index);
+		currentStepIndex = response.index;
+		updateChapterProgressFromScroll();
+
+		const modelIndex = Math.min(response.index + 1, models.length - 1);
+		models.forEach((m) => m.classList.remove("active"));
+		(models[modelIndex] || models[0]).classList.add("active");
+	}
+
+	function handleStepProgress(response) {
+		currentStepIndex = response.index;
+		updateChapterProgressFromScroll();
+	}
+
+	function init() {
+		// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+		handleResize();
+
+		// 2. setup the scroller passing options
+		// 3. bind scrollama event handlers
+		scroller
+			.setup({
+				step: "#vertic-scrolly article .step",
+				offset: 0.33,
+				progress: true,
+				debug: false
+			})
+			.onStepEnter(handleStepEnter)
+			.onStepProgress(handleStepProgress);
+	}
+
+	// kick things off
+	init();
+	syncChapterProgress();
+
+	window.addEventListener("resize", handleResize);
+	window.addEventListener("scroll", updateChapterProgressFromScroll, { passive: true });
+
+</script>
+
+</body>
+</html>
