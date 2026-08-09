@@ -6,17 +6,6 @@
 <title>QLCA</title>
 
 <style>
-		:root {
-			--page-bg: #fdfdfd;
-			--text-color: #050505;
-			--header-height: 51px;
-			--rail-width: clamp(360px, 33.4vw, 481px);
-			--rail-padding: clamp(40px, 5.15vw, 74px);
-			--copy-width: 332px;
-			--scroll-thumb: #999;
-			--scroll-track: #ededed;
-		}
-
 		html {
 			scrollbar-gutter: stable;
 		}
@@ -24,20 +13,24 @@
 		body {
 			margin: 0;
 			font-family: "Inter", sans-serif;
-			background: var(--page-bg);
-			color: var(--text-color);
+			background: #fdfdfd;
+			color: #050505;
 			overflow-x: hidden;
 			overflow-y: scroll;
+		}
+
+		body.menu-open {
+			overflow: hidden;
 		}
 
 		.header {
 			position: fixed;
 			top: 0;
 			left: 0;
-			width: var(--rail-width);
-			height: var(--header-height);
-			z-index: 100;
-			display: flex;
+			width: 481px;
+			height: 51px;
+			z-index: 300;
+			display: none;
 			align-items: stretch;
 			background: #050505;
 			border-right: 1px solid #050505;
@@ -67,6 +60,10 @@
 			font-weight: 600;
 			line-height: 1;
 			white-space: nowrap;
+		}
+
+		body.menu-visible .header {
+    		display: flex;
 		}
 
 		.Dropdown {
@@ -113,18 +110,19 @@
 
 		.Chapters {
 			display: none;
-			position: absolute;
-			top: var(--header-height);
+			position: fixed;
+			top: 51px;
+			bottom: 0;
 			left: 0;
-			width: var(--rail-width);
-			height: calc(100vh - var(--header-height));
+			width: 481px;
+			max-width: 100vw;
 			padding: 38px 48px 32px;
 			background: #fdfdfd;
 			border: 1px solid rgba(5, 5, 5, 0.55);
 			border-top: 0;
 			box-sizing: border-box;
 			overflow-y: auto;
-			z-index: 99;
+			z-index: 301;
 		}
 
 		.open .Chapters {
@@ -133,176 +131,335 @@
 			align-items: flex-start;
 		}
 
+		.menu-group {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			width: 100%;
+			padding: 0 0 34px;
+			margin: 0 0 34px;
+			border-bottom: 1px solid rgba(5, 5, 5, 0.18);
+			box-sizing: border-box;
+		}
+
+		.menu-group:last-child {
+			margin-bottom: 0;
+			padding-bottom: 0;
+			border-bottom: 0;
+		}
+
 		.Chapters a {
-			display: block;
-			margin: 0 0 18px;
-			padding: 0;
 			color: #050505;
 			text-decoration: none;
+		}
+
+		.group-link {
+			display: inline-flex;
+			min-height: 38px;
+			min-width: 183px;
+			align-items: center;
+			padding: 0 16px;
+			margin: 0 0 26px;
+			border: 1px solid rgba(5, 5, 5, 0.35);
+			border-radius: 2px;
+			font-size: 20px;
+			font-weight: 600;
+			line-height: 1;
+			color: rgba(5, 5, 5, 0.55);
+			background: transparent;
+		}
+
+		.group-link.is-active {
+			background: #050505;
+			border-color: #050505;
+			color: #fdfdfd;
+		}
+
+		.item-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 16px;
+			margin: 0 0 14px;
 			font-size: 20px;
 			font-weight: 400;
 			line-height: 1.25;
-			opacity: 0.46;
+			color: rgba(5, 5, 5, 0.42);
 		}
 
-		.Chapters a:hover {
-			background: transparent;
+		.item-link:last-child {
+			margin-bottom: 0;
+		}
+
+		.item-link::before {
+			content: "";
+			width: 11px;
+			height: 11px;
+			border: 1px solid rgba(5, 5, 5, 0.34);
+			border-radius: 2px;
+			box-sizing: border-box;
+			flex: 0 0 11px;
+		}
+
+		.item-link.is-active {
 			color: #050505;
 		}
 
-		.Chapters a.subtitle {
-			font-size: 20px;
-			font-weight: 400;
-			opacity: 0.46;
-		}
-
-		.open .Chapters a:nth-child(1) {
-			display: inline-flex;
-			min-height: 38px;
-			min-width: 183px;
-			align-items: center;
-			padding: 0 16px;
+		.item-link.is-active::before {
 			background: #050505;
-			color: #fdfdfd;
-			border: 1px solid #050505;
-			border-radius: 0;
-			font-weight: 600;
-			opacity: 1;
+			border-color: #050505;
 		}
 
-		.open .Chapters a:nth-child(2) {
-			margin-top: 30px;
-			margin-bottom: 26px;
-			opacity: 1;
-		}
-
-		.open .Chapters a:nth-child(3),
-		.open .Chapters a:nth-child(8) {
-			display: inline-flex;
-			min-height: 38px;
-			min-width: 183px;
-			align-items: center;
-			padding: 0 16px;
-			border: 1px solid rgba(5, 5, 5, 0.35);
-			border-radius: 2px;
-			font-weight: 600;
-			opacity: 0.58;
-		}
-
-		.open .Chapters a:nth-child(4) {
-			margin-top: 26px;
-		}
-
-		.open .Chapters a:nth-child(8) {
-			margin-top: 22px;
-			margin-bottom: 22px;
-		}
-
-		#intro {
+		#intro.hero {
 			position: relative;
-			min-height: 100vh;
-			display: grid;
-			grid-template-columns: var(--rail-width) 1fr;
-			align-items: center;
-			padding-top: var(--header-height);
-			box-sizing: border-box;
-			background: var(--page-bg);
-		}
-
-		#intro > * {
-			margin-left: var(--rail-padding);
-		}
-
-		.intro_hed {
-			grid-column: 1;
-			display: flex;
-			max-width: 435px;
-			flex-direction: column;
-			justify-content: center;
-			font-size: clamp(3.8rem, 5.56vw, 5rem);
-			font-weight: 600;
-			line-height: 0.92;
-			letter-spacing: -0.04em;
-		}
-
-		.intro_cap {
-			grid-column: 1;
-			display: flex;
-			max-width: 340px;
-			flex-direction: column;
-			justify-content: center;
-			font-size: 24px;
-			font-weight: 500;
-			line-height: 1.15;
-			text-transform: none;
-		}
-
-		.intro_nav {
-			grid-column: 1;
-			display: flex;
-			max-width: 180px;
-			flex-direction: column;
-			justify-content: center;
-			text-align: center;
-			font-size: 24px;
-			font-weight: 200;
-			line-height: 1;
-		}
-
-		.arrow {
-			animation: float 1.4s infinite ease-in-out;
-			display: inline-block;
-			font-weight: 400;
-		}
-
-		#horiz-scrolly {
-			height: 500vh;
-			position: relative;
-			background: #fff;
-		}
-
-		.sticky {
-			position: sticky;
-			top: 0;
+			z-index: 200;
 			height: 100vh;
+			min-height: 100vh;
+			display: flex;
+			align-items: stretch;
+			padding: 28px 55px 40px;
+			box-sizing: border-box;
+			background: #fdfdfd;
 			overflow: hidden;
 		}
 
-		.model {
+		.hero__inner {
+			position: relative;
+			z-index: 2;
 			display: flex;
-			width: 500vw;
+			flex-direction: column;
+			align-items: flex-start;
 			height: 100%;
-			transform: translateX(0);
-			transition: transform 0.2s linear;
+			width: 700px; 
+			max-width: 100%;
+			flex: 0 0 700px;
 		}
 
-		.panel {
-			width: 100vw;
-			height: 100vh;
-			display: flex;
-			justify-content: center;
+		.hero__visual-shell {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 481px;
+			background: #fff;
+			overflow: hidden;
+			pointer-events: none;
+			z-index: 1;
+			transition: opacity 0.2s ease, visibility 0.2s ease;
+		}
+
+		body.content-active .hero__visual-shell {
+			opacity: 0 !important;
+			visibility: hidden !important;
+		}
+
+		.hero__model-canvas {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background: transparent;
+		}
+
+		.hero__model-canvas canvas {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.hero__model-fallback {
+			display: none;
+			position: absolute;
+			left: 40px;
+			bottom: 40px;
+			max-width: 220px;
+			font-size: 15px;
+			line-height: 1.35;
+			color: rgba(5, 5, 5, 0.56);
+		}
+
+		.hero__logo,
+		.hero__title,
+		.hero__subtitle,
+		.hero__scroll {
+			color: #050505;
+		}
+
+		.hero__logo {
+			display: inline-flex;
 			align-items: center;
-			font-size: 4rem;
-			color: black;
-			outline: 1px solid rgba(0, 0, 0, 0.1);
+			justify-content: center;
+			width: 100px;
+			min-height: 48px;
+			padding: 0 8px;
+			border: 1px solid #050505;
+			box-sizing: border-box;
+			font-size: 20px;
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: -0.05em;
+			margin-bottom: 12vh;
 		}
 
-		.step {
-			height: 100vh;
+		.hero__title {
+			margin: 0 0 0 30px;
+			text-transform: uppercase;
+			font-style: normal;
+			line-height: 0.92;
 		}
 
-		#vertic-scrolly {
+		.hero__title-line {
+			display: block;
+			font-weight: 300;
+			letter-spacing: -0.06em;
+		}
+
+		.hero__title-line--small {
+			font-size: 48px;
+			margin-bottom: 12px;
+		}
+
+		.hero__title-row {
+			display: flex;
+			align-items: flex-end;
+			gap: 4px;
+			flex-wrap: wrap;
+		}
+
+		.hero__title-box {
+			display: inline-flex;
+			align-items: center;
+			min-height: 96px;
+			padding: 0 8px;
+			border: 2px solid #050505;
+			box-sizing: border-box;
+			font-size: 80px;
+			font-weight: 500;
+			letter-spacing: -0.07em;
+			line-height: 1;
+		}
+
+		.hero__title-box--wide {
+			margin-bottom: 10px;
+		}
+
+		.hero__subtitle {
+			max-width: 440px;
+			margin: 48px 0 0 30px;
+			font-size: 24px;
+			font-weight: 500;
+			line-height: 1.15;
+			letter-spacing: -0.01em;
+			text-transform: capitalize;
+		}
+
+		.hero__scroll {
+			display: inline-flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 10px;
+			margin: auto 0 0 52px;
+			font-size: 24px;
+			font-weight: 300;
+			line-height: 1;
+			letter-spacing: 0.01em;
+			color: #050505;
+		}
+
+		.hero__arrow {
+			font-size: 24px;
+			line-height: 1;
+			transform: translateY(-1px);
+		}
+
+		#scrolly-sections {
+			position: relative;
+		}
+
+		#infographic,
+		#content {
 			position: relative;
 			display: grid;
-			grid-template-columns: var(--rail-width) minmax(0, 1fr);
+			grid-template-columns: 481px minmax(0, 1fr);
 			background: #fff;
 			min-height: 100vh;
+		}
+
+		#infographic article,
+		#content article {
+			width: 100%;
+			min-width: 0;
+			max-width: 481px;
+			outline: 0;
+			border-right: 1px solid #efefef;
+			background: #fff;
+			font-size: 20px;
+			padding: 149px 40px 40px 56px;
+			box-sizing: border-box;
+			position: relative;
+		}
+
+		#infographic figure,
+		#content figure {
+			position: sticky;
+			top: 0 !important;
+			height: 100vh !important;
+			width: 100%;
+			min-width: 0;
+			background: #fff;
+			display: flex;
+			align-items: stretch;
+			justify-content: stretch;
+			font-size: 1rem;
+			margin-left: 0;
+			overflow: hidden;
+		}
+
+		#infographic .step,
+		#content .step {
+			margin: 0;
+			padding: 0;
+			color: #050505;
+			outline: 0;
+			text-align: left;
+			min-height: 558px;
+			display: flex;
+			align-items: flex-start;
+			line-height: 1.7;
+			max-width: 332px;
+		}
+
+		#infographic article {
+			z-index: 1;
+		}
+
+		#infographic figure {
+			z-index: 0;
+			background: transparent;
+		}
+
+		#infographic .step {
+			opacity: 0.45;
+			transition: opacity 0.2s ease;
+		}
+
+		#infographic .step.is-active {
+			opacity: 1;
+		}
+
+		.intro-model-shell {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			box-sizing: border-box;
+			background: #fff;
 		}
 
 		.chapter-progress {
 			position: absolute;
 			top: 0;
-			left: var(--rail-width);
+			left: 481px;
 			width: 14px;
 			height: 100%;
 			transform: translateX(-50%);
@@ -313,7 +470,7 @@
 		.chapter-progress-inner {
 			position: sticky;
 			top: 76px;
-			height: calc(100vh - 152px);
+			height: 0;
 		}
 
 		.chapter-progress-inner::before {
@@ -348,52 +505,11 @@
 			will-change: transform;
 		}
 
-		#vertic-scrolly article {
-			width: 100%;
-			min-width: 0;
-			max-width: var(--rail-width);
-			outline: 0;
-			border-right: 1px solid #efefef;
-			background: #fff;
-			font-size: 20px;
-			padding: 149px 40px 40px 56px;
-			box-sizing: border-box;
-			position: relative;
-		}
-
-		#vertic-scrolly figure {
-			position: sticky;
-			top: 0 !important;
-			height: 100vh !important;
-			width: 100%;
-			min-width: 0;
-			background: #fff;
-			display: flex;
-			align-items: stretch;
-			justify-content: stretch;
-			font-size: 1rem;
-			margin-left: 0;
-			overflow: hidden;
-		}
-
-		#vertic-scrolly .step {
-			margin: 0;
-			padding: 0;
-			color: #050505;
-			outline: 0;
-			text-align: left;
-			min-height: 558px;
-			display: flex;
-			align-items: flex-start;
-			line-height: 1.7;
-			max-width: var(--copy-width);
-		}
-
-		#vertic-scrolly .step:first-child {
+		#content .step:first-child {
 			margin-top: 0;
 		}
 
-		#vertic-scrolly .step.is-active {
+		#content .step.is-active {
 			font-weight: 400;
 		}
 
@@ -403,7 +519,7 @@
 			display: flex;
 			width: 100%;
 			height: 100%;
-			padding: 86px 64px 48px;
+			padding: 112px 90px 72px;
 			box-sizing: border-box;
 			background: #fff;
 			color: black;
@@ -420,13 +536,13 @@
 		}
 
 		.model-view img {
-			width: 100%;
-			height: 100%;
+			width: 70%;
+			height: 70%;
 			object-fit: contain;
 			object-position: center center;
 		}
 
-		#vertic-scrolly .model-view::before {
+		#content .model-view::before {
 			content: "";
 			position: absolute;
 			inset: 0;
@@ -440,19 +556,116 @@
 
 		body::-webkit-scrollbar-track,
 		.Chapters::-webkit-scrollbar-track {
-			background: var(--scroll-track);
+			background: #ededed;
 		}
 
 		body::-webkit-scrollbar-thumb,
 		.Chapters::-webkit-scrollbar-thumb {
-			background: var(--scroll-thumb);
+			background: #999;
 			border-radius: 999px;
-			border: 1px solid var(--scroll-track);
+			border: 1px solid #ededed;
 		}
 
 		* {
 			scrollbar-width: thin;
-			scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+			scrollbar-color: #999 #ededed;
+		}
+
+		@media (max-width: 1446px) {
+			#intro.hero {
+				padding-right: 3.8vw;
+				padding-left: 3.8vw;
+			}
+		}
+
+		@media (max-width: 1297px) {
+			.hero__title-line--small {
+				font-size: 3.7vw;
+			}
+		}
+
+		@media (max-width: 1079px) {
+			.hero__inner {
+				flex-basis: 620px;
+			}
+
+			.hero__visual-shell {
+				left: 360px;
+			}
+
+			.header,
+			.Chapters {
+				width: 360px;
+			}
+
+			#infographic,
+			#content {
+				grid-template-columns: 360px minmax(0, 1fr);
+			}
+
+			.chapter-progress {
+				left: 360px;
+			}
+
+			#infographic article,
+			#content article {
+				max-width: 360px;
+			}
+		}
+
+		@media (max-width: 999px) {
+			.hero__title-box {
+				min-height: 56px;
+			}
+		}
+
+		@media (max-width: 973px) {
+			.hero__title-line--small {
+				font-size: 36px;
+			}
+		}
+
+		@media (max-width: 830px) {
+			.hero__title-box {
+				font-size: 44px;
+			}
+		}
+
+		@media (max-width: 789px) {
+			.hero__logo {
+				margin-bottom: 19vh;
+			}
+		}
+
+		@media (max-width: 736px) {
+			#intro.hero {
+				padding-right: 28px;
+				padding-left: 28px;
+			}
+		}
+
+		@media (max-height: 789px) {
+			.hero__logo {
+				margin-bottom: 19vh;
+			}
+		}
+
+		@media (max-height: 578px) {
+			.hero__logo {
+				margin-bottom: 110px;
+			}
+		}
+
+		@media (max-width: 1714px) {
+			.hero__title-box {
+				min-height: 5.6vw;
+			}
+		}
+
+		@media (max-width: 1509px) {
+			.hero__title-box {
+				font-size: 5.3vw;
+			}
 		}
 
 		@media (max-width: 640px) {
@@ -462,8 +675,17 @@
 
 			.Chapters {
 				width: 100vw;
-				height: calc(100vh - var(--header-height));
 				padding: 24px 32px;
+			}
+
+			.group-link {
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			.item-link {
+				gap: 12px;
+				font-size: 18px;
 			}
 
 			.Dropdownbutton {
@@ -471,22 +693,66 @@
 			}
 
 			#intro {
-				grid-template-columns: 1fr;
-				padding-left: 0;
-				padding-right: 0;
+				padding: 24px 28px 40px;
+				background-image: linear-gradient(90deg, rgba(5, 5, 5, 0.035) 0, rgba(5, 5, 5, 0.035) 84px, transparent 84px);
 			}
 
 			#intro > * {
-				margin-left: 32px;
-				margin-right: 32px;
+				margin-left: 0;
+				margin-right: 0;
 			}
 
-			#vertic-scrolly {
+			.hero__inner {
+				width: 100%;
+				flex: 1 1 auto;
+			}
+
+			.hero__visual-shell {
+				left: 0;
+			}
+
+			.hero__logo {
+				width: 86px;
+				min-height: 44px;
+				font-size: 18px;
+				margin-bottom: 88px;
+			}
+
+			.hero__title {
+				margin-left: 0;
+			}
+
+			.hero__title-line--small {
+				font-size: 40px;
+				margin-bottom: 10px;
+			}
+
+			.hero__title-box {
+				min-height: 54px;
+				padding: 0 10px;
+				font-size: 54px;
+			}
+
+			.hero__subtitle {
+				max-width: 320px;
+				margin-left: 0;
+				font-size: 18px;
+			}
+
+			.hero__scroll {
+				margin-left: 0;
+				margin-top: 56px;
+				font-size: 20px;
+			}
+
+			#infographic,
+			#content {
 				grid-template-columns: 1fr;
 				min-height: auto;
 			}
 
-			#vertic-scrolly article {
+			#infographic article,
+			#content article {
 				max-width: none;
 				border-right: 0;
 				padding: 115px 32px 20px;
@@ -496,21 +762,48 @@
 				display: none;
 			}
 
-			#vertic-scrolly figure {
+			#infographic figure,
+			#content figure {
 				position: relative;
 				top: 0 !important;
 				height: 62vh !important;
+			}
+
+			.intro-model-shell {
+				padding: 0;
 			}
 
 			.model-view {
 				padding: 32px;
 			}
 
-			.intro_hed,
-			.intro_cap,
-			.intro_nav,
-			#vertic-scrolly .step {
+			.hero__subtitle,
+			.hero__scroll,
+			#infographic .step,
+			#content .step {
 				max-width: 100%;
+			}
+		}
+
+		@media (max-width: 568px) {
+			.hero__title-box {
+				font-size: 9.5vw;
+			}
+		}
+
+		@media (max-width: 513px) {
+			.hero__title-line--small {
+				font-size: 7.8vw;
+			}
+		}
+
+		@media (max-width: 358px) {
+			.hero__title-line--small {
+				font-size: 28px;
+			}
+
+			.hero__title-box {
+				font-size: 34px;
 			}
 		}
 
@@ -535,53 +828,91 @@
 		</div>
     </button>
 
-    <div class="Chapters">
-      <a href="#intro">Introduction</a>
-	  <a href="#">System Boundaries</a>
-	  <a href="#vertic-scrolly">Concept</a>
-	  <a href="#" class="subtitle">Modular approach</a>
-	  <a href="#" class="subtitle">Key Factors</a>
-	  <a href="#" class="subtitle">GWP</a>
-	  <a href="#" class="subtitle">Land use</a>
-      <a href="#outro">Compare</a>
-	  <a href="#" class="subtitle">Case 1</a>
-	  <a href="#" class="subtitle">Case 2</a>
-	  <a href="#" class="subtitle">Case 3</a>	 
-    </div>
+	    <div class="Chapters">
+			<div class="menu-group" data-group="introduction">
+				<a href="#intro" class="group-link" data-menu-group-link="introduction">Introduction</a>
+				<a href="#infographic" class="item-link" data-menu-item="system-boundaries">The Building Blocks Of A Neighbourhood</a>
+			</div>
+			<div class="menu-group" data-group="concept">
+				<a href="#content" class="group-link" data-menu-group-link="concept">Concept</a>
+				<a href="#content" class="item-link" data-menu-item="modular-approach">From Building Blocks to Scenarios</a>
+				<a href="#content" class="item-link" data-menu-item="key-factors">How Climate Impact Is Measured</a>
+			</div>
+			<div class="menu-group" data-group="compare">
+				<a href="#outro" class="group-link" data-menu-group-link="compare">Compare</a>
+				<a href="#outro" class="item-link" data-menu-item="case-1">Urban Form & Private Parking</a>
+			</div>
+	    </div>
   </header>
 
  <!--Section 0: Homepage-->
 
 	<main>
-		<section id="intro">
-			<h1 class="intro_hed">
-				SUSTAINABLE<br>URBAN<br>PLANNING
-			</h1>
-			<p class="intro_cap">
-				A modular approach to<br>Urban Life Cycle Assessments
-			</p>
-            <p class="intro_nav">
-				SCROLL ↓
-			</p>
+		<section id="intro" class="hero" aria-label="Homepage hero">
+			<div class="hero__inner">
+				<div class="hero__logo" aria-label="QLCA logo">Q LCA</div>
+				<div class="hero__title" aria-label="The neighbourhood as a system">
+					<span class="hero__title-line hero__title-line--small">The</span>
+					<span class="hero__title-box hero__title-box--wide">Neighbourhood</span>
+					<span class="hero__title-row">
+						<span class="hero__title-line hero__title-line--small">As A</span>
+						<span class="hero__title-box">System</span>
+					</span>
+				</div>
+				<p class="hero__subtitle">
+					Exploring How Urban Design Choices<br>Shape Life Cycle Emissions
+				</p>
+				<div class="hero__scroll" aria-label="Scroll down">
+					<span>SCROLL</span>
+					<span class="hero__arrow" aria-hidden="true">↓</span>
+				</div>
+			</div>
+			<div class="hero__visual-shell" aria-hidden="true">
+				<div class="intro-model-shell">
+					<div class="hero__model-canvas" id="heroModelCanvas"></div>
+					<div class="hero__model-fallback" id="heroModelFallback"> Run this page through a local server to load and animate the 3D model.</div>
+				</div>
+			</div>
 		</section>
 
 
 <!--Section 1: Intro-->
 
-		<section id="horiz-scrolly">
+		<section id="scrolly-sections" aria-label="Scrollama storytelling sections">
+		<div id="infographic">
+			<article>
+				<!-- CAMERA SHOT 0 --> 
+				<div class="step"> A neighbourhood is not one building, but an interacting system of mobility, housing, and energy choices. </div>
 
-			<div class="sticky">
-				<div class="model" id="model">
-					<section class="panel one">1</section>
-				</div>
-			</div>
+				<!-- CAMERA SHOT 1 --> 
+ 				<div class="step"> Each design decision shifts embodied emissions, operational demand, and long-term performance across the whole district. </div>	
+				
+				<!-- CAMERA SHOT 2 --> 
+				<div class="step"> Here we look more closely at the relationship between buildings and mobility. </div>
 
-		</section>
+				<!-- CAMERA SHOT 3 --> 
+				<div class="step"> The arrangement of buildings changes the spatial structure of the neighbourhood. </div>
+			
+				<!-- CAMERA SHOT 4 --> 
+				<div class="step"> Individual design decisions influence the relationship between private and public space. </div>
+			
+				<!-- CAMERA SHOT 5 --> 
+				<div class="step"> Zooming in reveals how these choices affect the neighbourhood at a smaller scale. </div>
+			
+				<!-- CAMERA SHOT 6 --> 
+				<div class="step"> This reference neighbourhood becomes the basis for the scenarios that follow. </div>
+			</article>
+
+			<figure aria-hidden="true"></figure>
+
+		</div>
+
+
 
 
 <!--Section 2: Concept-->
 
-	<section id="vertic-scrolly">
+	<div id="content">
 
 		<article>
 			<div class="step" data-chapter="concept">This is a test text to test how wide the box will get an if the set boundaries fits the storytelling layout.</div>
@@ -603,14 +934,20 @@
             <div class="model-view active" id="model-0">
             </div>
             <div class="model-view" id="model-1">
-            <img src="./Models(test)/Model1.png" alt="Model 1">
+            <img src="./svgs/1_Hektar.svg" alt="Model 1">
             </div>
             <div class="model-view" id="model-2">
-                <img src="./Models(test)/Model2.png" alt="Model 2">
+                <img src="./svgs/6_Hektar.svg" alt="Model 2">
             </div>
-            <div class="model-view" id="model-3">Model 3</div>
+			<div class="model-view" id="model-3">
+                <img src="./svgs/6KeyFactors.svg" alt="Model 3" style="width: 100%; height: 100%;">
+            </div>
+            <div class="model-view" id="model-4">
+                <img src="" alt="Model 4">
+            </div>
         </figure>
 
+	</div>
 	</section>
 	<section id="outro"></section>
 
@@ -619,39 +956,262 @@
 
 	<script src="./scrollama/d3.v7.min.js"></script>
 	<script src="./scrollama/scrollama.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three@0.149.0/build/three.module.js",
+				"three/": "https://unpkg.com/three@0.149.0/"
+			}
+		}
+	</script>
+	<script type="module">
+		import * as THREE from "three";
+		import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
+		const heroModelCanvas = document.getElementById("heroModelCanvas");
+		const heroModelFallback = document.getElementById("heroModelFallback");
+
+		if (heroModelCanvas) {
+			const scene = new THREE.Scene();
+			const startWidth = heroModelCanvas.clientWidth || window.innerWidth;
+			const startHeight = heroModelCanvas.clientHeight || window.innerHeight;
+			const aspect = startWidth / startHeight;
+			const size = 4;
+			const camera = new THREE.OrthographicCamera(-size * aspect, size * aspect, size, -size, 1, 1000);
+			const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+			const loader = new GLTFLoader();
+			let modelRoot = null;
+
+
+
+			const shots = [ 
+			// Step 0 — Overview 
+			{ 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 1 }, 
+
+			// Step 1 — Left 
+			{ 
+				position: [20, 20, 20],
+				target: [-4, 0, 0],
+				zoom: 1.4 }, 
+			// Step 2 — Left / closer 
+			{ 
+				position: [20, 20, 20],
+				target: [-7, 0, 0],
+				zoom: 2 }, 
+
+			// Step 3 — Middle 
+			{ 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 2 }, 
+
+			// Step 4 — Right 
+			{ 
+				position: [20, 20, 20], 
+				target: [5, 0, 0], 
+				zoom: 2 }, 
+			// Step 5 — Right / closer 
+			{ 
+				position: [20, 20, 20], 
+				target: [7, 0, 0], 
+				zoom: 2.5 }, 
+			// Step 6 — Return to overview 
+			{ 
+				position: [20, 20, 20], 
+				target: [0, 0, 0], 
+				zoom: 1 } 
+			];
+
+			const cameraTarget = new THREE.Vector3(); 
+			window.setIntroCamera = (index) => { 
+				const shot = shots[index]; 
+				if (!shot) return; 
+
+				// Set camera position 
+				camera.position.set( 
+					shot.position[0], 
+					shot.position[1], 
+					shot.position[2] ); 
+					
+				// Set camera target 
+				cameraTarget.set( 
+					shot.target[0],
+					shot.target[1],
+					shot.target[2] );
+				
+				camera.lookAt(cameraTarget); 
+				
+				// Orthographic camera zoom 
+				camera.zoom = shot.zoom; 
+				camera.updateProjectionMatrix(); 
+			};
+
+			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+			renderer.outputColorSpace = THREE.SRGBColorSpace;
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			heroModelCanvas.appendChild(renderer.domElement);
+
+			camera.position.set(20, 20, 20);
+			camera.lookAt(0, 0, 0);
+
+			const material = new THREE.MeshPhongMaterial({
+				color: 0xc8c8c8,
+				flatShading: true,
+				shininess: 0,
+			});
+
+			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 1.8);
+			scene.add(ambient);
+
+			const directional = new THREE.DirectionalLight(0xffffff, 2.0);
+			directional.position.set(5, 10, -2);
+			directional.castShadow = true;
+			scene.add(directional);
+
+			const ground = new THREE.Mesh(
+				new THREE.PlaneGeometry(200, 200),
+				new THREE.ShadowMaterial({ opacity: 0.15 })
+			);
+			ground.rotation.x = -Math.PI / 2;
+			ground.receiveShadow = true;
+			scene.add(ground);
+
+
+			function animate() {
+				renderer.render(scene, camera);
+			}
+
+			loader.load(
+				"./Neighbourhood_Model/Intro.glb",
+				(gltf) => {
+					modelRoot = gltf.scene;
+					gltf.scene.scale.setScalar(1.15);
+					const modelBox = new THREE.Box3().setFromObject(gltf.scene);
+					const modelCenter = modelBox.getCenter(new THREE.Vector3());
+					gltf.scene.position.set(-modelCenter.x - -3, -modelCenter.y - -0.3, -modelCenter.z);
+
+					gltf.scene.traverse((child) => {
+						if (child.isMesh) {
+							child.material = material;
+
+							child.castShadow = true;
+							child.receiveShadow = true;
+						}
+					});
+
+					scene.add(gltf.scene);
+					renderer.render(scene, camera);
+				},
+				undefined,
+				() => {
+					if (heroModelFallback) {
+						heroModelFallback.style.display = "block";
+					}
+				}
+			);
+
+			function resizeRenderer() {
+				const width = heroModelCanvas.clientWidth || window.innerWidth;
+				const height = heroModelCanvas.clientHeight || window.innerHeight;
+				const nextAspect = width / height;
+				camera.left = -size * nextAspect;
+				camera.right = size * nextAspect;
+				camera.top = size;
+				camera.bottom = -size;
+				camera.updateProjectionMatrix();
+				renderer.setSize(width, height);
+			}
+
+			window.addEventListener("resize", () => {
+				resizeRenderer();
+			});
+
+			resizeRenderer();
+			renderer.setAnimationLoop(animate);
+		}
+	</script>
 	<script>
 
 	const dropdown = document.getElementById("headerDropdown");
 	const button = dropdown.querySelector(".Dropdownbutton");
 	const menuTitle = document.getElementById("menuTitle");
+	const menuGroupLinks = Array.from(document.querySelectorAll("[data-menu-group-link]"));
+	const menuItemLinks = Array.from(document.querySelectorAll("[data-menu-item]"));
+	const stepItemMap = ["modular-approach", "modular-approach", "key-factors", "case-1", "case-1"];
+
+	function setMenuOpenState(isOpen) {
+		dropdown.classList.toggle("open", isOpen);
+		document.body.classList.toggle("menu-open", isOpen);
+	}
+
+	function updateMenuHighlight() {
+		let activeGroup = "introduction";
+		let activeItem = "system-boundaries";
+
+		const conceptTop = conceptSection.getBoundingClientRect().top;
+		if (conceptTop <= 0) {
+			activeGroup = currentConceptStepIndex >= 3 ? "compare" : "concept";
+			activeItem = stepItemMap[currentConceptStepIndex] || "modular-approach";
+		}
+
+		menuGroupLinks.forEach((link) => {
+			link.classList.toggle("is-active", link.dataset.menuGroupLink === activeGroup);
+		});
+
+		menuItemLinks.forEach((link) => {
+			link.classList.toggle("is-active", link.dataset.menuItem === activeItem);
+		});
+
+		const activeGroupLink = menuGroupLinks.find((link) => link.dataset.menuGroupLink === activeGroup);
+		if (activeGroupLink) {
+			menuTitle.textContent = activeGroupLink.textContent.trim();
+		}
+	}
 
 	button.addEventListener("click", () => {
-		dropdown.classList.toggle("open");
+		setMenuOpenState(!dropdown.classList.contains("open"));
 	});
 
 	dropdown.addEventListener("click", (e) => {
     	const item = e.target.closest(".Chapters a");
     	if (!item) return;
 
-		menuTitle.textContent = item.textContent.trim();
-    	dropdown.classList.remove("open");
+		if (item.dataset.menuGroupLink) {
+			menuTitle.textContent = item.textContent.trim();
+		}
+	    	setMenuOpenState(false);
 	});
 
 	document.addEventListener("click", (e) => {
    		if (!dropdown.contains(e.target)) {
-        	dropdown.classList.remove("open");
+	        	setMenuOpenState(false);
     	}
 	});
 
-	// using d3 for convenience
 	const main = d3.select("main");
-	const scrolly = main.select("#vertic-scrolly");
-	const figure = scrolly.select("figure");
-	const article = scrolly.select("article");
-	const step = article.selectAll(".step");
-	const progressSegments = document.getElementById("chapterProgressSegments");
+	const introScrolly = main.select("#infographic");
+	const introFigure = introScrolly.select("figure");
+	const introArticle = introScrolly.select("article");
+	const introStep = introArticle.selectAll(".step");
+
+	const conceptScrolly = main.select("#content");
+	const conceptFigure = conceptScrolly.select("figure");
+	const conceptArticle = conceptScrolly.select("article");
+	const conceptStep = conceptArticle.selectAll(".step");
+
+	const heroVisualShell = document.querySelector(".hero__visual-shell");
+	const introSection = document.getElementById("infographic");
+	const conceptSection = document.getElementById("content");
+
+// scrollbar
 	const progressThumb = document.getElementById("chapterProgressThumb");
 
+// models
 	const models = [
 		document.getElementById("model-0"),
 		document.getElementById("model-1"),
@@ -659,161 +1219,151 @@
 		document.getElementById("model-3")
 	];
 
-	// initialize the scrollama
-	const scroller = scrollama();
-	const stepNodes = step.nodes();
-	const chapterGroups = buildChapterGroups(stepNodes);
-	let currentStepIndex = 0;
-	let lastScrollY = -1;
+// Scrollama
+	const introScroller = scrollama();
+	const conceptScroller = scrollama();
 
-	function buildChapterGroups(nodes) {
-		const groups = [];
+	let currentConceptStepIndex = 0;
 
-		nodes.forEach((node, index) => {
-			const chapterKey = node.dataset.chapter || "0";
-			const previousGroup = groups[groups.length - 1];
-
-			if (!previousGroup || previousGroup.key !== chapterKey) {
-				groups.push({
-					key: chapterKey,
-					start: index,
-					end: index,
-					count: 1,
-					element: null
-				});
-				return;
-			}
-
-			previousGroup.end = index;
-			previousGroup.count += 1;
-		});
-
-		return groups;
+	function syncMenuState() {
+		updateMenuVisibility();
+		updateMenuHighlight();
 	}
 
-	function clamp(value, min, max) {
-		return Math.min(Math.max(value, min), max);
+	function setActiveStep(stepSelection, index) {
+		stepSelection.classed("is-active", (d, i) => i === index);
 	}
 
-	function renderChapterProgress() {
-		if (!progressSegments || !progressThumb || !chapterGroups.length) return;
+	function handleIntroStepEnter(response) {
+		const index = response.index;
 
-		progressSegments.innerHTML = "";
-
-		chapterGroups.forEach((group) => {
-			const segment = document.createElement("div");
-			segment.className = "chapter-progress-segment";
-			progressSegments.appendChild(segment);
-			group.element = segment;
-		});
-
-		updateChapterProgressFromScroll();
-	}
-
-	function updateChapterProgressFromScroll() {
-		if (!progressThumb || !chapterGroups.length || !stepNodes.length) return;
-
-		const triggerLine = window.innerHeight * 0.33;
-		const scrollTop = window.scrollY;
-		const chapterMetrics = chapterGroups.map((group) => {
-			const firstStep = stepNodes[group.start];
-			const lastStep = stepNodes[group.end];
-			const firstTop = firstStep.getBoundingClientRect().top + window.scrollY;
-			const lastTop = lastStep.getBoundingClientRect().top + window.scrollY;
-			const start = firstTop - triggerLine;
-			const end = (lastTop + lastStep.offsetHeight) - triggerLine;
-
-			return {
-				...group,
-				start,
-				end
-			};
-		});
-
-		const activeChapter = chapterMetrics.find((group, index) => {
-			const nextGroup = chapterMetrics[index + 1];
-			return scrollTop >= group.start && (!nextGroup || scrollTop < nextGroup.start);
-		}) || chapterMetrics[0];
-
-		const chapterRange = Math.max(activeChapter.end - activeChapter.start, 1);
-		const chapterProgress = clamp((scrollTop - activeChapter.start) / chapterRange, 0, 0.999);
-		const totalTravel = Math.max(progressThumb.parentElement.offsetHeight - progressThumb.offsetHeight, 0);
-		const nextY = totalTravel * chapterProgress;
-
-		progressThumb.style.transform = `translate3d(0, ${Math.round(nextY)}px, 0)`;
-	}
-
-	function syncChapterProgress() {
-		if (window.scrollY !== lastScrollY) {
-			lastScrollY = window.scrollY;
-			updateChapterProgressFromScroll();
+		if (typeof window.setIntroCamera === "function") {
+			window.setIntroCamera(index);
 		}
 
-		window.requestAnimationFrame(syncChapterProgress);
+		setActiveStep(introStep, index);
+		syncMenuState();
 	}
 
-	// generic window resize listener event
+	function handleIntroStepProgress(response) {
+		updateThreeJSFromScroll(response);
+		syncMenuState();
+	}
+
+	function handleStepEnter(response) {
+		const index = response.index;
+		currentConceptStepIndex = index;
+
+		setActiveStep(conceptStep, index);
+
+		const modelIndex = Math.min(index + 1, models.length - 1);
+		models.forEach((model) => {
+			model.classList.remove("active");
+		});
+		models[modelIndex].classList.add("active");
+
+		updateChapterProgress(response);
+		syncMenuState();
+	}
+
+	function handleStepProgress(response) {
+		currentConceptStepIndex = response.index;
+		updateChapterProgress(response);
+		syncMenuState();
+	}
+
+	function updateChapterProgress(response) {
+		if (!progressThumb) return;
+
+		const totalSteps = conceptStep.size();
+		const overallProgress = (response.index + response.progress) / totalSteps;
+		const totalTravel = progressThumb.parentElement.offsetHeight - progressThumb.offsetHeight;
+		const y = totalTravel * overallProgress;
+
+		progressThumb.style.transform = `translate3d(0, ${Math.round(y)}px, 0)`;
+	}
+
+	function updateThreeJSFromScroll(response) {
+		const progress = response.progress;
+		if (typeof window.setIntroModelTilt === "function") {
+			window.setIntroModelTilt(progress);
+		}
+	}
+
 	function handleResize() {
-		// 1. update height of step elements
-		const stepH = Math.floor(window.innerHeight * 0.75);
-		step.style("height", stepH + "px");
+		const stepH = Math.floor(window.innerHeight * 2);
+
+		[introStep, conceptStep].forEach((selection) => {
+			selection.style("height", stepH + "px");
+		});
 
 		const figureTop = 51;
 		const figureHeight = Math.max(window.innerHeight - figureTop, 0);
 
-		figure
-			.style("height", figureHeight + "px")
-			.style("top", figureTop + "px");
+		[introFigure, conceptFigure].forEach((selection) => {
+			selection.style("height", figureHeight + "px").style("top", figureTop + "px");
+		});
 
-		renderChapterProgress();
-		updateChapterProgressFromScroll();
+		const progressTrackHeight = Math.max(window.innerHeight - 152, 0);
+		d3.select(".chapter-progress-inner").style("height", progressTrackHeight + "px");
 
-		// 3. tell scrollama to update new element dimensions
-		scroller.resize();
+		syncMenuState();
+		introScroller.resize();
+		conceptScroller.resize();
 	}
 
-	// scrollama event handlers
-	function handleStepEnter(response) {
-		// response = { element, direction, index }
+	function updateMenuVisibility() {
+		if (!introSection) return;
 
-		// add color to current step only
-		step.classed("is-active", (d, i) => i === response.index);
-		currentStepIndex = response.index;
-		updateChapterProgressFromScroll();
+		const sectionRect = introSection.getBoundingClientRect();
+		const conceptTop = conceptSection.getBoundingClientRect().top;
+		const menuShouldShow = sectionRect.top <= 0;
+		const contentActive = conceptTop <= 0;
 
-		const modelIndex = Math.min(response.index + 1, models.length - 1);
-		models.forEach((m) => m.classList.remove("active"));
-		(models[modelIndex] || models[0]).classList.add("active");
-	}
+		document.body.classList.toggle("menu-visible", menuShouldShow);
+		document.body.classList.toggle("content-active", contentActive);
 
-	function handleStepProgress(response) {
-		currentStepIndex = response.index;
-		updateChapterProgressFromScroll();
+		if (heroVisualShell) {
+			heroVisualShell.style.opacity = contentActive ? "0" : "1";
+			heroVisualShell.style.visibility = contentActive ? "hidden" : "visible";
+		}
 	}
 
 	function init() {
-		// 1. force a resize on load to ensure proper dimensions are sent to scrollama
 		handleResize();
+		syncMenuState();
 
-		// 2. setup the scroller passing options
-		// 3. bind scrollama event handlers
-		scroller
+		introScroller
 			.setup({
-				step: "#vertic-scrolly article .step",
+				step: "#infographic article .step",
+				offset: 0.5,
+				progress: true,
+				debug: false
+			})
+			.onStepEnter(handleIntroStepEnter)
+			.onStepProgress(handleIntroStepProgress);
+
+		conceptScroller
+			.setup({
+				step: "#content article .step",
 				offset: 0.33,
 				progress: true,
 				debug: false
 			})
 			.onStepEnter(handleStepEnter)
 			.onStepProgress(handleStepProgress);
+
+		requestAnimationFrame(() => {
+			syncMenuState();
+		});
 	}
 
-	// kick things off
 	init();
-	syncChapterProgress();
 
 	window.addEventListener("resize", handleResize);
-	window.addEventListener("scroll", updateChapterProgressFromScroll, { passive: true });
+	window.addEventListener("scroll", () => {
+		syncMenuState();
+	}, { passive: true });
 
 </script>
 
