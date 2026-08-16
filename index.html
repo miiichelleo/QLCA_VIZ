@@ -243,12 +243,17 @@
 			top: 0;
 			right: 0;
 			bottom: 0;
-			left: 481px;
+			left: 0;
 			background: #FDFDFD;
 			overflow: hidden;
 			pointer-events: none;
 			z-index: 1;
 			transition: opacity 0.2s ease, visibility 0.2s ease;
+		}
+
+		/* Keep homepage model as full background, then restore split layout for scrolly sections. */
+		body.menu-visible .hero__visual-shell {
+			left: 481px;
 		}
 
 		body.content-active .hero__visual-shell {
@@ -751,6 +756,10 @@
 			}
 
 			.hero__visual-shell {
+				left: 0;
+			}
+
+			body.menu-visible .hero__visual-shell {
 				left: 360px;
 			}
 
@@ -1309,6 +1318,7 @@
 
 	<script src="./scrollama/d3.v7.min.js"></script>
 	<script src="./scrollama/scrollama.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 	<script type="importmap">
 		{
 			"imports": {
@@ -1333,73 +1343,95 @@
 			const camera = new THREE.OrthographicCamera(-size * aspect, size * aspect, size, -size, 1, 1000);
 			const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 			const loader = new GLTFLoader();
+			const gsap = window.gsap;
+			const CAMERA_TWEEN_DURATION = 0.65;
 			let modelRoot = null;
+			let cameraTween = null;
 
 
 
-			const shots = [ 
-			// Step 0 — Overview 
-			{ 
-				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 1 }, 
-
-			// Step 1 — Left 
-			{ 
-				position: [20, 20, 20],
-				target: [-4, 0, 0],
-				zoom: 1.4 }, 
-			// Step 2 — Left / closer 
-			{ 
-				position: [20, 20, 20],
-				target: [-7, 0, 0],
-				zoom: 2 }, 
-
-			// Step 3 — Middle 
-			{ 
-				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 2 }, 
-
-			// Step 4 — Right 
-			{ 
-				position: [20, 20, 20], 
-				target: [5, 0, 0], 
-				zoom: 2 }, 
-			// Step 5 — Right / closer 
-			{ 
-				position: [20, 20, 20], 
-				target: [7, 0, 0], 
-				zoom: 2.5 }, 
-			// Step 6 — Return to overview 
-			{ 
-				position: [20, 20, 20], 
-				target: [0, 0, 0], 
-				zoom: 1 } 
+			const shots = [
+			// Camera Position 1
+			{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
+			// Camera Position 2
+			{ position: [20, 20, 20], target: [-2, 0, 0], zoom: 1.2 },
+			// Camera Position 3
+			{ position: [20, 20, 20], target: [-4, 0, 0], zoom: 1.4 },
+			// Camera Position 4
+			{ position: [20, 20, 20], target: [-7, 0, 0], zoom: 2 },
+			// Camera Position 5
+			{ position: [20, 20, 20], target: [0, 0, 0], zoom: 2 },
+			// Camera Position 6
+			{ position: [20, 20, 20], target: [5, 0, 0], zoom: 2 },
+			// Camera Position 7
+			{ position: [20, 20, 20], target: [7, 0, 0], zoom: 2.5 },
+			// Camera Position 8
+			{ position: [20, 20, 20], target: [6, -0.2, 0], zoom: 2.25 },
+			// Camera Position 9
+			{ position: [20, 20, 20], target: [1.5, 0, 0], zoom: 1.6 },
+			// Camera Position 10
+			{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 }
 			];
 
 			const cameraTarget = new THREE.Vector3(); 
+			function applyShot(shot) {
+				camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
+				cameraTarget.set(shot.target[0], shot.target[1], shot.target[2]);
+				camera.lookAt(cameraTarget);
+				camera.zoom = shot.zoom;
+				camera.updateProjectionMatrix();
+			}
+
 			window.setIntroCamera = (index) => { 
 				const shot = shots[index]; 
 				if (!shot) return; 
 
-				// Set camera position 
-				camera.position.set( 
-					shot.position[0], 
-					shot.position[1], 
-					shot.position[2] ); 
-					
-				// Set camera target 
-				cameraTarget.set( 
-					shot.target[0],
-					shot.target[1],
-					shot.target[2] );
-				
-				camera.lookAt(cameraTarget); 
-				
-				// Orthographic camera zoom 
-				camera.zoom = shot.zoom; 
-				camera.updateProjectionMatrix(); 
+				if (!gsap) {
+					applyShot(shot);
+					return;
+				}
+
+				if (cameraTween) {
+					cameraTween.kill();
+				}
+
+				const tweenState = {
+					px: camera.position.x,
+					py: camera.position.y,
+					pz: camera.position.z,
+					tx: cameraTarget.x,
+					ty: cameraTarget.y,
+					tz: cameraTarget.z,
+					zoom: camera.zoom
+				};
+
+				cameraTween = gsap.to(tweenState, {
+					px: shot.position[0],
+					py: shot.position[1],
+					pz: shot.position[2],
+					tx: shot.target[0],
+					ty: shot.target[1],
+					tz: shot.target[2],
+					zoom: shot.zoom,
+					duration: CAMERA_TWEEN_DURATION,
+					ease: "power2.inOut",
+					overwrite: "auto",
+					onUpdate: () => {
+						camera.position.set(tweenState.px, tweenState.py, tweenState.pz);
+						cameraTarget.set(tweenState.tx, tweenState.ty, tweenState.tz);
+						camera.lookAt(cameraTarget);
+						camera.zoom = tweenState.zoom;
+						camera.updateProjectionMatrix();
+					},
+					onComplete: () => {
+						// Snap to exact configured values to avoid tiny tween rounding drift.
+						applyShot(shot);
+						cameraTween = null;
+					},
+					onInterrupt: () => {
+						cameraTween = null;
+					}
+				});
 			};
 
 			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -1588,10 +1620,11 @@
 	const compareScroller = scrollama();
 	const introFadeStart = 0.01;
 	const introFadeEnd = 0.62;
-	const INTRO_UI_DELAY_AFTER_FADE = 0.08;
 	const CONCEPT_PART1_PROGRESS = 0.28;
 	const CONCEPT_PART2_PROGRESS = 0.56;
 	const CONCEPT_PART3_PROGRESS = 0.8;
+	const INTRO_CAMERA_PHASE_1 = CONCEPT_PART1_PROGRESS;
+	const INTRO_CAMERA_PHASE_2 = CONCEPT_PART2_PROGRESS;
 
 	let currentConceptStepIndex = 0;
 	let currentCompareStepIndex = 0;
@@ -1599,27 +1632,7 @@
 	let currentIntroTextVisible = false;
 	let introProgressOrigin = null;
 	let currentIntroCameraIndex = -1;
-	let currentIntroStepIndex = -1;
-	let currentIntroStepProgress = 0;
 	let conceptSectionActive = false;
-
-	function setIntroHeroOpacity(opacity) {
-		const numericOpacity = typeof opacity === "number" ? opacity : Number(opacity);
-		currentIntroOpacity = Number.isFinite(numericOpacity) ? numericOpacity : 1;
-		document.documentElement.style.setProperty("--intro-hero-opacity", currentIntroOpacity.toFixed(3));
-	}
-
-	function getIntroTextProgress(stepIndex, stepProgress) {
-		// Intro text should start only once step 1 (left camera) is active.
-		if (stepIndex === 0) return 0;
-		return stepProgress;
-	}
-
-	function isIntroUiReady() {
-		if (currentIntroStepIndex > 0) return true;
-		if (currentIntroStepIndex !== 0) return false;
-		return currentIntroOpacity <= 0.02 && currentIntroStepProgress >= introFadeEnd + INTRO_UI_DELAY_AFTER_FADE;
-	}
 
 	function syncIntroCamera(index) {
 		if (index === currentIntroCameraIndex) return;
@@ -1676,23 +1689,39 @@
 		stepEl.classList.toggle("concept-part3-visible", progress >= CONCEPT_PART3_PROGRESS);
 	}
 
+	function getIntroCameraIndex(stepIndex, progress) {
+		// Bind camera switches to the same paragraph reveal phases driven by Scrollama.
+		if (stepIndex <= 0) {
+			return progress >= INTRO_CAMERA_PHASE_2 ? 1 : 0;
+		}
+		if (stepIndex === 1) {
+			return progress >= INTRO_CAMERA_PHASE_2 ? 3 : 2;
+		}
+		if (stepIndex === 2) return 4;
+		if (stepIndex === 3) return 5;
+		if (stepIndex === 4) return 6;
+		if (stepIndex === 5) return 7;
+		// Final step transitions from recap to full overview.
+		return progress >= INTRO_CAMERA_PHASE_2 ? 9 : 8;
+	}
+
 	function handleIntroStepEnter(response) {
 		const index = response.index;
-		currentIntroStepIndex = index;
-		currentIntroStepProgress = 0;
-		syncIntroCamera(index);
+		syncIntroCamera(getIntroCameraIndex(index, 0));
 		conceptSectionActive = false;
 
 		resetIntroFlowState();
 		setActiveStep(introStep, index);
 		if (index > 0) {
-			setIntroHeroOpacity(0);
+			currentIntroOpacity = 0;
 			currentIntroTextVisible = true;
 			introProgressOrigin = null;
+			document.documentElement.style.setProperty("--intro-hero-opacity", "0");
 		} else {
-			setIntroHeroOpacity(1);
+			currentIntroOpacity = 1;
 			currentIntroTextVisible = false;
 			introProgressOrigin = null;
+			document.documentElement.style.setProperty("--intro-hero-opacity", "1");
 		}
 		syncMenuState();
 	}
@@ -1700,14 +1729,16 @@
 	function updateIntroOverlayFade(response) {
 		// Link landing-page fade to Scrollama progress on the first intro step.
 		if (response.index > 0) {
-			setIntroHeroOpacity(0);
+			currentIntroOpacity = 0;
 			introProgressOrigin = null;
+			document.documentElement.style.setProperty("--intro-hero-opacity", "0");
 			return;
 		}
 
 		if (window.scrollY <= 2) {
 			introProgressOrigin = response.progress;
-			setIntroHeroOpacity(1);
+			currentIntroOpacity = 1;
+			document.documentElement.style.setProperty("--intro-hero-opacity", "1");
 			return;
 		}
 
@@ -1721,17 +1752,21 @@
 		const clamped = Math.max(0, Math.min(1, normalized));
 		const opacity = 1 - clamped;
 
-		setIntroHeroOpacity(opacity.toFixed(3));
+		currentIntroOpacity = opacity;
+		document.documentElement.style.setProperty("--intro-hero-opacity", opacity.toFixed(3));
 	}
 
 	function handleIntroStepProgress(response) {
-		currentIntroStepIndex = response.index;
-		currentIntroStepProgress = response.progress;
-		syncIntroCamera(response.index);
+		syncIntroCamera(getIntroCameraIndex(response.index, response.progress));
 		updateThreeJSFromScroll(response);
 		updateIntroOverlayFade(response);
 
-		const introTextProgress = getIntroTextProgress(response.index, response.progress);
+		let introTextProgress = response.progress;
+		if (response.index === 0) {
+			// Keep intro text fully inactive on camera shot 0.
+			// Text reveal starts only once shot 1 (left camera position) becomes active.
+			introTextProgress = 0;
+		}
 
 		currentIntroTextVisible = response.index > 0 || introTextProgress >= CONCEPT_PART1_PROGRESS;
 		conceptSectionActive = false;
@@ -1830,8 +1865,7 @@
 		if (!introSection) return;
 
 		const sectionRect = introSection.getBoundingClientRect();
-		const introOverviewActive = currentIntroStepIndex >= 0;
-		const menuShouldShow = window.scrollY > 2 && sectionRect.top <= 0 && introOverviewActive && isIntroUiReady();
+		const menuShouldShow = window.scrollY > 2 && sectionRect.top <= 0 && currentIntroOpacity <= 0.08;
 		const conceptTop = conceptSection.getBoundingClientRect().top;
 		const contentActive = conceptSectionActive || conceptTop <= 0;
 
@@ -1850,12 +1884,11 @@
 	}
 
 	function init() {
-		setIntroHeroOpacity(1);
+		currentIntroOpacity = 1;
 		currentIntroTextVisible = false;
 		introProgressOrigin = null;
 		currentIntroCameraIndex = -1;
-		currentIntroStepIndex = -1;
-		currentIntroStepProgress = 0;
+		document.documentElement.style.setProperty("--intro-hero-opacity", "1");
 
 		handleResize();
 		syncMenuState();
