@@ -1342,6 +1342,7 @@
 			const camera = new THREE.OrthographicCamera(-size * aspect, size * aspect, size, -size, 1, 1000);
 			const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 			const loader = new GLTFLoader();
+			const groundShadowOpacity = 0.07;
 			let modelRoot = null;
 
 
@@ -1421,18 +1422,37 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xc8c8c8,
+				color: 0xb7b7b7,
 				flatShading: true,
-				shininess: 0,
+				shininess: 6,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 1.8);
+			const ambient = new THREE.HemisphereLight(0xffffff, 0xd9d9d9, 1.15);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 2.0);
-			directional.position.set(5, 10, -2);
+			const directional = new THREE.DirectionalLight(0xffffff, 2.35);
+			directional.position.set(8, 12, 2);
 			directional.castShadow = true;
+			directional.shadow.mapSize.width = 2048;
+			directional.shadow.mapSize.height = 2048;
+			directional.shadow.radius = 3;
+			directional.shadow.bias = -0.00015;
+			directional.shadow.camera.near = 1;
+			directional.shadow.camera.far = 80;
+			directional.shadow.camera.left = -18;
+			directional.shadow.camera.right = 18;
+			directional.shadow.camera.top = 18;
+			directional.shadow.camera.bottom = -18;
 			scene.add(directional);
+
+			const ground = new THREE.Mesh(
+				new THREE.PlaneGeometry(200, 200),
+				new THREE.ShadowMaterial({ opacity: groundShadowOpacity })
+			);
+			ground.rotation.x = -Math.PI / 2;
+			ground.position.y = -0.02;
+			ground.receiveShadow = true;
+			scene.add(ground);
 
 
 			function animate() {
@@ -1446,7 +1466,7 @@
 					gltf.scene.scale.setScalar(1.15);
 					const modelBox = new THREE.Box3().setFromObject(gltf.scene);
 					const modelCenter = modelBox.getCenter(new THREE.Vector3());
-					gltf.scene.position.set(-modelCenter.x - -6, -modelCenter.y - -2.5, -modelCenter.z);
+					gltf.scene.position.set(-modelCenter.x - -3, -modelCenter.y - -0.3, -modelCenter.z);
 
 					gltf.scene.traverse((child) => {
 						if (child.isMesh) {
