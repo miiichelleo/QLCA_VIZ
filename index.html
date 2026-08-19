@@ -1411,7 +1411,7 @@
 			};
 
 			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-			renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+			renderer.outputColorSpace = THREE.SRGBColorSpace;
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 			heroModelCanvas.appendChild(renderer.domElement);
@@ -1420,16 +1420,16 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xc8c8c8,
+				color: 0xababab,
 				flatShading: true,
-				shininess: 0,
+				shininess: 8,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 0.85);
+			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 0.92);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 1.0);
-			directional.position.set(5, 10, -2);
+			const directional = new THREE.DirectionalLight(0xffffff, 2.8);
+			directional.position.set(-8, 13, 7);
 			directional.castShadow = true;
 			scene.add(directional);
 
