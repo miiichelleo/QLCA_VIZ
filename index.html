@@ -1319,12 +1319,10 @@
 	<script src="./scrollama/d3.v7.min.js"></script>
 	<script src="./scrollama/scrollama.js"></script>
 	<script type="importmap">
-		{
-			"imports": {
-				"three": "https://unpkg.com/three@0.149.0/build/three.module.js",
-				"three/": "https://unpkg.com/three@0.149.0/"
-			}
-		}
+		{ "imports": { 
+			"three": "./three/three.module.js",
+    		"three/examples/jsm/loaders/GLTFLoader.js": "./three/GLTFLoader.js"
+		} }
 	</script>
 	<script type="module">
 		import * as THREE from "three";
@@ -1342,7 +1340,6 @@
 			const camera = new THREE.OrthographicCamera(-size * aspect, size * aspect, size, -size, 1, 1000);
 			const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 			const loader = new GLTFLoader();
-			const groundShadowOpacity = 0.07;
 			let modelRoot = null;
 
 
@@ -1357,30 +1354,30 @@
 			// Step 1 — Left 
 			{ 
 				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 1 }, 
+				target: [-4, 0, 0],
+				zoom: 1.4 }, 
 			// Step 2 — Left / closer 
 			{ 
 				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 1 }, 
+				target: [-7, 0, 0],
+				zoom: 2 }, 
 
 			// Step 3 — Middle 
 			{ 
 				position: [20, 20, 20],
 				target: [0, 0, 0],
-				zoom: 1 }, 
+				zoom: 2 }, 
 
 			// Step 4 — Right 
 			{ 
 				position: [20, 20, 20], 
-				target: [0, 0, 0], 
-				zoom: 1 }, 
+				target: [5, 0, 0], 
+				zoom: 2 }, 
 			// Step 5 — Right / closer 
 			{ 
 				position: [20, 20, 20], 
-				target: [0, 0, 0], 
-				zoom: 1 }, 
+				target: [7, 0, 0], 
+				zoom: 2.5 }, 
 			// Step 6 — Return to overview 
 			{ 
 				position: [20, 20, 20], 
@@ -1422,37 +1419,18 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xb7b7b7,
+				color: 0xc8c8c8,
 				flatShading: true,
-				shininess: 6,
+				shininess: 0,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0xd9d9d9, 1.15);
+			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 0.85);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 2.35);
-			directional.position.set(8, 12, 2);
+			const directional = new THREE.DirectionalLight(0xffffff, 1.0);
+			directional.position.set(5, 10, -2);
 			directional.castShadow = true;
-			directional.shadow.mapSize.width = 2048;
-			directional.shadow.mapSize.height = 2048;
-			directional.shadow.radius = 3;
-			directional.shadow.bias = -0.00015;
-			directional.shadow.camera.near = 1;
-			directional.shadow.camera.far = 80;
-			directional.shadow.camera.left = -18;
-			directional.shadow.camera.right = 18;
-			directional.shadow.camera.top = 18;
-			directional.shadow.camera.bottom = -18;
 			scene.add(directional);
-
-			const ground = new THREE.Mesh(
-				new THREE.PlaneGeometry(200, 200),
-				new THREE.ShadowMaterial({ opacity: groundShadowOpacity })
-			);
-			ground.rotation.x = -Math.PI / 2;
-			ground.position.y = -0.02;
-			ground.receiveShadow = true;
-			scene.add(ground);
 
 
 			function animate() {
