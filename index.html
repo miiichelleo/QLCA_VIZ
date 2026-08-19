@@ -1420,24 +1420,24 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xababab,
+				color: 0x8f8f8f,
 				flatShading: true,
-				shininess: 8,
+				shininess: 0,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 0.92);
+			const ambient = new THREE.HemisphereLight(0xffffff, 0x666666, 0.62);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 2.8);
-			directional.position.set(-8, 13, 7);
+			const directional = new THREE.DirectionalLight(0xffffff, 1.6);
+			directional.position.set(-10, 16, 10);
 			directional.castShadow = true;
 			scene.add(directional);
 
-			directional.shadow.camera.left = -20;
-			directional.shadow.camera.right = 20;
-			directional.shadow.camera.top = 20;
-			directional.shadow.camera.bottom = -20;
-			directional.shadow.mapSize.set(2048, 2048);
+			directional.shadow.camera.left = -24;
+			directional.shadow.camera.right = 24;
+			directional.shadow.camera.top = 24;
+			directional.shadow.camera.bottom = -24;
+			directional.shadow.mapSize.set(4096, 4096);
 			directional.shadow.camera.updateProjectionMatrix();
 
 			function animate() {
