@@ -1326,6 +1326,7 @@
 	</script>
 	<script type="module">
 		import * as THREE from "three";
+		THREE.ColorManagement.enabled = false;
 		import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 		const heroModelCanvas = document.getElementById("heroModelCanvas");
@@ -1410,7 +1411,7 @@
 			};
 
 			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-			renderer.outputColorSpace = THREE.SRGBColorSpace;
+			renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 			heroModelCanvas.appendChild(renderer.domElement);
@@ -1432,6 +1433,12 @@
 			directional.castShadow = true;
 			scene.add(directional);
 
+			directional.shadow.camera.left = -20;
+			directional.shadow.camera.right = 20;
+			directional.shadow.camera.top = 20;
+			directional.shadow.camera.bottom = -20;
+			directional.shadow.mapSize.set(2048, 2048);
+			directional.shadow.camera.updateProjectionMatrix();
 
 			function animate() {
 				renderer.render(scene, camera);
