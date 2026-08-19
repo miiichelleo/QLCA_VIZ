@@ -1320,8 +1320,8 @@
 	<script src="./scrollama/scrollama.js"></script>
 	<script type="importmap">
 		{ "imports": { 
-			"three": "https://unpkg.com/three@0.149.0/build/three.module.js",
-			"three/": "https://unpkg.com/three@0.149.0/"
+			"three": "./three/three.module.js",
+			"three/": "./three/"
 		} }
 	</script>
 	<script type="module">
@@ -1448,10 +1448,10 @@
 				"./Neighbourhood_Model/Intro.glb",
 				(gltf) => {
 					modelRoot = gltf.scene;
-					gltf.scene.scale.setScalar(1.15);
+					gltf.scene.scale.setScalar(0.88);
 					const modelBox = new THREE.Box3().setFromObject(gltf.scene);
 					const modelCenter = modelBox.getCenter(new THREE.Vector3());
-					gltf.scene.position.set(-modelCenter.x - -3, -modelCenter.y - -0.3, -modelCenter.z);
+					gltf.scene.position.set(-modelCenter.x - 1.4, -modelCenter.y + 0.75, -modelCenter.z);
 
 					gltf.scene.traverse((child) => {
 						if (child.isMesh) {
