@@ -407,7 +407,7 @@
 			position: relative;
 			z-index: 100;
 			margin-top: 0;
-			background: #fff;
+			background: #FDFDFD;
 			opacity: 0;
 			pointer-events: none;
 			transition: opacity 0.25s ease;
@@ -424,7 +424,7 @@
 			position: relative;
 			display: grid;
 			grid-template-columns: 481px minmax(0, 1fr);
-			background: #fff;
+			background: #FDFDFD;
 			min-height: 100vh;
 		}
 
@@ -436,7 +436,7 @@
 			max-width: 481px;
 			outline: 0;
 			border-right: 1px solid #efefef;
-			background: #fff;
+			background: #FDFDFD;
 			font-size: 20px;
 			padding: 149px 40px 40px 56px;
 			box-sizing: border-box;
@@ -451,7 +451,7 @@
 			height: calc(100vh - 51px);
 			width: 100%;
 			min-width: 0;
-			background: #fff;
+			background: #FDFDFD;
 			display: flex;
 			align-items: stretch;
 			justify-content: stretch;
@@ -507,7 +507,7 @@
 		.step-part {
 			display: block;
 			padding: 12px 14px;
-			background: #fff;
+			background: #FDFDFD;
 			line-height: 1.55;
 			opacity: 0;
 			transform: translate3d(0, 22px, 0);
@@ -553,7 +553,7 @@
 			height: 100%;
 			padding: 0;
 			box-sizing: border-box;
-			background: #fff;
+			background: #FDFDFD;
 		}
 
 		.chapter-progress {
@@ -687,7 +687,7 @@
 			height: 100%;
 			padding: 112px 90px 72px;
 			box-sizing: border-box;
-			background: #fff;
+			background: #FDFDFD;
 			color: black;
 			align-items: center;
 			justify-content: center;
@@ -1319,9 +1319,9 @@
 	<script src="./scrollama/d3.v7.min.js"></script>
 	<script src="./scrollama/scrollama.js"></script>
 	<script type="importmap">
-		{ "imports": { 
-			"three": "./three/three.module.js",
-			"three/": "./three/"
+		{ "imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js",
+			"three/": "https://cdn.jsdelivr.net/npm/three@0.154.0/"
 		} }
 	</script>
 	<script type="module">
@@ -1420,23 +1420,29 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xababab,
+				color: 0xd9d9d9,
 				flatShading: true,
-				shininess: 8,
+				shininess: 0,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0x888888, 0.92);
+			const ambient = new THREE.HemisphereLight(0xffffff, 0x9a9a9a, 0.55);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 2.8);
-			directional.position.set(-8, 13, 7);
+			const directional = new THREE.DirectionalLight(0xffffff, 1.1);
+			directional.position.set(-8, 20, 7);
 			directional.castShadow = true;
+			directional.shadow.bias = -0.0002;
+			directional.shadow.normalBias = 0.015;
 			scene.add(directional);
 
-			directional.shadow.camera.left = -20;
-			directional.shadow.camera.right = 20;
-			directional.shadow.camera.top = 20;
-			directional.shadow.camera.bottom = -20;
+			const fill = new THREE.DirectionalLight(0xffffff, 0.25);
+			fill.position.set(10, 8, -6);
+			scene.add(fill);
+
+			directional.shadow.camera.left = -10;
+			directional.shadow.camera.right = 10;
+			directional.shadow.camera.top = 10;
+			directional.shadow.camera.bottom = -10;
 			directional.shadow.mapSize.set(2048, 2048);
 			directional.shadow.camera.updateProjectionMatrix();
 
