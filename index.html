@@ -6,17 +6,13 @@
 <title>QLCA</title>
 
 <style>
-		html {
-			scrollbar-gutter: stable;
-		}
-
 		body {
 			margin: 0;
 			font-family: "Inter", sans-serif;
 			background: #fdfdfd;
 			color: #050505;
 			overflow-x: hidden;
-			overflow-y: scroll;
+			overflow-y: auto;
 		}
 
 		body.menu-open {
@@ -40,9 +36,10 @@
 			display: grid;
 			grid-template-columns: minmax(0, 1fr) auto;
 			align-items: center;
+			text-align: left;
 			width: 100%;
 			height: 100%;
-			padding: 0 28px 0 42px;
+			padding: 0 28px 0 70px;
 			background: #050505;
 			color: #fdfdfd;
 			border: 0;
@@ -60,6 +57,7 @@
 			font-weight: 600;
 			line-height: 1;
 			white-space: nowrap;
+			justify-self: start;
 		}
 
 		body.menu-visible .header {
@@ -118,7 +116,7 @@
 			max-width: 100vw;
 			padding: 38px 48px 32px;
 			background: #fdfdfd;
-			border: 1px solid rgba(5, 5, 5, 0.55);
+			border: 1px solid #a6a6a6;
 			border-top: 0;
 			box-sizing: border-box;
 			overflow-y: auto;
@@ -224,6 +222,12 @@
 			pointer-events: none;
 		}
 
+		/* Keep the model as a full-page background while scrolly text panels
+		   render above it. */
+		body.menu-visible #intro.hero {
+			z-index: 50;
+		}
+
 		.hero__inner {
 			position: relative;
 			z-index: 2;
@@ -236,6 +240,10 @@
 			flex: 0 0 740px;
 			opacity: var(--intro-hero-opacity, 1);
 			transition: opacity 0.24s linear;
+		}
+
+		body.menu-visible .hero__inner {
+			opacity: 0;
 		}
 
 		.hero__visual-shell {
@@ -251,15 +259,10 @@
 			transition: opacity 0.2s ease, visibility 0.2s ease;
 		}
 
-		/* Keep homepage model as full background, then restore split layout for scrolly sections. */
-		body.menu-visible .hero__visual-shell {
-			left: 481px;
-		}
-
-		body.content-active .hero__visual-shell {
-			opacity: 0;
-			visibility: hidden;
-		}
+		/* The canvas stays full-viewport at all times — #infographic's opaque
+		   article column already covers the left side visually, so the model
+		   never resizes/reflows between the landing page and the scrolly
+		   steps. This keeps the camera framing pixel-identical throughout. */
 
 		.hero__title,
 		.hero__subtitle,
@@ -273,12 +276,49 @@
 			width: 100%;
 			height: 100%;
 			background: transparent;
+			opacity: 1;
+			transition: opacity 0.24s linear;
 		}
 
 		.hero__model-canvas canvas {
 			display: block;
 			width: 100%;
 			height: 100%;
+		}
+
+		.hero__model-labels {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			z-index: 2;
+			overflow: hidden;
+			opacity: 1;
+			transition: opacity 0.24s linear;
+		}
+
+		body.content-active .hero__model-canvas,
+		body.content-active .hero__model-labels {
+			opacity: 0;
+		}
+
+		.hero__model-label {
+			position: absolute;
+			top: 0;
+			left: 0;
+			transform: translate3d(-1000px, -1000px, 0);
+			opacity: 0;
+			transition: opacity 0.35s ease;
+			will-change: transform, opacity;
+		}
+
+		.hero__model-label.is-visible {
+			opacity: 1;
+		}
+
+		.hero__model-label img {
+			display: block;
+			height: 34px;
+			width: auto;
 		}
 
 		.hero__model-fallback {
@@ -407,7 +447,7 @@
 			position: relative;
 			z-index: 100;
 			margin-top: 0;
-			background: #FDFDFD;
+			background: transparent;
 			opacity: 0;
 			pointer-events: none;
 			transition: opacity 0.25s ease;
@@ -424,8 +464,12 @@
 			position: relative;
 			display: grid;
 			grid-template-columns: 481px minmax(0, 1fr);
-			background: #FDFDFD;
+			background: transparent;
 			min-height: 100vh;
+		}
+
+		#content {
+			opacity: 1;
 		}
 
 		#infographic article,
@@ -447,11 +491,11 @@
 		#content figure,
 		#compare figure {
 			position: sticky;
-			top: 51px;
-			height: calc(100vh - 51px);
+			top: 0;
+			height: 100vh;
 			width: 100%;
 			min-width: 0;
-			background: #FDFDFD;
+			background: transparent;
 			display: flex;
 			align-items: stretch;
 			justify-content: stretch;
@@ -492,6 +536,17 @@
 		}
 
 		#infographic .step.is-active {
+			opacity: 1;
+		}
+
+		#content .step,
+		#compare .step {
+			opacity: 0.45;
+			transition: opacity 0.2s ease;
+		}
+
+		#content .step.is-active,
+		#compare .step.is-active {
 			opacity: 1;
 		}
 
@@ -562,9 +617,10 @@
 			left: 481px;
 			width: 14px;
 			height: 100%;
-			transform: translateX(-50%);
+			transform: translateX(-11px);
 			pointer-events: none;
 			z-index: 5;
+			display: block;
 		}
 
 		.chapter-progress-inner {
@@ -574,14 +630,7 @@
 		}
 
 		.chapter-progress-inner::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 50%;
-			width: 1px;
-			height: 100%;
-			transform: translateX(-50%);
-			background: rgba(5, 5, 5, 0.08);
+			content: none;
 		}
 
 		.chapter-progress-segments {
@@ -645,7 +694,6 @@
 			opacity: 0;
 			transform: translate3d(0, 22px, 0);
 			padding: 12px 14px;
-			border: 1px solid rgba(5, 5, 5, 0.42);
 			line-height: 1.55;
 			transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 		}
@@ -701,6 +749,10 @@
 			opacity: 1;
 		}
 
+		#model-0 {
+			display: none;
+		}
+
 		.model-view img {
 			width: 70%;
 			height: 70%;
@@ -715,24 +767,32 @@
 			pointer-events: none;
 		}
 
-		body::-webkit-scrollbar,
+		html,
+		body {
+			scrollbar-width: none;
+		}
+
+		html::-webkit-scrollbar,
+		body::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+
 		.Chapters::-webkit-scrollbar {
 			width: 10px;
 		}
 
-		body::-webkit-scrollbar-track,
 		.Chapters::-webkit-scrollbar-track {
 			background: #ededed;
 		}
 
-		body::-webkit-scrollbar-thumb,
 		.Chapters::-webkit-scrollbar-thumb {
 			background: #999;
 			border-radius: 999px;
 			border: 1px solid #ededed;
 		}
 
-		* {
+		.Chapters {
 			scrollbar-width: thin;
 			scrollbar-color: #999 #ededed;
 		}
@@ -757,10 +817,6 @@
 
 			.hero__visual-shell {
 				left: 0;
-			}
-
-			body.menu-visible .hero__visual-shell {
-				left: 360px;
 			}
 
 			.header,
@@ -861,7 +917,7 @@
 			}
 
 			.Dropdownbutton {
-				padding: 0 24px;
+				padding: 0 24px 0 16px;
 			}
 
 			#intro {
@@ -1024,6 +1080,7 @@
 			</div>
 			<div class="menu-group" data-group="compare">
 				<a href="#compare" class="group-link" data-menu-group-link="compare">Compare</a>
+				<a href="#compare" class="item-link" data-menu-item="case-0">The Model in Practice</a>
 				<a href="#compare" class="item-link" data-menu-item="case-1">Urban Form & Private Parking</a>
 			</div>
 	    </div>
@@ -1051,6 +1108,7 @@
 			<div class="hero__visual-shell" aria-hidden="true">
 				<div class="intro-model-shell">
 					<div class="hero__model-canvas" id="heroModelCanvas"></div>
+					<div class="hero__model-labels" id="heroModelLabels" aria-hidden="true"></div>
 					<div class="hero__model-fallback" id="heroModelFallback"> Run this page through a local server to load and animate the 3D model.</div>
 				</div>
 			</div>
@@ -1060,9 +1118,15 @@
 <!--Section 1: Intro-->
 
 		<section id="scrolly-sections" aria-label="Scrollama storytelling sections">
+			<div class="chapter-progress" aria-hidden="true">
+				<div class="chapter-progress-inner">
+					<div class="chapter-progress-thumb" id="chapterProgressThumb"></div>
+				</div>
+			</div>
 		<div id="infographic">
 			<article>
 				<!-- CAMERA SHOT 0 --> 
+				<!-- CAMERA SHOT 2 --> 
 				<div class="step">
 					<div class="step-flow">
 						<div class="step-part step-part--1">Life cycle assessments are well established for individual buildings, but their application at neighbourhood scale remains limited.</div>
@@ -1070,7 +1134,7 @@
 					</div>
 				</div>
 
-				<!-- CAMERA SHOT 1 --> 
+				<!-- CAMERA SHOT 3 --> 
 			 	<div class="step">
 					<div class="step-flow">
 						<div class="step-part step-part--1">The Quarter Life Cycle Assessment (Q-LCA) model addresses this gap with a modular structure.</div>
@@ -1078,7 +1142,7 @@
 					</div>
 				</div>	
 				
-				<!-- CAMERA SHOT 2 --> 
+				<!-- CAMERA SHOT 4 --> 
 				<div class="step">
 					<div class="step-flow">
 					<h2 class="infographic-title">From Building Blocks to Scenarios</h2>
@@ -1087,7 +1151,7 @@
 					</div>
 				</div>
 
-				<!-- CAMERA SHOT 3 --> 
+				<!-- CAMERA SHOT 5 --> 
 				<div class="step">
 					<div class="step-flow">
 						<div class="step-part step-part--1">The neighbourhood structure is shaped by urban elements such as streets and parking areas.</div>
@@ -1095,7 +1159,7 @@
 					</div>
 				</div>
 			
-				<!-- CAMERA SHOT 4 --> 
+				<!-- CAMERA SHOT 6 --> 
 				<div class="step">
 					<div class="step-flow">
 						<div class="step-part step-part--1">Another layer is formed by interconnected energy infrastructure across the district.</div>
@@ -1103,7 +1167,7 @@
 					</div>
 				</div>
 			
-				<!-- CAMERA SHOT 5 --> 
+				<!-- CAMERA SHOT 7 --> 
 				<div class="step">
 					<div class="step-flow">
 						<div class="step-part step-part--1">Finally, open spaces complete the neighbourhood system.</div>
@@ -1111,11 +1175,10 @@
 					</div>
 				</div>
 			
-				<!-- CAMERA SHOT 6 --> 
+				<!-- CAMERA SHOT 8 --> 
 				<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">Together, these interconnected elements are assessed over a 50-year life cycle using the Q-LCA model.</div>
-						<div class="step-part step-part--2">This reveals their combined contribution to global warming potential.</div>
+						<div class="step-part step-part--1">Together, these interconnected elements are assessed over a 50-year life cycle using the Q-LCA model, revealing their contribution to global warming potential.</div>
 					</div>
 				</div>
 			</article>
@@ -1230,13 +1293,6 @@
 
 		</article>
 
-		<div class="chapter-progress" aria-hidden="true">
-			<div class="chapter-progress-inner">
-				<div class="chapter-progress-segments" id="chapterProgressSegments"></div>
-				<div class="chapter-progress-thumb" id="chapterProgressThumb"></div>
-			</div>
-		</div>
-
 		<figure> 
             <!--Model O as a starting page (?)-->
             <div class="model-view active" id="model-0">
@@ -1337,7 +1393,7 @@
 			const startWidth = heroModelCanvas.clientWidth || window.innerWidth;
 			const startHeight = heroModelCanvas.clientHeight || window.innerHeight;
 			const aspect = startWidth / startHeight;
-			const size = 4;
+			const size = 2.9;
 			const camera = new THREE.OrthographicCamera(-size * aspect, size * aspect, size, -size, 1, 1000);
 			const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 			const loader = new GLTFLoader();
@@ -1352,63 +1408,106 @@
 				target: [0, 0, 0],
 				zoom: 1 }, 
 
-			// Step 1 — Left 
-			{ 
+			// Step 1 — Same as landing overview
+			{
 				position: [20, 20, 20],
-				target: [-4, 0, 0],
-				zoom: 1.4 }, 
-			// Step 2 — Left / closer 
-			{ 
-				position: [20, 20, 20],
-				target: [-7, 0, 0],
-				zoom: 2 }, 
+				target: [0, 0, 0],
+				zoom: 1 },
 
-			// Step 3 — Middle 
+			// Step 2 — House (camera 1)
+			{
+				position: [20, 20, 20],
+				target: [1.3, 0.15, 3.4],
+				zoom: 9 },
+
+			// Step 3 — Density / Building Components & Construction
+			{
+				position: [20, 20, 20],
+				target: [2.1, 0.34, 3.76],
+				zoom: 5 },
+
+			// Step 4 — Street & Parking Areas / Underground Parking
+			{
+				position: [20, 20, 20],
+				target: [3.3, -0.04, 0.44],
+				zoom: 2.5 },
+
+			// Step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
+			{
+				position: [20, 20, 20],
+				target: [1.06, 0.43, -3.83],
+				zoom: 6 },
+
+			// Step 6 — Green Space & Unbuilt Area
+			{
+				position: [20, 20, 20],
+				target: [2.54, 0.23, 1.03],
+				zoom: 5 },
+
+			// Step 7 — Summary overview (all layers visible)
+			{
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 0.85 },
+
+			// Step 8 — Return to overview
 			{ 
 				position: [20, 20, 20],
 				target: [0, 0, 0],
-				zoom: 2 }, 
+				zoom: 1 },
 
-			// Step 4 — Right 
+			// Step 9 —  Overview 
 			{ 
-				position: [20, 20, 20], 
-				target: [5, 0, 0], 
-				zoom: 2 }, 
-			// Step 5 — Right / closer 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 1 }, 
+
+			// Step 10 —  Overview 
 			{ 
-				position: [20, 20, 20], 
-				target: [7, 0, 0], 
-				zoom: 2.5 }, 
-			// Step 6 — Return to overview 
-			{ 
-				position: [20, 20, 20], 
-				target: [0, 0, 0], 
-				zoom: 1 } 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 6 }, 
 			];
 
-			const cameraTarget = new THREE.Vector3(); 
-			window.setIntroCamera = (index) => { 
-				const shot = shots[index]; 
-				if (!shot) return; 
+			const cameraTarget = new THREE.Vector3();
 
-				// Set camera position 
-				camera.position.set( 
-					shot.position[0], 
-					shot.position[1], 
-					shot.position[2] ); 
-					
-				// Set camera target 
-				cameraTarget.set( 
-					shot.target[0],
-					shot.target[1],
-					shot.target[2] );
-				
-				camera.lookAt(cameraTarget); 
-				
-				// Orthographic camera zoom 
-				camera.zoom = shot.zoom; 
-				camera.updateProjectionMatrix(); 
+			// Smoothly-animated camera state: setIntroCamera only updates the
+			// target values below — the render loop eases the live camera
+			// toward them every frame instead of snapping instantly, so
+			// scroll-triggered shot changes read as a dynamic pan/zoom
+			// rather than an abrupt cut.
+			const cameraPositionCurrent = new THREE.Vector3(20, 20, 20);
+			const cameraPositionTarget = new THREE.Vector3(20, 20, 20);
+			const cameraLookAtCurrent = new THREE.Vector3(0, 0, 0);
+			const cameraLookAtTarget = new THREE.Vector3(0, 0, 0);
+			let cameraZoomCurrent = 1;
+			let cameraZoomTarget = 1;
+			const cameraEaseLambda = 12; // higher = snappier — must converge faster than steps can activate
+
+			window.setIntroCamera = (index) => {
+				const shot = shots[index];
+				if (!shot) return;
+
+				cameraPositionTarget.set(shot.position[0], shot.position[1], shot.position[2]);
+				cameraLookAtTarget.set(shot.target[0], shot.target[1], shot.target[2]);
+				cameraZoomTarget = shot.zoom;
 			};
+
+			const cameraClock = new THREE.Clock();
+			function updateCameraEasing() {
+				const delta = Math.min(cameraClock.getDelta(), 0.1);
+				const ease = 1 - Math.exp(-cameraEaseLambda * delta);
+
+				cameraPositionCurrent.lerp(cameraPositionTarget, ease);
+				cameraLookAtCurrent.lerp(cameraLookAtTarget, ease);
+				cameraZoomCurrent += (cameraZoomTarget - cameraZoomCurrent) * ease;
+
+				camera.position.copy(cameraPositionCurrent);
+				cameraTarget.copy(cameraLookAtCurrent);
+				camera.lookAt(cameraTarget);
+				camera.zoom = cameraZoomCurrent;
+				camera.updateProjectionMatrix();
+			}
 
 			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 			renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1420,22 +1519,88 @@
 			camera.lookAt(0, 0, 0);
 
 			const material = new THREE.MeshPhongMaterial({
-				color: 0xd9d9d9,
+				color: 0x999999,
+				emissive: 0xffffff,
+				emissiveIntensity: 0.2,
 				flatShading: true,
 				shininess: 0,
 			});
 
-			const ambient = new THREE.HemisphereLight(0xffffff, 0x9a9a9a, 0.55);
+			const outlineMaterial = new THREE.LineBasicMaterial({
+				color: 0x000000,
+				transparent: true,
+				opacity: 0.12,
+			});
+
+			// Per-step highlight + label configuration. `match` selects mesh
+			// names belonging to that step's feature; `startsHidden` marks
+			// features (Garage, electricity lines) that are invisible until
+			// their step is reached. `labels` are the existing svgs/ callout
+			// assets, anchored to a 3D world point projected to screen space
+			// each frame in updateStepLabels().
+			const stepFeatures = [
+				null, // step 0 — overview, no feature
+				null, // step 1 — camera-only (House (camera 1))
+				{
+					// step 2 — Density / Building Components & Construction
+					highlights: [
+						{ match: (n) => n.includes("step_4") && !n.includes("step_2"), startsHidden: false },
+						{ match: (n) => n.includes("step_2"), startsHidden: false },
+					],
+					labels: [
+						{ svg: "./svgs/building_components.svg", anchor: [2.1, 0.34, 3.76] },
+						{ svg: "./svgs/Density.svg", anchor: [1.31, 0.15, 4.42] },
+					],
+				},
+				{
+					// step 3 — Street & Parking Areas / Underground Parking
+					highlights: [
+						{ match: (n) => n.includes("step_5") || n.startsWith("parking"), startsHidden: false },
+						{ match: (n) => n === "garage" || n.startsWith("cube_50") || n === "ground_17", startsHidden: true },
+					],
+					labels: [
+						{ svg: "./svgs/Street_&_Parking Areas.svg", anchor: [2.04, 0.02, 1.33] },
+						{ svg: "./svgs/Underground_Parking.svg", anchor: [4.59, -0.1, -0.45] },
+					],
+				},
+				{
+					// step 4 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
+					highlights: [
+						{ match: (n) => n === "electricity" || n === "electricityground", startsHidden: false },
+						{ match: (n) => n.includes("step_6"), startsHidden: true },
+					],
+					labels: [
+						{ svg: "./svgs/Electricity.svg", anchor: [1.06, 0.43, -3.83] },
+						{ svg: "./svgs/Pipe_& Utility_Lines.svg", anchor: [0.7, 0.15, -3.6] },
+						{ svg: "./svgs/Heating.svg", anchor: [1.4, 0.15, -4.1] },
+					],
+				},
+				{
+					// step 5 — Green Space & Unbuilt Area
+					highlights: [
+						{ match: (n) => n.includes("step_7"), startsHidden: false },
+					],
+					labels: [
+						{ svg: "./svgs/Green_Space.svg", anchor: [2.54, 0.23, 1.03] },
+					],
+				},
+				{
+					// step 6 — summary: every feature highlighted + labeled at once
+					summary: true,
+				},
+			];
+
+			const ambient = new THREE.HemisphereLight(0xffffff, 0xcccccc, 0.3);
 			scene.add(ambient);
 
-			const directional = new THREE.DirectionalLight(0xffffff, 1.1);
-			directional.position.set(-8, 20, 7);
+			const directional = new THREE.DirectionalLight(0xffffff, 0.8);
+			directional.position.set(-8, 14, 7);
 			directional.castShadow = true;
 			directional.shadow.bias = -0.0002;
 			directional.shadow.normalBias = 0.015;
 			scene.add(directional);
 
-			const fill = new THREE.DirectionalLight(0xffffff, 0.25);
+			const fill = new THREE.DirectionalLight(0xffffff, 0.2);
 			fill.position.set(10, 8, -6);
 			scene.add(fill);
 
@@ -1446,27 +1611,142 @@
 			directional.shadow.mapSize.set(2048, 2048);
 			directional.shadow.camera.updateProjectionMatrix();
 
+			// Screen-space label overlay: each label is an <img> of an
+			// existing svgs/ callout asset, positioned every frame by
+			// projecting its 3D world anchor through the live camera.
+			const heroModelLabels = document.getElementById("heroModelLabels");
+			const labelElementCache = new Map();
+			let activeLabelEntries = [];
+
+			function getLabelElement(svgPath) {
+				if (labelElementCache.has(svgPath)) return labelElementCache.get(svgPath);
+				const el = document.createElement("div");
+				el.className = "hero__model-label";
+				const img = document.createElement("img");
+				img.src = svgPath;
+				img.alt = "";
+				el.appendChild(img);
+				heroModelLabels.appendChild(el);
+				labelElementCache.set(svgPath, el);
+				return el;
+			}
+
+			function setActiveLabels(labelConfigs) {
+				labelElementCache.forEach((el) => el.classList.remove("is-visible"));
+				activeLabelEntries = labelConfigs.map((cfg) => {
+					const el = getLabelElement(cfg.svg);
+					el.classList.add("is-visible");
+					return { el, anchor: new THREE.Vector3(cfg.anchor[0], cfg.anchor[1], cfg.anchor[2]) };
+				});
+			}
+
+			function updateStepLabels() {
+				if (!activeLabelEntries.length) return;
+				const width = heroModelCanvas.clientWidth;
+				const height = heroModelCanvas.clientHeight;
+				const projected = new THREE.Vector3();
+				activeLabelEntries.forEach(({ el, anchor }) => {
+					projected.copy(anchor).project(camera);
+					const x = (projected.x * 0.5 + 0.5) * width;
+					const y = (-projected.y * 0.5 + 0.5) * height;
+					const labelW = el.offsetWidth || 0;
+					const labelH = el.offsetHeight || 0;
+					const halfW = labelW / 2;
+					const halfH = labelH / 2;
+					const clampedX = Math.max(16 + halfW, Math.min(width - 16 - halfW, x));
+					const clampedY = Math.max(16 + halfH, Math.min(height - 16 - halfH, y));
+					el.style.transform = `translate3d(${clampedX - halfW}px, ${clampedY - halfH}px, 0)`;
+				});
+			}
+
+			// Highlight state, built once the model has loaded.
+			const highlightGroups = [];
+			const hiddenFeatureMeshes = [];
+			let allHighlightEntries = [];
+			let currentFeatureIndex = -1;
+
+			function applyHighlight(entries, active) {
+				entries.forEach(({ mesh, highlightMaterial }) => {
+					mesh.material = active ? highlightMaterial : material;
+				});
+			}
+
+			window.setIntroFeature = (index) => {
+				if (index === currentFeatureIndex) return;
+				currentFeatureIndex = index;
+
+				highlightGroups.forEach((group) => group && applyHighlight(group, false));
+
+				const feature = stepFeatures[index];
+
+				if (feature && feature.summary) {
+					hiddenFeatureMeshes.forEach(({ mesh }) => { mesh.visible = true; });
+					applyHighlight(allHighlightEntries, true);
+					const allLabels = stepFeatures.filter((f) => f && !f.summary).flatMap((f) => f.labels);
+					setActiveLabels(allLabels);
+					return;
+				}
+
+				hiddenFeatureMeshes.forEach(({ mesh, revealAtStep }) => {
+					mesh.visible = index >= revealAtStep;
+				});
+
+				if (feature) {
+					applyHighlight(highlightGroups[index] || [], true);
+					setActiveLabels(feature.labels || []);
+				} else {
+					setActiveLabels([]);
+				}
+			};
+
 			function animate() {
+				updateCameraEasing();
+				updateStepLabels();
 				renderer.render(scene, camera);
 			}
 
 			loader.load(
-				"./Neighbourhood_Model/Intro.glb",
+				"./Neighbourhood_Model/intro_ALL.glb",
 				(gltf) => {
 					modelRoot = gltf.scene;
 					gltf.scene.scale.setScalar(0.88);
 					const modelBox = new THREE.Box3().setFromObject(gltf.scene);
 					const modelCenter = modelBox.getCenter(new THREE.Vector3());
-					gltf.scene.position.set(-modelCenter.x - -3, -modelCenter.y - -0.3, -modelCenter.z);
+					gltf.scene.position.set(-modelCenter.x - -3, -modelCenter.y - 0, -modelCenter.z - 3);
 
+					const meshes = [];
 					gltf.scene.traverse((child) => {
 						if (child.isMesh) {
 							child.material = material;
 
 							child.castShadow = true;
 							child.receiveShadow = true;
+
+							const edges = new THREE.EdgesGeometry(child.geometry, 80);
+							child.add(new THREE.LineSegments(edges, outlineMaterial));
+
+							meshes.push(child);
 						}
 					});
+
+					stepFeatures.forEach((feature, stepIndex) => {
+						if (!feature || feature.summary) return;
+						const groupEntries = [];
+						feature.highlights.forEach((h) => {
+							meshes.forEach((mesh) => {
+								if (!h.match(mesh.name.toLowerCase())) return;
+								const highlightMaterial = material.clone();
+								highlightMaterial.color.set(0xbfbfbf);
+								groupEntries.push({ mesh, highlightMaterial });
+								if (h.startsHidden) {
+									mesh.visible = false;
+									hiddenFeatureMeshes.push({ mesh, revealAtStep: stepIndex });
+								}
+							});
+						});
+						highlightGroups[stepIndex] = groupEntries;
+					});
+					allHighlightEntries = highlightGroups.flat().filter(Boolean);
 
 					scene.add(gltf.scene);
 					renderer.render(scene, camera);
@@ -1507,6 +1787,7 @@
 	const menuGroupLinks = Array.from(document.querySelectorAll("[data-menu-group-link]"));
 	const menuItemLinks = Array.from(document.querySelectorAll("[data-menu-item]"));
 	const conceptStepItemMap = ["modular-approach", "modular-approach", "key-factors"];
+	const compareStepItemMap = ["case-0", "case-1", "case-1", "case-1", "case-1"];
 
 	function setMenuOpenState(isOpen) {
 		dropdown.classList.toggle("open", isOpen);
@@ -1521,7 +1802,7 @@
 		const conceptTop = conceptSection.getBoundingClientRect().top;
 		if (compareTop <= 0) {
 			activeGroup = "compare";
-			activeItem = "case-1";
+			activeItem = compareStepItemMap[currentCompareStepIndex] || "case-1";
 		} else if (conceptTop <= 0) {
 			activeGroup = "concept";
 			activeItem = conceptStepItemMap[currentConceptStepIndex] || "key-factors";
@@ -1600,9 +1881,14 @@
 	const compareScroller = scrollama();
 	const introFadeStart = 0.01;
 	const introFadeEnd = 0.62;
-	const CONCEPT_PART1_PROGRESS = 0.28;
+	const CONCEPT_PART1_PROGRESS = 0;
 	const CONCEPT_PART2_PROGRESS = 0.56;
 	const CONCEPT_PART3_PROGRESS = 0.8;
+	const CONCEPT_ACTIVATION_PROGRESS = 0.34;
+	const PNG_REVEAL_END_PROGRESS = 0.56;
+	// Keep the first infographic step on the same framing as landing.
+	// Then continue model progression from the next shot.
+	const INTRO_MODEL_STEP_OFFSET = 1;
 
 	let currentConceptStepIndex = 0;
 	let currentCompareStepIndex = 0;
@@ -1613,10 +1899,19 @@
 	let conceptSectionActive = false;
 
 	function syncIntroCamera(index) {
-		if (index === currentIntroCameraIndex) return;
+		let modelIndex = index + INTRO_MODEL_STEP_OFFSET;
+		// Keep the first two intro paragraphs on the landing framing.
+		// This prevents any camera move before the modular-structure text is done.
+		if (index <= 1) {
+			modelIndex = 0;
+		}
+		if (modelIndex === currentIntroCameraIndex) return;
 		if (typeof window.setIntroCamera === "function") {
-			window.setIntroCamera(index);
-			currentIntroCameraIndex = index;
+			window.setIntroCamera(modelIndex);
+			currentIntroCameraIndex = modelIndex;
+		}
+		if (typeof window.setIntroFeature === "function") {
+			window.setIntroFeature(modelIndex);
 		}
 	}
 
@@ -1638,7 +1933,7 @@
 		if (!stepEl.querySelector(".step-flow")) return;
 
 		stepEl.classList.add("concept-title-visible");
-		stepEl.classList.toggle("concept-part1-visible", progress >= CONCEPT_PART1_PROGRESS);
+		stepEl.classList.toggle("concept-part1-visible", progress >= 0);
 		stepEl.classList.toggle("concept-part2-visible", progress >= CONCEPT_PART2_PROGRESS);
 		stepEl.classList.toggle("concept-part3-visible", progress >= CONCEPT_PART3_PROGRESS);
 	}
@@ -1651,6 +1946,11 @@
 
 	function resetConceptFlowState() {
 		resetFlowState(conceptStep);
+	}
+
+	function clearConceptStepFlowState(stepEl) {
+		if (!stepEl) return;
+		stepEl.classList.remove("concept-title-visible", "concept-part1-visible", "concept-part2-visible", "concept-part3-visible");
 	}
 
 	function resetCompareFlowState() {
@@ -1667,6 +1967,34 @@
 		stepEl.classList.toggle("concept-part3-visible", progress >= CONCEPT_PART3_PROGRESS);
 	}
 
+	function setConceptModelState(index, progress = 0) {
+		const primaryIndex = index <= 1
+			? 1
+			: Math.min(index, models.length - 1);
+		const model1 = document.getElementById("model-1");
+
+		models.forEach((model) => {
+			model.classList.remove("active");
+			model.style.opacity = "";
+		});
+
+		if (index === 0 && model1) {
+			if (progress < CONCEPT_ACTIVATION_PROGRESS) {
+				return;
+			}
+
+			const normalized = (progress - CONCEPT_ACTIVATION_PROGRESS) / (PNG_REVEAL_END_PROGRESS - CONCEPT_ACTIVATION_PROGRESS);
+			const overlayOpacity = Math.max(0, Math.min(1, normalized));
+			model1.classList.add("active");
+			model1.style.opacity = overlayOpacity.toFixed(3);
+			return;
+		}
+
+		if (models[primaryIndex]) {
+			models[primaryIndex].classList.add("active");
+		}
+	}
+
 	function handleIntroStepEnter(response) {
 		const index = response.index;
 		syncIntroCamera(index);
@@ -1674,6 +2002,7 @@
 
 		resetIntroFlowState();
 		setActiveStep(introStep, index);
+		updateIntroFlowFromProgress(response.element, 0);
 		if (index > 0) {
 			currentIntroOpacity = 0;
 			currentIntroTextVisible = true;
@@ -1736,25 +2065,27 @@
 		setActiveStep(introStep, response.index);
 
 		updateIntroFlowFromProgress(response.element, introTextProgress);
+		updateChapterProgress(progressThumb, introStep, response);
 
 		syncMenuState();
 	}
 
 	function handleStepEnter(response) {
 		const index = response.index;
-		const modelIndex = Math.min(index + 1, models.length - 1);
 		currentConceptStepIndex = index;
 		conceptSectionActive = true;
 
 		setActiveStep(conceptStep, index);
 		resetConceptFlowState();
-		updateConceptFlowFromProgress(response.element, 0);
-		models.forEach((model) => {
-			model.classList.remove("active");
-		});
-		models[modelIndex].classList.add("active");
+		if (index === 0) {
+			clearConceptStepFlowState(response.element);
+			setConceptModelState(index, 0);
+		} else {
+			updateConceptFlowFromProgress(response.element, 0);
+			setConceptModelState(index, 1);
+		}
 
-		updateChapterProgress(response);
+		updateChapterProgress(progressThumb, conceptStep, response);
 		syncMenuState();
 	}
 
@@ -1762,16 +2093,19 @@
 		currentConceptStepIndex = response.index;
 		conceptSectionActive = true;
 		setActiveStep(conceptStep, response.index);
-		updateConceptFlowFromProgress(response.element, response.progress);
+		if (response.index === 0 && response.progress < CONCEPT_ACTIVATION_PROGRESS) {
+			clearConceptStepFlowState(response.element);
+			setConceptModelState(response.index, response.progress);
+		} else if (response.index === 0) {
+			const adjustedProgress = (response.progress - CONCEPT_ACTIVATION_PROGRESS) / (1 - CONCEPT_ACTIVATION_PROGRESS);
+			updateConceptFlowFromProgress(response.element, Math.max(0, Math.min(1, adjustedProgress)));
+			setConceptModelState(response.index, response.progress);
+		} else {
+			updateConceptFlowFromProgress(response.element, response.progress);
+			setConceptModelState(response.index, 1);
+		}
 
-		// Keep the right-side model in sync even during continuous progress updates.
-		const modelIndex = Math.min(response.index + 1, models.length - 1);
-		models.forEach((model) => {
-			model.classList.remove("active");
-		});
-		models[modelIndex].classList.add("active");
-
-		updateChapterProgress(response);
+		updateChapterProgress(progressThumb, conceptStep, response);
 		syncMenuState();
 	}
 
@@ -1792,20 +2126,21 @@
 
 		setActiveStep(compareStep, response.index);
 		updateConceptFlowFromProgress(response.element, response.progress);
+		updateChapterProgress(progressThumb, compareStep, response);
 
 		syncMenuState();
 	}
 
-	function updateChapterProgress(response) {
-		if (!progressThumb) return;
+	function updateChapterProgress(progressThumbEl, stepSelection, response) {
+		if (!progressThumbEl) return;
 
 		// Convert current step + in-step progress into one overall 0..1 value.
-		const totalSteps = conceptStep.size();
+		const totalSteps = stepSelection.size();
 		const overallProgress = (response.index + response.progress) / totalSteps;
-		const totalTravel = progressThumb.parentElement.offsetHeight - progressThumb.offsetHeight;
+		const totalTravel = progressThumbEl.parentElement.offsetHeight - progressThumbEl.offsetHeight;
 		const y = totalTravel * overallProgress;
 
-		progressThumb.style.transform = `translate3d(0, ${Math.round(y)}px, 0)`;
+		progressThumbEl.style.transform = `translate3d(0, ${Math.round(y)}px, 0)`;
 	}
 
 	function updateThreeJSFromScroll(response) {
@@ -1827,21 +2162,20 @@
 		if (!introSection) return;
 
 		const sectionRect = introSection.getBoundingClientRect();
-		const menuShouldShow = window.scrollY > 2 && sectionRect.top <= 0 && currentIntroOpacity <= 0.08;
-		const conceptTop = conceptSection.getBoundingClientRect().top;
-		const contentActive = conceptSectionActive || conceptTop <= 0;
+		const conceptRect = conceptSection ? conceptSection.getBoundingClientRect() : null;
+		const compareRect = compareSection ? compareSection.getBoundingClientRect() : null;
+		const pastLanding = window.scrollY > 2 && sectionRect.top <= 0;
+		const conceptInView = !!conceptRect && conceptRect.top <= window.innerHeight * 0.75;
+		const compareInView = !!compareRect && compareRect.top <= window.innerHeight * 0.75;
+		const menuShouldShow = pastLanding && (currentIntroOpacity <= 0.08 || conceptInView || compareInView || conceptSectionActive);
+		const contentActive = conceptSectionActive || conceptInView || compareInView;
 
 		document.body.classList.toggle("menu-visible", menuShouldShow);
 		document.body.classList.toggle("content-active", contentActive);
 
 		if (heroVisualShell) {
-			if (contentActive) {
-				heroVisualShell.style.display = "none";
-			} else {
-				heroVisualShell.style.display = "";
-				heroVisualShell.style.opacity = "";
-				heroVisualShell.style.visibility = "";
-			}
+			heroVisualShell.style.opacity = "";
+			heroVisualShell.style.visibility = "";
 		}
 	}
 
