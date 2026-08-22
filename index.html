@@ -14,11 +14,6 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
-
-		body.menu-open {
-			overflow: hidden;
-		}
-
 		.header {
 			position: fixed;
 			top: 0;
@@ -722,6 +717,12 @@
 			transform: translate3d(0, 0, 0);
 		}
 
+		#content .step.concept-part4-visible .concept-text-blocks .step-part--4,
+		#compare .step.concept-part4-visible .concept-text-blocks .step-part--4 {
+			opacity: 1;
+			transform: translate3d(0, 0, 0);
+		}
+
 		#content .step.is-active,
 		#compare .step.is-active {
 			font-weight: 400;
@@ -733,7 +734,7 @@
 			display: flex;
 			width: 100%;
 			height: 100%;
-			padding: 112px 90px 72px;
+			padding: 36px;
 			box-sizing: border-box;
 			background: #FDFDFD;
 			color: black;
@@ -741,7 +742,7 @@
 			justify-content: center;
 			font-size: 1.2rem;
 			opacity: 0;
-			transition: opacity 0.35s ease;
+			transition: opacity 0s;
 			pointer-events: none;
 		}
 
@@ -756,8 +757,85 @@
 		.model-view img {
 			width: 70%;
 			height: 70%;
+			max-width: 100%;
+			max-height: 100%;
 			object-fit: contain;
 			object-position: center center;
+		}
+
+		.neighborhood-model .model-main {
+			width: 84%;
+			height: 84%;
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain;
+		}
+
+		.neighborhood-model .factor-overview-trigger {
+			position: absolute;
+			left: 48px;
+			bottom: 42px;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 0;
+			border: 0;
+			background: transparent;
+			cursor: pointer;
+			pointer-events: auto;
+		}
+
+		.neighborhood-model .factor-overview-trigger img {
+			width: auto;
+			height: 18px;
+			max-width: none;
+			max-height: none;
+			object-fit: contain;
+		}
+
+		.neighborhood-model .factor-overview-panel {
+			position: absolute;
+			top: 22px;
+			right: 26px;
+			width: min(56%, 360px);
+			height: calc(100% - 44px);
+			padding: 18px 16px;
+			box-sizing: border-box;
+			background: #fdfdfd;
+			border: 1px solid #c8c8c8;
+			display: none;
+			overflow-y: auto;
+			overflow-x: hidden;
+			pointer-events: auto;
+		}
+
+		.neighborhood-model .factor-overview-panel.is-open {
+			display: block;
+		}
+
+		.neighborhood-model .factor-overview-full {
+			width: 100%;
+			height: auto;
+			max-width: none;
+			max-height: none;
+			object-fit: contain;
+			object-position: top center;
+			display: block;
+		}
+
+		.neighborhood-model .factor-overview-close {
+			position: sticky;
+			top: 0;
+			margin-left: auto;
+			display: block;
+			width: 24px;
+			height: 24px;
+			line-height: 22px;
+			text-align: center;
+			border: 0;
+			background: #fdfdfd;
+			cursor: pointer;
+			font-size: 20px;
 		}
 
 		#content .model-view::before {
@@ -1010,6 +1088,27 @@
 
 			.model-view {
 				padding: 32px;
+			}
+
+			.neighborhood-model .factor-overview-trigger {
+				left: 36px;
+				bottom: 34px;
+			}
+
+			.neighborhood-model .factor-overview-panel {
+				width: min(44%, 360px);
+			}
+
+			.neighborhood-model .factor-overview-trigger {
+				left: 18px;
+				bottom: 20px;
+			}
+
+			.neighborhood-model .factor-overview-panel {
+				top: 16px;
+				right: 16px;
+				width: calc(100% - 32px);
+				height: calc(100% - 32px);
 			}
 
 			.hero__subtitle,
@@ -1277,6 +1376,13 @@
 					<h2 class="concept-title">How Climate Impact is measured</h2>
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">The GWP of all 972 variations can be explored through different indicators, including total GWP as well as area-based and population-based metrics.</div>
+					</div>
+				</div>
+			</div>
+			<div class="step" data-chapter="concept">
+				<div class="concept-flow">
+					<div class="concept-text-blocks">
+						<div class="step-part step-part--1">Each indicator highlights different aspects of settlement performance.</div>
 						<div class="step-part step-part--2">Comparing different configurations of urban patterns is therefore not only a matter of total global warming potential but also of spatial efficiency and per-capita resource use.</div>
 					</div>
 				</div>
@@ -1308,6 +1414,30 @@
             </div>
             <div class="model-view" id="model-4">
                 <img src="./svgs/BuildingTypes.svg" alt="Model 4">
+            </div>
+			<div class="model-view" id="model-5">
+                <img src="./svgs/Density_Factor.svg" alt="Model 5">
+            </div>
+			<div class="model-view" id="model-6">
+                <img src="./svgs/Road_Factor.svg" alt="Model 6">
+            </div>
+			<div class="model-view" id="model-7">
+                <img src="./svgs/Construction_Factor.svg" alt="Model 7">
+            </div>
+			<div class="model-view" id="model-8">
+                <img src="./svgs/Heat_Factor.svg" alt="Model 8">
+            </div>
+			<div class="model-view" id="model-9">
+                <img src="./svgs/Energy_Factor.svg" alt="Model 9">
+            </div>
+			<div class="model-view" id="model-10">
+                <img src="./svgs/climate_impact.svg" alt="Model 10">
+            </div>
+			<div class="model-view" id="model-11">
+                <img src="./svgs/Land_Use.svg" alt="Model 11">
+            </div>
+			<div class="model-view" id="model-12">
+                <img src="./svgs/GWP_Composition.svg" alt="Model 12">
             </div>
         </figure>
 
@@ -1348,6 +1478,8 @@
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Neighbourhood A represents a compact, high-density urban structure where land is used efficiently and urban functions are closely connected.</div>
 						<div class="step-part step-part--2">Most parking is provided underground to accommodate many vehicles within a limited area, requiring more complex construction and additional materials.</div>
+						<div class="step-part step-part--3"><img src="svgs/Text/NeighborhoodA.svg" alt="Neighborhood A"></div>
+
 					</div>
 				</div>
 			</div>
@@ -1357,13 +1489,48 @@
 						<div class="step-part step-part--1">Neighbourhood B represents a low-density suburban structure with detached housing, larger private spaces and more dispersed urban functions. </div>
 						<div class="step-part step-part--2">Its lower density requires more land per person, but creates more open and green spaces within the neighbourhood.</div>
 						<div class="step-part step-part--3">Parking is typically provided above ground.</div>
+						<div class="step-part step-part--4"><img src="svgs/Text/NeighborhoodB.svg" alt="Neighborhood B"></div>
+
 					</div>
 				</div>
 			</div>
 
 
 		</article>
-		<figure aria-hidden="true"></figure>
+
+		<figure> 
+           
+            <div class="model-view" id="model-13">
+            <img src="./svgs/Units.svg" alt="Model 13">
+            </div>
+			<div class="model-view" id="model-14">
+            <img src="./svgs/Units_Ex.svg" alt="Model 14">
+            </div>
+			<div class="model-view" id="model-15">
+            <img src="./svgs/UrbanForm.svg" alt="Model 15">
+            </div>
+			<div class="model-view neighborhood-model" id="model-16">
+				<img class="model-main" src="./svgs/NeighborhoodA.svg" alt="Model 16 Neighborhood A">
+				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerA" aria-controls="factorOverviewPanelA" aria-expanded="false">
+					<img src="./svgs/FactorOverview.svg" alt="Open factor overview">
+				</button>
+				<div class="factor-overview-panel" id="factorOverviewPanelA" aria-hidden="true">
+					<button type="button" class="factor-overview-close" aria-label="Close factor overview">×</button>
+					<img class="factor-overview-full" src="./svgs/FactorOverview(full).svg" alt="Full factor overview">
+				</div>
+			</div>
+			<div class="model-view neighborhood-model" id="model-17">
+				<img class="model-main" src="./svgs/NeighborhoodB.svg" alt="Model 17 Neighborhood B">
+				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerB" aria-controls="factorOverviewPanelB" aria-expanded="false">
+					<img src="./svgs/FactorOverview.svg" alt="Open factor overview">
+				</button>
+				<div class="factor-overview-panel" id="factorOverviewPanelB" aria-hidden="true">
+					<button type="button" class="factor-overview-close" aria-label="Close factor overview">×</button>
+					<img class="factor-overview-full" src="./svgs/FactorOverview(full).svg" alt="Full factor overview">
+				</div>
+			</div>
+        
+        </figure>
 
 	</div>
 	</section>
@@ -1423,14 +1590,14 @@
 			// Step 3 — Density / Building Components & Construction
 			{
 				position: [20, 20, 20],
-				target: [2.1, 0.34, 3.76],
+				target: [2.2, 0.9, 2.5],
 				zoom: 5 },
 
 			// Step 4 — Street & Parking Areas / Underground Parking
 			{
 				position: [20, 20, 20],
-				target: [3.3, -0.04, 0.44],
-				zoom: 2.5 },
+				target: [0, 0, 0],
+				zoom: 1 },
 
 			// Step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
 			{
@@ -1872,8 +2039,23 @@
 		document.getElementById("model-1"),
 		document.getElementById("model-2"),
 		document.getElementById("model-3"),
-		document.getElementById("model-4")
+		document.getElementById("model-4"),
+		document.getElementById("model-5"),
+		document.getElementById("model-6"),
+		document.getElementById("model-7"),
+		document.getElementById("model-8"),
+		document.getElementById("model-9"),
+		document.getElementById("model-10"),
+		document.getElementById("model-11"),
+		document.getElementById("model-12"),
+		document.getElementById("model-13"),
+		document.getElementById("model-14"),
+		document.getElementById("model-15"),
+		document.getElementById("model-16"),
+		document.getElementById("model-17"),
+
 	].filter(Boolean);
+	const neighborhoodModels = Array.from(document.querySelectorAll(".neighborhood-model"));
 
 // Scrollama
 	const introScroller = scrollama();
@@ -1884,8 +2066,10 @@
 	const CONCEPT_PART1_PROGRESS = 0;
 	const CONCEPT_PART2_PROGRESS = 0.56;
 	const CONCEPT_PART3_PROGRESS = 0.8;
+	const CONCEPT_PART4_PROGRESS = 0.92;
 	const CONCEPT_ACTIVATION_PROGRESS = 0.34;
 	const PNG_REVEAL_END_PROGRESS = 0.56;
+	const COMPARE_MODEL_START_INDEX = 13;
 	// Keep the first infographic step on the same framing as landing.
 	// Then continue model progression from the next shot.
 	const INTRO_MODEL_STEP_OFFSET = 1;
@@ -1936,11 +2120,12 @@
 		stepEl.classList.toggle("concept-part1-visible", progress >= 0);
 		stepEl.classList.toggle("concept-part2-visible", progress >= CONCEPT_PART2_PROGRESS);
 		stepEl.classList.toggle("concept-part3-visible", progress >= CONCEPT_PART3_PROGRESS);
+		stepEl.classList.toggle("concept-part4-visible", progress >= CONCEPT_PART4_PROGRESS);
 	}
 
 	function resetFlowState(stepSelection) {
 		stepSelection.each(function () {
-			this.classList.remove("concept-title-visible", "concept-part1-visible", "concept-part2-visible", "concept-part3-visible");
+			this.classList.remove("concept-title-visible", "concept-part1-visible", "concept-part2-visible", "concept-part3-visible", "concept-part4-visible");
 		});
 	}
 
@@ -1950,7 +2135,7 @@
 
 	function clearConceptStepFlowState(stepEl) {
 		if (!stepEl) return;
-		stepEl.classList.remove("concept-title-visible", "concept-part1-visible", "concept-part2-visible", "concept-part3-visible");
+		stepEl.classList.remove("concept-title-visible", "concept-part1-visible", "concept-part2-visible", "concept-part3-visible", "concept-part4-visible");
 	}
 
 	function resetCompareFlowState() {
@@ -1965,6 +2150,7 @@
 		stepEl.classList.toggle("concept-part1-visible", progress >= CONCEPT_PART1_PROGRESS);
 		stepEl.classList.toggle("concept-part2-visible", progress >= CONCEPT_PART2_PROGRESS);
 		stepEl.classList.toggle("concept-part3-visible", progress >= CONCEPT_PART3_PROGRESS);
+		stepEl.classList.toggle("concept-part4-visible", progress >= CONCEPT_PART4_PROGRESS);
 	}
 
 	function setConceptModelState(index, progress = 0) {
@@ -1994,6 +2180,64 @@
 			models[primaryIndex].classList.add("active");
 		}
 	}
+
+	function setCompareModelState(index) {
+		const compareModelIndex = Math.min(COMPARE_MODEL_START_INDEX + index, 17);
+
+		models.forEach((model) => {
+			model.classList.remove("active");
+			model.style.opacity = "";
+		});
+
+		closeAllFactorOverviewPanels();
+
+		if (models[compareModelIndex]) {
+			models[compareModelIndex].classList.add("active");
+		}
+	}
+
+	function closeAllFactorOverviewPanels() {
+		neighborhoodModels.forEach((modelEl) => {
+			const trigger = modelEl.querySelector(".factor-overview-trigger");
+			const panel = modelEl.querySelector(".factor-overview-panel");
+			if (!trigger || !panel) return;
+			panel.classList.remove("is-open");
+			trigger.setAttribute("aria-expanded", "false");
+			panel.setAttribute("aria-hidden", "true");
+		});
+	}
+
+	function openFactorOverviewPanel(modelEl) {
+		const trigger = modelEl.querySelector(".factor-overview-trigger");
+		const panel = modelEl.querySelector(".factor-overview-panel");
+		if (!trigger || !panel) return;
+		panel.classList.add("is-open");
+		trigger.setAttribute("aria-expanded", "true");
+		panel.setAttribute("aria-hidden", "false");
+		panel.scrollTop = 0;
+	}
+
+	neighborhoodModels.forEach((modelEl) => {
+		const trigger = modelEl.querySelector(".factor-overview-trigger");
+		const panel = modelEl.querySelector(".factor-overview-panel");
+		const closeButton = modelEl.querySelector(".factor-overview-close");
+
+		if (trigger && panel) {
+			trigger.addEventListener("click", () => {
+				const isOpen = panel.classList.contains("is-open");
+				closeAllFactorOverviewPanels();
+				if (!isOpen) {
+					openFactorOverviewPanel(modelEl);
+				}
+			});
+		}
+
+		if (closeButton) {
+			closeButton.addEventListener("click", () => {
+				closeAllFactorOverviewPanels();
+			});
+		}
+	});
 
 	function handleIntroStepEnter(response) {
 		const index = response.index;
@@ -2116,6 +2360,7 @@
 		setActiveStep(compareStep, response.index);
 		resetCompareFlowState();
 		updateConceptFlowFromProgress(response.element, 0);
+		setCompareModelState(response.index);
 
 		syncMenuState();
 	}
@@ -2126,6 +2371,7 @@
 
 		setActiveStep(compareStep, response.index);
 		updateConceptFlowFromProgress(response.element, response.progress);
+		setCompareModelState(response.index);
 		updateChapterProgress(progressThumb, compareStep, response);
 
 		syncMenuState();
@@ -2179,6 +2425,24 @@
 		}
 	}
 
+	function ensureCompareVisibleStateOnLoad() {
+		const hash = window.location.hash;
+		const compareInHash = hash === "#compare";
+		const compareInView = compareSection && compareSection.getBoundingClientRect().top <= window.innerHeight * 0.8;
+
+		if (!compareInHash && !compareInView) return;
+
+		const firstCompareStep = compareStep.nodes()[0];
+		if (!firstCompareStep) return;
+
+		currentCompareStepIndex = 0;
+		conceptSectionActive = true;
+		setActiveStep(compareStep, 0);
+		resetCompareFlowState();
+		updateConceptFlowFromProgress(firstCompareStep, 0);
+		setCompareModelState(0);
+	}
+
 	function init() {
 		currentIntroOpacity = 1;
 		currentIntroTextVisible = false;
@@ -2218,6 +2482,8 @@
 			})
 			.onStepEnter(handleCompareStepEnter)
 			.onStepProgress(handleCompareStepProgress);
+
+		ensureCompareVisibleStateOnLoad();
 
 		requestAnimationFrame(() => {
 			syncMenuState();
