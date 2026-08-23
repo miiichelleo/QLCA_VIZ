@@ -496,10 +496,6 @@
 			position: relative;
 		}
 
-		#compare article {
-			padding-bottom: 36px;
-		}
-
 		#infographic figure,
 		#content figure,
 		#compare figure {
@@ -530,12 +526,6 @@
 			align-items: flex-start;
 			line-height: 1.7;
 			max-width: 332px;
-		}
-
-		#compare .step:last-child {
-			height: auto !important;
-			min-height: 0 !important;
-			padding-bottom: 12px;
 		}
 
 		#infographic article {
@@ -1170,46 +1160,9 @@
 			}
 		}
 
-
-		.figures {
-    	margin-bottom: 20px;
-    	border-top: 1px solid #ddd;
-    	border-bottom: 1px solid #ddd;
+		#outro {
+			height: 100vh;
 		}
-
-		.figure {
-    	display: flex;
-    	justify-content: space-between;
-    	margin-top: 8px;
-    	margin-bottom: 8px;
-		}
-
-		.explore-case-link {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			min-width: 112px;
-			padding: 10px 18px;
-			margin: 0 auto;
-			background: #050505;
-			color: #fdfdfd;
-			text-decoration: none;
-			font-size: 16px;
-			line-height: 1;
-			border: 0;
-			cursor: pointer;
-		}
-
-		.explore-case-link:hover {
-			background: #222;
-		}
-
-		.explore-case-wrap {
-			display: flex;
-			justify-content: center;
-			margin-top: -10px;
-		}
-
 	</style>
 
 
@@ -1539,57 +1492,23 @@
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Neighbourhood A represents a compact, high-density urban structure where land is used efficiently and urban functions are closely connected.</div>
 						<div class="step-part step-part--2">Most parking is provided underground to accommodate many vehicles within a limited area, requiring more complex construction and additional materials.</div>
-						
-						<section class="figures">
-							<div class="figure">
-								<span>Population</span> 
-								<span id="populationValueA">1141</span>
-            				</div>
+						<div class="step-part step-part--3"><img src="svgs/Text/NeighborhoodA.svg" alt="Neighborhood A"></div>
 
-							<div class="figure">
-								<span>Buildings</span>
-								<span id="buildingsValueA">6</span>
-							</div>
-
-							<div class="figure">
-								<span>Hectares</span>
-								<span id="hectaresValueA">7</span>
-							</div>
-						</section>
-		
 					</div>
 				</div>
 			</div>
-			
 			<div class="step" data-chapter="compare">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Neighbourhood B represents a low-density suburban structure with detached housing, larger private spaces and more dispersed urban functions. </div>
 						<div class="step-part step-part--2">Its lower density requires more land per person, but creates more open and green spaces within the neighbourhood.</div>
 						<div class="step-part step-part--3">Parking is typically provided above ground.</div>
-							<section class="figures">
-								<div class="figure">
-									<span>Population</span> 
-									<span id="populationValueB">183</span>
-            					</div>
+						<div class="step-part step-part--4"><img src="svgs/Text/NeighborhoodB.svg" alt="Neighborhood B"></div>
 
-								<div class="figure">
-									<span>Buildings</span>
-									<span id="buildingsValueB">6</span>
-								</div>
-
-								<div class="figure">
-									<span>Hectares</span>
-									<span id="hectaresValueB">60</span>
-								</div>
-							</section>
-							<div class="explore-case-wrap">
-								<a class="explore-case-link" href="./Compare_Section/index.html">Explore Case</a>
-							</div>
 					</div>
 				</div>
 			</div>
-		
+
 
 		</article>
 
@@ -1629,6 +1548,8 @@
 
 	</div>
 	</section>
+	<section id="outro"></section>
+
 	</main>
 	
 
@@ -2016,20 +1937,6 @@
 	function syncMenuState() {
 		updateMenuVisibility();
 		updateMenuHighlight();
-		syncChapterThumbAtCompareEnd();
-	}
-
-	function syncChapterThumbAtCompareEnd() {
-		if (!progressThumb || !compareSection) return;
-
-		const compareRect = compareSection.getBoundingClientRect();
-		if (compareRect.bottom > window.innerHeight + 1) return;
-
-		const progressTrack = progressThumb.parentElement;
-		if (!progressTrack) return;
-
-		const totalTravel = progressTrack.offsetHeight - progressThumb.offsetHeight;
-		progressThumb.style.transform = `translate3d(0, ${Math.max(0, Math.round(totalTravel))}px, 0)`;
 	}
 
 	function setActiveStep(stepSelection, index) {
@@ -2284,17 +2191,11 @@
 	function handleCompareStepEnter(response) {
 		currentCompareStepIndex = response.index;
 		conceptSectionActive = true;
-		const isLastCompareStep = response.index === compareStep.size() - 1;
 
 		setActiveStep(compareStep, response.index);
 		resetCompareFlowState();
-		updateConceptFlowFromProgress(response.element, isLastCompareStep ? 1 : 0);
+		updateConceptFlowFromProgress(response.element, 0);
 		setCompareModelState(response.index);
-		updateChapterProgress(
-			progressThumb,
-			compareStep,
-			isLastCompareStep ? { ...response, progress: 1 } : response
-		);
 
 		syncMenuState();
 	}
@@ -2302,16 +2203,11 @@
 	function handleCompareStepProgress(response) {
 		currentCompareStepIndex = response.index;
 		conceptSectionActive = true;
-		const isLastCompareStep = response.index === compareStep.size() - 1;
 
 		setActiveStep(compareStep, response.index);
-		updateConceptFlowFromProgress(response.element, isLastCompareStep ? 1 : response.progress);
+		updateConceptFlowFromProgress(response.element, response.progress);
 		setCompareModelState(response.index);
-		updateChapterProgress(
-			progressThumb,
-			compareStep,
-			isLastCompareStep ? { ...response, progress: 1 } : response
-		);
+		updateChapterProgress(progressThumb, compareStep, response);
 
 		syncMenuState();
 	}
