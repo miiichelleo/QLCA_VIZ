@@ -281,18 +281,16 @@
 			height: 100%;
 		}
 
-		.hero__model-image {
+		.hero__model-infographic {
 			position: absolute;
-			left: 50%;
 			top: 50%;
-			width: min(92vw, 1700px);
-			height: auto;
+			left: 50%;
 			max-width: none;
-			transform: translate3d(-50%, -50%, 0) scale(1);
-			transform-origin: center center;
-			will-change: transform;
+			max-height: none;
 			pointer-events: none;
 			user-select: none;
+			transform-origin: center center;
+			will-change: transform;
 		}
 
 		.hero__model-labels {
@@ -328,17 +326,6 @@
 			display: block;
 			height: 34px;
 			width: auto;
-		}
-
-		.hero__model-fallback {
-			display: none;
-			position: absolute;
-			left: 40px;
-			bottom: 40px;
-			max-width: 220px;
-			font-size: 15px;
-			line-height: 1.35;
-			color: rgba(5, 5, 5, 0.56);
 		}
 
 		.hero__logo,
@@ -1163,6 +1150,46 @@
 		#outro {
 			height: 100vh;
 		}
+
+		.figures {
+			margin-bottom: 20px;
+			border-top: 1px solid #ddd;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.figure {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 8px;
+			margin-bottom: 8px;
+		}
+
+		.explore-case-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 112px;
+			padding: 10px 18px;
+			margin: 0 auto;
+			background: #050505;
+			color: #fdfdfd;
+			text-decoration: none;
+			font-size: 16px;
+			line-height: 1;
+			border: 0;
+			cursor: pointer;
+		}
+
+		.explore-case-link:hover {
+			background: #222;
+		}
+
+		.explore-case-wrap {
+			display: flex;
+			justify-content: center;
+			margin-top: -10px;
+		}
+
 	</style>
 
 
@@ -1222,7 +1249,6 @@
 				<div class="intro-model-shell">
 					<div class="hero__model-canvas" id="heroModelCanvas"></div>
 					<div class="hero__model-labels" id="heroModelLabels" aria-hidden="true"></div>
-					<div class="hero__model-fallback" id="heroModelFallback"> Run this page through a local server to load and animate the 3D model.</div>
 				</div>
 			</div>
 		</section>
@@ -1258,7 +1284,7 @@
 				<!-- CAMERA SHOT 4 --> 
 				<div class="step">
 					<div class="step-flow">
-					<h2 class="infographic-title">From Building Blocks to Scenarios</h2>
+					<h2 class="infographic-title">The Building Blocks of the Neighbourhood</h2>
 						<div class="step-part step-part--1">Every neighbourhood begins with its buildings, including components, construction methods, and density.</div>
 						<div class="step-part step-part--2">However, buildings are only one part of the neighbourhood system.</div>
 					</div>
@@ -1492,7 +1518,23 @@
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Neighbourhood A represents a compact, high-density urban structure where land is used efficiently and urban functions are closely connected.</div>
 						<div class="step-part step-part--2">Most parking is provided underground to accommodate many vehicles within a limited area, requiring more complex construction and additional materials.</div>
-						<div class="step-part step-part--3"><img src="svgs/Text/NeighborhoodA.svg" alt="Neighborhood A"></div>
+						
+						<section class="figures">
+							<div class="figure">
+								<span>Population</span> 
+								<span id="populationValueA">1141</span>
+							</div>
+
+							<div class="figure">
+								<span>Buildings</span>
+								<span id="buildingsValueA">6</span>
+							</div>
+
+							<div class="figure">
+								<span>Hectares</span>
+								<span id="hectaresValueA">7</span>
+							</div>
+						</section>
 
 					</div>
 				</div>
@@ -1503,7 +1545,25 @@
 						<div class="step-part step-part--1">Neighbourhood B represents a low-density suburban structure with detached housing, larger private spaces and more dispersed urban functions. </div>
 						<div class="step-part step-part--2">Its lower density requires more land per person, but creates more open and green spaces within the neighbourhood.</div>
 						<div class="step-part step-part--3">Parking is typically provided above ground.</div>
-						<div class="step-part step-part--4"><img src="svgs/Text/NeighborhoodB.svg" alt="Neighborhood B"></div>
+							<section class="figures">
+								<div class="figure">
+									<span>Population</span> 
+									<span id="populationValueB">183</span>
+								</div>
+
+								<div class="figure">
+									<span>Buildings</span>
+									<span id="buildingsValueB">6</span>
+								</div>
+
+								<div class="figure">
+									<span>Hectares</span>
+									<span id="hectaresValueB">60</span>
+								</div>
+							</section>
+							<div class="explore-case-wrap">
+								<a class="explore-case-link" href="./Compare_Section/index.html">Explore Case</a>
+							</div>
 
 					</div>
 				</div>
@@ -1548,84 +1608,194 @@
 
 	</div>
 	</section>
-	<section id="outro"></section>
 
 	</main>
 	
 
 	<script src="./scrollama/d3.v7.min.js"></script>
 	<script src="./scrollama/scrollama.js"></script>
-	<script type="importmap">
-		{ "imports": {
-			"three": "https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js",
-			"three/": "https://cdn.jsdelivr.net/npm/three@0.154.0/"
-		} }
-	</script>
-	<script type="module">
+	<script>
+
 		const heroModelCanvas = document.getElementById("heroModelCanvas");
 		const heroModelFallback = document.getElementById("heroModelFallback");
 
 		if (heroModelCanvas) {
-			const PAN_SENSITIVITY = 82;
-			const MIN_ZOOM = 0.7;
-			const MAX_ZOOM = 9;
+			// Beginner-friendly controls: most future visual adjustments
+			// can be done by editing this settings object.
+			const INFOGRAPHIC_SETTINGS = {
+				assetPath: "./Neighbourhood_Model/Infographic.png",
+				referenceSize: { width: 7440, height: 6520 },
+				camera: {
+					orthoSize: 2.9,
+					easeLambda: 12,
+					startPosition: [20, 20, 20],
+					startTarget: [0, 0, 0],
+					startZoom: 1,
+				},
+				placement: {
+					baseOffsetX: 120,
+					baseOffsetY: 40,
+					panPerLookX: 140,
+					panPerLookZ: 0.62,
+					panPerLookY: 0.35,
+				},
+				labelPadding: 16,
+			};
 
-			const shots = [
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
-				{ position: [20, 20, 20], target: [1.3, 0.15, 3.4], zoom: 9 },
-				{ position: [20, 20, 20], target: [2.2, 0.9, 2.5], zoom: 5 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
-				{ position: [20, 20, 20], target: [1.06, 0.43, -3.83], zoom: 6 },
-				{ position: [20, 20, 20], target: [2.54, 0.23, 1.03], zoom: 5 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 0.85 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 1 },
-				{ position: [20, 20, 20], target: [0, 0, 0], zoom: 6 },
-			];
+			const startWidth = heroModelCanvas.clientWidth || window.innerWidth;
+			const startHeight = heroModelCanvas.clientHeight || window.innerHeight;
+			const size = INFOGRAPHIC_SETTINGS.camera.orthoSize;
+			let cameraAspect = startWidth / startHeight;
 
-			const cameraPositionCurrent = { x: 20, y: 20, z: 20 };
-			const cameraPositionTarget = { x: 20, y: 20, z: 20 };
-			const cameraLookAtCurrent = { x: 0, y: 0, z: 0 };
-			const cameraLookAtTarget = { x: 0, y: 0, z: 0 };
-			let cameraZoomCurrent = 1;
-			let cameraZoomTarget = 1;
-			const cameraEaseLambda = 12;
-
-			const heroModelImage = document.createElement("img");
-			heroModelImage.className = "hero__model-image";
-			heroModelImage.alt = "Neighborhood infographic";
-			heroModelCanvas.appendChild(heroModelImage);
-
-			const modelImageCandidates = [
-				"./Neighbourhood_Model/svg/Infographic.svg",
-				"./svgs/Infographic.svg",
-				"./svgs/Neighborhood.svg",
-				"./svgs/neighborhood.svg",
-				"./svgs/Neighbourhood.svg"
-			];
-			let modelImageIndex = 0;
-
-			function loadCurrentModelImage() {
-				heroModelImage.src = modelImageCandidates[modelImageIndex];
+			function vec3(x = 0, y = 0, z = 0) {
+				return { x, y, z };
 			}
 
-			heroModelImage.addEventListener("error", () => {
-				if (modelImageIndex < modelImageCandidates.length - 1) {
-					modelImageIndex += 1;
-					loadCurrentModelImage();
-					return;
-				}
+			function vecSub(a, b) {
+				return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+			}
 
-				if (heroModelFallback) {
-					heroModelFallback.style.display = "block";
-				}
-			});
+			function vecDot(a, b) {
+				return a.x * b.x + a.y * b.y + a.z * b.z;
+			}
 
-			loadCurrentModelImage();
+			function vecCross(a, b) {
+				return vec3(
+					a.y * b.z - a.z * b.y,
+					a.z * b.x - a.x * b.z,
+					a.x * b.y - a.y * b.x
+				);
+			}
+
+			function vecLength(v) {
+				return Math.hypot(v.x, v.y, v.z);
+			}
+
+			function vecNormalize(v) {
+				const len = vecLength(v);
+				if (len < 1e-6) return vec3(0, 0, 0);
+				return vec3(v.x / len, v.y / len, v.z / len);
+			}
+
+			function vecLerp(current, target, t) {
+				current.x += (target.x - current.x) * t;
+				current.y += (target.y - current.y) * t;
+				current.z += (target.z - current.z) * t;
+			}
+
+			const infographicImage = document.createElement("img");
+			infographicImage.className = "hero__model-infographic";
+			infographicImage.src = INFOGRAPHIC_SETTINGS.assetPath;
+			infographicImage.alt = "";
+			infographicImage.decoding = "async";
+			infographicImage.draggable = false;
+			infographicImage.style.width = `${INFOGRAPHIC_SETTINGS.referenceSize.width}px`;
+			infographicImage.style.height = `${INFOGRAPHIC_SETTINGS.referenceSize.height}px`;
+			heroModelCanvas.appendChild(infographicImage);
+
+			const CAMERA_SHOTS = [ 
+			// Step 0 — Overview 
+			{ 
+				position: [20, 20, 20],
+				target: [-2, 0, -1.5],
+				zoom: 1 }, 
+
+			// Step 1 — House (camera 1)
+			{
+				position: [20, 20, 20],
+				target: [-12, -1, -11],
+				zoom: 4 },
+
+			// Step 2 — Overview 
+			{
+				position: [20, 20, 20],
+				target: [-2, 0, -1.5],
+				zoom: 1 },
+
+			// Step 3 — Density / Building Components & Construction
+			{
+				position: [20, 20, 20],
+				target: [-2, 0, -1.5],
+				zoom: 1 },
+
+			// Step 4 — Street & Parking Areas / Underground Parking
+			{
+				position: [20, 20, 20],
+				target: [2, 0, -2],
+				zoom: 1 },
+
+			// Step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
+			{
+				position: [20, 20, 20],
+				target: [2, 0, 2],
+				zoom: 1.5 },
+
+			// Step 6 — Green Space & Unbuilt Area
+			{
+				position: [20, 20, 20],
+				target: [-1, 0, -2],
+				zoom: 1.5 },
+
+			// Step 7 — Summary overview (all layers visible)
+			{
+				position: [20, 20, 20],
+				target: [-0.8, 0, -1],
+				zoom: 0.7 },
+
+			// Step 8 — Return to overview
+			{ 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 1 },
+
+			// Step 9 —  Overview 
+			{ 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 1 }, 
+
+			// Step 10 —  Overview 
+			{ 
+				position: [20, 20, 20],
+				target: [0, 0, 0],
+				zoom: 6 }, 
+
+			// Step 11 — Concept intro bridge (before PNG models appear)
+			{
+				position: [20, 20, 20],
+				target: [-3, 0, -8],
+				zoom: 2,
+			},
+			];
+
+			// Smoothly-animated camera state: setIntroCamera only updates the
+			// target values below — the render loop eases the live camera
+			// toward them every frame instead of snapping instantly, so
+			// scroll-triggered shot changes read as a dynamic pan/zoom
+			// rather than an abrupt cut.
+			const cameraPositionCurrent = vec3(20, 20, 20);
+			const cameraPositionTarget = vec3(20, 20, 20);
+			const cameraLookAtCurrent = vec3(0, 0, 0);
+			const cameraLookAtTarget = vec3(0, 0, 0);
+			let cameraZoomCurrent = INFOGRAPHIC_SETTINGS.camera.startZoom;
+			let cameraZoomTarget = INFOGRAPHIC_SETTINGS.camera.startZoom;
+			const cameraEaseLambda = INFOGRAPHIC_SETTINGS.camera.easeLambda;
+
+			cameraPositionCurrent.x = INFOGRAPHIC_SETTINGS.camera.startPosition[0];
+			cameraPositionCurrent.y = INFOGRAPHIC_SETTINGS.camera.startPosition[1];
+			cameraPositionCurrent.z = INFOGRAPHIC_SETTINGS.camera.startPosition[2];
+			cameraPositionTarget.x = INFOGRAPHIC_SETTINGS.camera.startPosition[0];
+			cameraPositionTarget.y = INFOGRAPHIC_SETTINGS.camera.startPosition[1];
+			cameraPositionTarget.z = INFOGRAPHIC_SETTINGS.camera.startPosition[2];
+			cameraLookAtCurrent.x = INFOGRAPHIC_SETTINGS.camera.startTarget[0];
+			cameraLookAtCurrent.y = INFOGRAPHIC_SETTINGS.camera.startTarget[1];
+			cameraLookAtCurrent.z = INFOGRAPHIC_SETTINGS.camera.startTarget[2];
+			cameraLookAtTarget.x = INFOGRAPHIC_SETTINGS.camera.startTarget[0];
+			cameraLookAtTarget.y = INFOGRAPHIC_SETTINGS.camera.startTarget[1];
+			cameraLookAtTarget.z = INFOGRAPHIC_SETTINGS.camera.startTarget[2];
 
 			window.setIntroCamera = (index) => {
-				const shot = shots[index];
+				const shot = CAMERA_SHOTS[index];
 				if (!shot) return;
 
 				cameraPositionTarget.x = shot.position[0];
@@ -1634,71 +1804,75 @@
 				cameraLookAtTarget.x = shot.target[0];
 				cameraLookAtTarget.y = shot.target[1];
 				cameraLookAtTarget.z = shot.target[2];
-				cameraZoomTarget = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, shot.zoom));
+				cameraZoomTarget = shot.zoom;
 			};
 
-			function isoProject(point) {
-				return {
-					u: (point.x - point.z) * 0.70710678,
-					v: (point.x + point.z) * 0.40824829 - point.y * 0.81649658,
-				};
-			}
-
-			function updateCameraEasing(delta) {
+			let lastFrameTime = performance.now();
+			function updateCameraEasing() {
+				const now = performance.now();
+				const delta = Math.min((now - lastFrameTime) / 1000, 0.1);
+				lastFrameTime = now;
 				const ease = 1 - Math.exp(-cameraEaseLambda * delta);
 
-				cameraPositionCurrent.x += (cameraPositionTarget.x - cameraPositionCurrent.x) * ease;
-				cameraPositionCurrent.y += (cameraPositionTarget.y - cameraPositionCurrent.y) * ease;
-				cameraPositionCurrent.z += (cameraPositionTarget.z - cameraPositionCurrent.z) * ease;
-
-				cameraLookAtCurrent.x += (cameraLookAtTarget.x - cameraLookAtCurrent.x) * ease;
-				cameraLookAtCurrent.y += (cameraLookAtTarget.y - cameraLookAtCurrent.y) * ease;
-				cameraLookAtCurrent.z += (cameraLookAtTarget.z - cameraLookAtCurrent.z) * ease;
-
+				vecLerp(cameraPositionCurrent, cameraPositionTarget, ease);
+				vecLerp(cameraLookAtCurrent, cameraLookAtTarget, ease);
 				cameraZoomCurrent += (cameraZoomTarget - cameraZoomCurrent) * ease;
 			}
 
-			function updateInfographicTransform() {
-				const lookAtProjection = isoProject(cameraLookAtCurrent);
-				const tx = -lookAtProjection.u * PAN_SENSITIVITY * cameraZoomCurrent;
-				const ty = -lookAtProjection.v * PAN_SENSITIVITY * cameraZoomCurrent;
-				heroModelImage.style.transform = `translate3d(calc(-50% + ${tx.toFixed(2)}px), calc(-50% + ${ty.toFixed(2)}px), 0) scale(${cameraZoomCurrent.toFixed(4)})`;
-			}
-
+			// Per-step label configuration. Label anchors stay in the same
+			// world coordinate system as the previous 3D setup.
 			const stepFeatures = [
-				null,
-				null,
+				null, // step 0 — overview, no feature
+				null, // step 1 — camera-only (House (camera 1))
+				null, // step 2 — overview, no feature labels yet
 				{
+					// step 3 — Density / Building Components & Construction
 					labels: [
-						{ svg: "./svgs/building_components.svg", anchor: [2.1, 0.34, 3.76] },
-						{ svg: "./svgs/Density.svg", anchor: [1.31, 0.15, 4.42] },
+						{ svg: "./svgs/building_components.svg", anchor: [0, 1, 0] },
+						{ svg: "./svgs/Density.svg", anchor: [1, 3, 0] },
 					],
 				},
 				{
+					// step 4 — Street & Parking Areas / Underground Parking
 					labels: [
-						{ svg: "./svgs/Street_&_Parking Areas.svg", anchor: [2.04, 0.02, 1.33] },
-						{ svg: "./svgs/Underground_Parking.svg", anchor: [4.59, -0.1, -0.45] },
+						{ svg: "./svgs/Street_&_Parking Areas.svg", anchor: [3.3, 3, 0] },
+						{ svg: "./svgs/Underground_Parking.svg", anchor: [6, 2, 0] },
 					],
 				},
 				{
+					// step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
 					labels: [
-						{ svg: "./svgs/Electricity.svg", anchor: [1.06, 0.43, -3.83] },
-						{ svg: "./svgs/Pipe_& Utility_Lines.svg", anchor: [0.7, 0.15, -3.6] },
-						{ svg: "./svgs/Heating.svg", anchor: [1.4, 0.15, -4.1] },
+						{ svg: "./svgs/Electricity.svg", anchor: [2, 0.5, 0] },
+						{ svg: "./svgs/Pipe_& Utility_Lines.svg", anchor: [0.2, -1.4, 0] },
+						{ svg: "./svgs/Heating.svg", anchor: [4, -0.5, 0] },
 					],
 				},
 				{
+					// step 6 — Green Space & Unbuilt Area
 					labels: [
-						{ svg: "./svgs/Green_Space.svg", anchor: [2.54, 0.23, 1.03] },
+						{ svg: "./svgs/Green_Space.svg", anchor: [2.2, 2, 0] },
 					],
 				},
-				{ summary: true },
+				{
+					// step 7 — summary: every feature highlighted + labeled at once
+					labels: [
+					{ svg: "./svgs/__Building.svg", anchor: [6, 5.5, 0] },
+						{ svg: "./svgs/__Heating_Density.svg", anchor: [1, 2.3, 0] },
+						{ svg: "./svgs/__Street.svg", anchor: [6.5, 4.3, 0] },
+						{ svg: "./svgs/__UndergroundParking.svg", anchor: [8.05, 3.15, 0] },
+						{ svg: "./svgs/__Electricity.svg", anchor: [6, 7, 0] },
+						{ svg: "./svgs/__Pipeline.svg", anchor: [6, 1.3, 0] },
+						{ svg: "./svgs/__Green_Space.svg", anchor: [4.46, 1.5, 0] },
+					],
+				},
 			];
 
+			// Screen-space label overlay: each label is an <img> of an
+			// existing svgs/ callout asset, positioned every frame by
+			// projecting its 3D world anchor through the live camera.
 			const heroModelLabels = document.getElementById("heroModelLabels");
 			const labelElementCache = new Map();
 			let activeLabelEntries = [];
-			let currentFeatureIndex = -1;
 
 			function getLabelElement(svgPath) {
 				if (labelElementCache.has(svgPath)) return labelElementCache.get(svgPath);
@@ -1718,67 +1892,123 @@
 				activeLabelEntries = labelConfigs.map((cfg) => {
 					const el = getLabelElement(cfg.svg);
 					el.classList.add("is-visible");
-					return {
-						el,
-						anchor: { x: cfg.anchor[0], y: cfg.anchor[1], z: cfg.anchor[2] },
-					};
+					return { el, anchor: cfg.anchor };
 				});
 			}
 
-			function updateStepLabels() {
-				if (!activeLabelEntries.length) return;
-				const width = heroModelCanvas.clientWidth;
-				const height = heroModelCanvas.clientHeight;
-				const lookAtProjection = isoProject(cameraLookAtCurrent);
-
-				activeLabelEntries.forEach(({ el, anchor }) => {
-					const anchorProjection = isoProject(anchor);
-					const x = width * 0.5 + (anchorProjection.u - lookAtProjection.u) * PAN_SENSITIVITY * cameraZoomCurrent;
-					const y = height * 0.5 + (anchorProjection.v - lookAtProjection.v) * PAN_SENSITIVITY * cameraZoomCurrent;
-					const labelW = el.offsetWidth || 0;
-					const labelH = el.offsetHeight || 0;
-					const halfW = labelW / 2;
-					const halfH = labelH / 2;
-					const clampedX = Math.max(16 + halfW, Math.min(width - 16 - halfW, x));
-					const clampedY = Math.max(16 + halfH, Math.min(height - 16 - halfH, y));
-					el.style.transform = `translate3d(${(clampedX - halfW).toFixed(2)}px, ${(clampedY - halfH).toFixed(2)}px, 0)`;
-				});
-			}
+			let currentFeatureIndex = -1;
 
 			window.setIntroFeature = (index) => {
 				if (index === currentFeatureIndex) return;
 				currentFeatureIndex = index;
 
 				const feature = stepFeatures[index];
+
 				if (feature && feature.summary) {
-					const allLabels = stepFeatures.filter((f) => f && !f.summary).flatMap((f) => f.labels || []);
+					const allLabels = stepFeatures.filter((f) => f && !f.summary).flatMap((f) => f.labels);
 					setActiveLabels(allLabels);
 					return;
 				}
 
-				setActiveLabels(feature ? (feature.labels || []) : []);
+				if (feature) {
+					setActiveLabels(feature.labels || []);
+				} else {
+					setActiveLabels([]);
+				}
 			};
 
-			window.setIntroModelTilt = () => {};
+			function projectAnchorToScreen(anchor, width, height) {
+				const worldPoint = vec3(anchor[0], anchor[1], anchor[2]);
+				const forward = vecNormalize(vecSub(cameraLookAtCurrent, cameraPositionCurrent));
+				let right = vecNormalize(vecCross(forward, vec3(0, 1, 0)));
+				if (vecLength(right) < 1e-6) {
+					right = vec3(1, 0, 0);
+				}
+				const up = vecNormalize(vecCross(right, forward));
+				const toPoint = vecSub(worldPoint, cameraPositionCurrent);
 
-			let lastFrameTime = performance.now();
-			function animate(now) {
-				const delta = Math.min((now - lastFrameTime) / 1000, 0.1);
-				lastFrameTime = now;
+				const xCamera = vecDot(toPoint, right);
+				const yCamera = vecDot(toPoint, up);
 
-				updateCameraEasing(delta);
+				const safeZoom = Math.max(0.01, cameraZoomCurrent);
+				const halfWidth = (size * cameraAspect) / safeZoom;
+				const halfHeight = size / safeZoom;
+
+				const ndcX = xCamera / halfWidth;
+				const ndcY = yCamera / halfHeight;
+
+				return {
+					x: (ndcX * 0.5 + 0.5) * width,
+					y: (-ndcY * 0.5 + 0.5) * height,
+				};
+			}
+
+			function updateInfographicTransform() {
+				const width = heroModelCanvas.clientWidth || window.innerWidth;
+				const height = heroModelCanvas.clientHeight || window.innerHeight;
+				const naturalWidth = INFOGRAPHIC_SETTINGS.referenceSize.width;
+				const naturalHeight = INFOGRAPHIC_SETTINGS.referenceSize.height;
+
+				const fitScale = Math.max(width / naturalWidth, height / naturalHeight);
+				const zoomScale = Math.max(0.01, cameraZoomCurrent);
+				const scale = fitScale * zoomScale;
+
+				const panX = INFOGRAPHIC_SETTINGS.placement.baseOffsetX - cameraLookAtCurrent.x * INFOGRAPHIC_SETTINGS.placement.panPerLookX;
+				const panY = INFOGRAPHIC_SETTINGS.placement.baseOffsetY
+					+ cameraLookAtCurrent.z * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookZ
+					+ cameraLookAtCurrent.y * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookY;
+
+				infographicImage.style.transform = `translate3d(calc(-50% + ${panX.toFixed(2)}px), calc(-50% + ${panY.toFixed(2)}px), 0) scale(${scale.toFixed(4)})`;
+			}
+
+			function animate() {
+				updateCameraEasing();
 				updateInfographicTransform();
 				updateStepLabels();
 				requestAnimationFrame(animate);
 			}
 
-			window.addEventListener("resize", () => {
+			function resizeRenderer() {
+				const width = heroModelCanvas.clientWidth || window.innerWidth;
+				const height = heroModelCanvas.clientHeight || window.innerHeight;
+				cameraAspect = width / height;
 				updateInfographicTransform();
 				updateStepLabels();
+			}
+
+			function updateStepLabels() {
+				if (!activeLabelEntries.length) return;
+				const width = heroModelCanvas.clientWidth;
+				const height = heroModelCanvas.clientHeight;
+				activeLabelEntries.forEach(({ el, anchor }) => {
+					const projected = projectAnchorToScreen(anchor, width, height);
+					const x = projected.x;
+					const y = projected.y;
+					const labelW = el.offsetWidth || 0;
+					const labelH = el.offsetHeight || 0;
+					const halfW = labelW / 2;
+					const halfH = labelH / 2;
+					const padding = INFOGRAPHIC_SETTINGS.labelPadding;
+					const clampedX = Math.max(padding + halfW, Math.min(width - padding - halfW, x));
+					const clampedY = Math.max(padding + halfH, Math.min(height - padding - halfH, y));
+					el.style.transform = `translate3d(${clampedX - halfW}px, ${clampedY - halfH}px, 0)`;
+				});
+			}
+
+			infographicImage.addEventListener("error", () => {
+				if (heroModelFallback) {
+					heroModelFallback.style.display = "block";
+				}
 			});
 
-			updateInfographicTransform();
-			requestAnimationFrame(animate);
+			window.addEventListener("resize", () => {
+				resizeRenderer();
+			});
+
+			window.setIntroCamera(0);
+			window.setIntroFeature(0);
+			resizeRenderer();
+			animate();
 		}
 	</script>
 	<script>
@@ -1905,9 +2135,11 @@
 	const CONCEPT_ACTIVATION_PROGRESS = 0.34;
 	const PNG_REVEAL_END_PROGRESS = 0.56;
 	const COMPARE_MODEL_START_INDEX = 13;
+	const CONCEPT_INTRO_CAMERA_STEP = 11;
 	// Keep the first infographic step on the same framing as landing.
 	// Then continue model progression from the next shot.
 	const INTRO_MODEL_STEP_OFFSET = 1;
+	const INTRO_FIRST_PARAGRAPH_CAMERA_PROGRESS = introFadeEnd;
 
 	let currentConceptStepIndex = 0;
 	let currentCompareStepIndex = 0;
@@ -1916,12 +2148,11 @@
 	let introProgressOrigin = null;
 	let currentIntroCameraIndex = -1;
 	let conceptSectionActive = false;
+	let currentConceptStepProgress = 0;
 
-	function syncIntroCamera(index) {
+	function syncIntroCamera(index, progress = 1) {
 		let modelIndex = index + INTRO_MODEL_STEP_OFFSET;
-		// Keep the first two intro paragraphs on the landing framing.
-		// This prevents any camera move before the modular-structure text is done.
-		if (index <= 1) {
+		if (index === 0 && (window.scrollY <= 2 || progress < INTRO_FIRST_PARAGRAPH_CAMERA_PROGRESS)) {
 			modelIndex = 0;
 		}
 		if (modelIndex === currentIntroCameraIndex) return;
@@ -1989,25 +2220,14 @@
 	}
 
 	function setConceptModelState(index, progress = 0) {
-		const primaryIndex = index <= 1
-			? 1
-			: Math.min(index, models.length - 1);
-		const model1 = document.getElementById("model-1");
+		const primaryIndex = Math.max(1, Math.min(index, models.length - 1));
 
 		models.forEach((model) => {
 			model.classList.remove("active");
 			model.style.opacity = "";
 		});
 
-		if (index === 0 && model1) {
-			if (progress < CONCEPT_ACTIVATION_PROGRESS) {
-				return;
-			}
-
-			const normalized = (progress - CONCEPT_ACTIVATION_PROGRESS) / (PNG_REVEAL_END_PROGRESS - CONCEPT_ACTIVATION_PROGRESS);
-			const overlayOpacity = Math.max(0, Math.min(1, normalized));
-			model1.classList.add("active");
-			model1.style.opacity = overlayOpacity.toFixed(3);
+		if (index === 0) {
 			return;
 		}
 
@@ -2076,12 +2296,12 @@
 
 	function handleIntroStepEnter(response) {
 		const index = response.index;
-		syncIntroCamera(index);
+		syncIntroCamera(index, 0);
 		conceptSectionActive = false;
 
 		resetIntroFlowState();
 		setActiveStep(introStep, index);
-		updateIntroFlowFromProgress(response.element, 0);
+		updateIntroFlowFromProgress(response.element, index === 0 ? -1 : 0);
 		if (index > 0) {
 			currentIntroOpacity = 0;
 			currentIntroTextVisible = true;
@@ -2127,15 +2347,16 @@
 	}
 
 	function handleIntroStepProgress(response) {
-		syncIntroCamera(response.index);
-		updateThreeJSFromScroll(response);
+		syncIntroCamera(response.index, response.progress);
+		updateHeroVisualFromScroll(response);
 		updateIntroOverlayFade(response);
 
 		let introTextProgress = response.progress;
 		if (response.index === 0) {
-			// Keep intro text fully inactive on camera shot 0.
-			// Text reveal starts only once shot 1 (left camera position) becomes active.
-			introTextProgress = 0;
+			// Keep intro text hidden until the same delayed point where
+			// the first intro camera switch is allowed to happen.
+			const normalizedProgress = (response.progress - INTRO_FIRST_PARAGRAPH_CAMERA_PROGRESS) / (1 - INTRO_FIRST_PARAGRAPH_CAMERA_PROGRESS);
+			introTextProgress = Math.max(-1, Math.min(1, normalizedProgress));
 		}
 
 		currentIntroTextVisible = response.index > 0 || introTextProgress >= CONCEPT_PART1_PROGRESS;
@@ -2152,12 +2373,19 @@
 	function handleStepEnter(response) {
 		const index = response.index;
 		currentConceptStepIndex = index;
-		conceptSectionActive = true;
+		currentConceptStepProgress = 0;
+		conceptSectionActive = index !== 0;
 
 		setActiveStep(conceptStep, index);
 		resetConceptFlowState();
 		if (index === 0) {
-			clearConceptStepFlowState(response.element);
+			if (typeof window.setIntroCamera === "function") {
+				window.setIntroCamera(CONCEPT_INTRO_CAMERA_STEP);
+				if (typeof window.setIntroFeature === "function") {
+					window.setIntroFeature(CONCEPT_INTRO_CAMERA_STEP);
+				}
+			}
+			updateConceptFlowFromProgress(response.element, 0);
 			setConceptModelState(index, 0);
 		} else {
 			updateConceptFlowFromProgress(response.element, 0);
@@ -2170,14 +2398,19 @@
 
 	function handleStepProgress(response) {
 		currentConceptStepIndex = response.index;
-		conceptSectionActive = true;
+		currentConceptStepProgress = response.progress;
+		conceptSectionActive = response.index === 0
+			? false
+			: true;
+		if (response.index === 0 && typeof window.setIntroCamera === "function") {
+			window.setIntroCamera(CONCEPT_INTRO_CAMERA_STEP);
+			if (typeof window.setIntroFeature === "function") {
+				window.setIntroFeature(CONCEPT_INTRO_CAMERA_STEP);
+			}
+		}
 		setActiveStep(conceptStep, response.index);
-		if (response.index === 0 && response.progress < CONCEPT_ACTIVATION_PROGRESS) {
-			clearConceptStepFlowState(response.element);
-			setConceptModelState(response.index, response.progress);
-		} else if (response.index === 0) {
-			const adjustedProgress = (response.progress - CONCEPT_ACTIVATION_PROGRESS) / (1 - CONCEPT_ACTIVATION_PROGRESS);
-			updateConceptFlowFromProgress(response.element, Math.max(0, Math.min(1, adjustedProgress)));
+		if (response.index === 0) {
+			updateConceptFlowFromProgress(response.element, response.progress);
 			setConceptModelState(response.index, response.progress);
 		} else {
 			updateConceptFlowFromProgress(response.element, response.progress);
@@ -2224,7 +2457,7 @@
 		progressThumbEl.style.transform = `translate3d(0, ${Math.round(y)}px, 0)`;
 	}
 
-	function updateThreeJSFromScroll(response) {
+	function updateHeroVisualFromScroll(response) {
 		const progress = response.progress;
 		if (typeof window.setIntroModelTilt === "function") {
 			window.setIntroModelTilt(progress);
@@ -2248,8 +2481,11 @@
 		const pastLanding = window.scrollY > 2 && sectionRect.top <= 0;
 		const conceptInView = !!conceptRect && conceptRect.top <= window.innerHeight * 0.75;
 		const compareInView = !!compareRect && compareRect.top <= window.innerHeight * 0.75;
+		const holdConceptCamera = currentConceptStepIndex === 0
+			&& conceptInView
+			&& !compareInView;
 		const menuShouldShow = pastLanding && (currentIntroOpacity <= 0.08 || conceptInView || compareInView || conceptSectionActive);
-		const contentActive = conceptSectionActive || conceptInView || compareInView;
+		const contentActive = !holdConceptCamera && (conceptSectionActive || conceptInView || compareInView);
 
 		document.body.classList.toggle("menu-visible", menuShouldShow);
 		document.body.classList.toggle("content-active", contentActive);
