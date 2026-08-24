@@ -829,6 +829,7 @@
 			justify-content: space-between;
 			gap: 18px;
 			pointer-events: none;
+			z-index: 3;
 		}
 
 		.factor-panel__icons {
@@ -855,6 +856,8 @@
 			line-height: 1;
 			color: #2d2d2d;
 			white-space: nowrap;
+			position: relative;
+			z-index: 4;
 		}
 
 		.factor-panel__count-box {
@@ -865,7 +868,7 @@
 			height: 30px;
 			padding: 0 4px;
 			border: 1px solid rgba(5, 5, 5, 0.48);
-			background: #ffffff;
+			background: transparent;
 			box-sizing: border-box;
 		}
 
@@ -879,9 +882,189 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			z-index: 1;
+		}
+
+		#model-5 .factor-panel__cases,
+		#model-6 .factor-panel__cases,
+		#model-7 .factor-panel__cases,
+		#model-8 .factor-panel__cases,
+		#model-9 .factor-panel__cases {
+			--cases-start-x: -50%;
+			--cases-start-y: -50%;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+			--cases-start-scale: 1.4;
+			transform: translate(var(--cases-start-x), var(--cases-start-y)) scale(var(--cases-start-scale));
+			transform-origin: center center;
+			transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+		}
+
+		#model-5 .factor-panel__cases {
+			--cases-start-x: -10%;
+			--cases-start-y: 30%;
+			--cases-start-scale: 2.2;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+		}
+
+		#model-6 .factor-panel__cases {
+			--cases-start-x: -20%;
+			--cases-start-y: -100%;
+			--cases-start-scale: 2.2;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+		}
+
+		#model-7 .factor-panel__cases {
+			--cases-start-x: -20%;
+			--cases-start-y: -50%;
+			--cases-start-scale: 2.2;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+		}
+		#model-8 .factor-panel__cases {
+			--cases-start-x: -20%;
+			--cases-start-y: -50%;
+			--cases-start-scale: 2.2;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+		}
+
+		#model-9 .factor-panel__cases {
+			--cases-start-x: -10%;
+			--cases-start-y: 10%;
+			--cases-start-scale: 2.2;
+			--cases-end-x: -50%;
+			--cases-end-y: -50%;
+		}
+
+		#model-5 .factor-panel__cases.is-revealed,
+		#model-6 .factor-panel__cases.is-revealed,
+		#model-7 .factor-panel__cases.is-revealed,
+		#model-8 .factor-panel__cases.is-revealed,
+		#model-9 .factor-panel__cases.is-revealed {
+			transform: translate(var(--cases-end-x), var(--cases-end-y)) scale(1);
 		}
 
 		.factor-panel__cases img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			max-height: none;
+			object-fit: contain;
+			object-position: center center;
+		}
+
+		.land-use-panel {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.land-use-panel__title {
+			position: absolute;
+			top: 14%;
+			left: 8.5%;
+			max-width: 460px;
+			font-size: 20px;
+			font-weight: 500;
+			line-height: 1.06;
+			letter-spacing: -0.02em;
+			color: #1f1f1f;
+		}
+
+		.land-use-panel__metrics {
+			position: absolute;
+			top: 30%;
+			left: 8.5%;
+			display: flex;
+			align-items: flex-start;
+			gap: 78px;
+			color: #0b0b0b;
+		}
+
+		.land-use-panel__metric {
+			display: grid;
+			grid-template-rows: auto auto;
+			gap: 2px;
+		}
+
+		.land-use-panel__value {
+			font-size: 40px;
+			font-weight: 600;
+			line-height: 1;
+			letter-spacing: -0.03em;
+		}
+
+		.land-use-panel__label {
+			font-size: 20px;
+			font-weight: 400;
+			line-height: 1;
+			letter-spacing: -0.01em;
+		}
+
+		.land-use-panel__equals {
+			font-size: 40px;
+			font-weight: 600;
+			line-height: 1;
+			margin-top: 2px;
+		}
+
+		.land-use-panel__cases {
+			position: absolute;
+			left: 51.5%;
+			top: 67.5%;
+			width: min(79%, 1100px);
+			height: min(62%, 700px);
+			transform: translate(-50%, -50%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.land-use-panel__cases img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			max-height: none;
+			object-fit: contain;
+			object-position: center center;
+		}
+
+		.gwp-panel {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.gwp-panel__title {
+			position: absolute;
+			top: 14%;
+			left: 8.5%;
+			max-width: 460px;
+			font-size: 20px;
+			font-weight: 500;
+			line-height: 1.06;
+			letter-spacing: -0.02em;
+			color: #1f1f1f;
+		}
+
+		.gwp-panel__cases {
+			position: absolute;
+			left: 51.5%;
+			top: 67.5%;
+			width: min(79%, 1100px);
+			height: min(62%, 700px);
+			transform: translate(-50%, -50%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.gwp-panel__cases img {
 			display: block;
 			width: 100%;
 			height: 100%;
@@ -1349,6 +1532,53 @@
 			.step-flow {
 				top: 96px;
 			}
+
+			.land-use-panel__title {
+				top: 10%;
+				left: 7%;
+				max-width: 86%;
+				font-size: 20px;
+			}
+
+			.land-use-panel__metrics {
+				top: 24%;
+				left: 7%;
+				gap: 20px;
+			}
+
+			.land-use-panel__value {
+				font-size: 34px;
+			}
+
+			.land-use-panel__label {
+				font-size: 22px;
+			}
+
+			.land-use-panel__equals {
+				font-size: 34px;
+				margin-top: 0;
+			}
+
+			.land-use-panel__cases {
+				left: 52%;
+				top: 65%;
+				width: min(92%, 620px);
+				height: min(58%, 420px);
+			}
+
+			.gwp-panel__title {
+				top: 10%;
+				left: 7%;
+				max-width: 86%;
+				font-size: 20px;
+			}
+
+			.gwp-panel__cases {
+				left: 52%;
+				top: 65%;
+				width: min(92%, 620px);
+				height: min(58%, 420px);
+			}
 		}
 
 		@media (max-width: 568px) {
@@ -1670,13 +1900,13 @@
             <div class="model-view active" id="model-0">
             </div>
             <div class="model-view" id="model-1">
-            <img src="./svgs/1_Hektar.svg" alt="1 Hektar">
+            <img src="./svgs/Concept/1_Hektar/1Hektar.svg" alt="1 Hektar">
             </div>
             <div class="model-view" id="model-2">
-                <img src="./svgs/6_Hektar.svg" alt="6 Hektar">
+                <img src="./svgs/Concept/6_Hektar/6Hektar.svg" alt="6 Hektar">
             </div>
 			<div class="model-view" id="model-3">
-                <img src="./svgs/6KeyFactors.svg" alt="6 Key Factors">
+                <img src="./svgs/Concept/6_Key_Factors/6KeyFactors.svg" alt="6 Key Factors">
             </div>
 			<div class="model-view" id="model-4">
 				<div class="factor-panel factor-panel--building-types" aria-label="Building type factor overview">
@@ -1792,10 +2022,31 @@
                 <img src="./GIF/GWP.gif" alt="GWP" style="transform: scale(1.6); padding: 0 100px 60px 0;">
             </div>
 			<div class="model-view" id="model-11">
-                <img src="./svgs/Land_Use.svg" alt="Land Use">
+				<div class="land-use-panel" aria-label="Land use comparison per one thousand inhabitants">
+					<div class="land-use-panel__title">Comparison of land use per 1.000 inhabitants [medium density]</div>
+					<div class="land-use-panel__metrics" aria-hidden="true">
+						<div class="land-use-panel__metric">
+							<span class="land-use-panel__value">3 ha</span>
+							<span class="land-use-panel__label">Block</span>
+						</div>
+						<div class="land-use-panel__equals">=</div>
+						<div class="land-use-panel__metric">
+							<span class="land-use-panel__value">28 ha</span>
+							<span class="land-use-panel__label">Single</span>
+						</div>
+					</div>
+					<div class="land-use-panel__cases">
+						<img src="./svgs/Concept/Land_Use/Cases.svg" alt="Land use block and single settlement comparison">
+					</div>
+				</div>
             </div>
 			<div class="model-view" id="model-12">
-                <img src="./svgs/GWP_Composition.svg" alt="GWP Composition">
+				<div class="gwp-panel" aria-label="GWP composition overview">
+					<div class="gwp-panel__title">Average GWP composition across all 972 settlement variations</div>
+					<div class="gwp-panel__cases">
+						<img src="./svgs/Concept/GWP_Composition/GWPComposition.svg" alt="GWP composition by cost groups">
+					</div>
+				</div>
             </div>
         </figure>
 
@@ -2231,41 +2482,41 @@
 				{
 					// step 3 — Density / Building Components & Construction
 					labels: [
-						{ svg: "./svgs/building_components.svg", anchor: [0, 1, 0] },
-						{ svg: "./svgs/Density.svg", anchor: [1, 3, 0] },
+						{ svg: "./svgs/Labels/building_components.svg", anchor: [0, 1, 0] },
+						{ svg: "./svgs/Labels/Density.svg", anchor: [1, 3, 0] },
 					],
 				},
 				{
 					// step 4 — Street & Parking Areas / Underground Parking
 					labels: [
-						{ svg: "./svgs/Street_&_Parking Areas.svg", anchor: [3.3, 3, 0] },
-						{ svg: "./svgs/Underground_Parking.svg", anchor: [6, 2, 0] },
+						{ svg: "./svgs/Labels/Street_&_Parking Areas.svg", anchor: [3.3, 3, 0] },
+						{ svg: "./svgs/Labels/Underground_Parking.svg", anchor: [6, 2, 0] },
 					],
 				},
 				{
 					// step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
 					labels: [
-						{ svg: "./svgs/Electricity.svg", anchor: [2, 0.5, 0] },
-						{ svg: "./svgs/Pipe_& Utility_Lines.svg", anchor: [0.2, -1.4, 0] },
-						{ svg: "./svgs/Heating.svg", anchor: [4, -0.5, 0] },
+						{ svg: "./svgs/Labels/Electricity.svg", anchor: [2, 0.5, 0] },
+						{ svg: "./svgs/Labels/Pipe_& Utility_Lines.svg", anchor: [0.2, -1.4, 0] },
+						{ svg: "./svgs/Labels/Heating.svg", anchor: [4, -0.5, 0] },
 					],
 				},
 				{
 					// step 6 — Green Space & Unbuilt Area
 					labels: [
-						{ svg: "./svgs/Green_Space.svg", anchor: [2.2, 2, 0] },
+						{ svg: "./svgs/Labels/Green_Space.svg", anchor: [2.2, 2, 0] },
 					],
 				},
 				{
 					// step 7 — summary: every feature highlighted + labeled at once
 					labels: [
-					{ svg: "./svgs/__Building.svg", anchor: [6, 5.5, 0] },
-						{ svg: "./svgs/__Heating_Density.svg", anchor: [1, 2.3, 0] },
-						{ svg: "./svgs/__Street.svg", anchor: [6.5, 4.3, 0] },
-						{ svg: "./svgs/__UndergroundParking.svg", anchor: [8.05, 3.15, 0] },
-						{ svg: "./svgs/__Electricity.svg", anchor: [6, 7, 0] },
-						{ svg: "./svgs/__Pipeline.svg", anchor: [6, 1.3, 0] },
-						{ svg: "./svgs/__Green_Space.svg", anchor: [4.46, 1.5, 0] },
+					{ svg: "./svgs/Labels/__Building.svg", anchor: [6, 5.5, 0] },
+						{ svg: "./svgs/Labels/__Heating_Density.svg", anchor: [1, 2.3, 0] },
+						{ svg: "./svgs/Labels/__Street.svg", anchor: [6.5, 4.3, 0] },
+						{ svg: "./svgs/Labels/__UndergroundParking.svg", anchor: [8.05, 3.15, 0] },
+						{ svg: "./svgs/Labels/__Electricity.svg", anchor: [6, 7, 0] },
+						{ svg: "./svgs/Labels/__Pipeline.svg", anchor: [6, 1.3, 0] },
+						{ svg: "./svgs/Labels/__Green_Space.svg", anchor: [4.46, 1.5, 0] },
 					],
 				},
 			];
@@ -2646,6 +2897,17 @@
 		}
 	}
 
+	function setConceptCasesReveal(index, progress = 0) {
+		for (let modelIndex = 5; modelIndex <= 9; modelIndex += 1) {
+			const model = document.getElementById(`model-${modelIndex}`);
+			if (!model) continue;
+			const casesNode = model.querySelector(".factor-panel__cases");
+			if (!casesNode) continue;
+			const revealForActiveStep = modelIndex === index && progress >= CONCEPT_PART2_PROGRESS;
+			casesNode.classList.toggle("is-revealed", revealForActiveStep);
+		}
+	}
+
 	function setCompareModelState(index) {
 		const compareModelIndex = Math.min(COMPARE_MODEL_START_INDEX + index, 17);
 
@@ -2657,6 +2919,8 @@
 		if (models[compareModelIndex]) {
 			models[compareModelIndex].classList.add("active");
 		}
+
+		setConceptCasesReveal(-1, 0);
 	}
 
 	function openFactorOverviewModal() {
@@ -2795,6 +3059,8 @@
 			setConceptModelState(index, 1);
 		}
 
+		setConceptCasesReveal(index, 0);
+
 		updateChapterProgress(progressThumb, conceptStep, response);
 		syncMenuState();
 	}
@@ -2819,6 +3085,8 @@
 			updateConceptFlowFromProgress(response.element, response.progress);
 			setConceptModelState(response.index, 1);
 		}
+
+		setConceptCasesReveal(response.index, response.progress);
 
 		updateChapterProgress(progressThumb, conceptStep, response);
 		syncMenuState();
