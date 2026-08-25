@@ -92,12 +92,12 @@
 		}
 
 		.Dropdownbutton:hover {
-			background: #050505;
+			background: #555;
 			color: #fdfdfd;
 		}
 
 		.menu {
-			font-size: 20px;
+			font-size: 18px;
 			font-weight: 600;
 			line-height: 1;
 			white-space: nowrap;
@@ -342,6 +342,20 @@
 			will-change: transform;
 		}
 
+		.hero__model-highlight {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			opacity: 0;
+			pointer-events: none;
+			will-change: transform;
+			transition: opacity 0.24s ease;
+		}
+
+		.hero__model-highlight.is-highlighted {
+			opacity: 1;
+		}
+
 		.hero__model-labels {
 			position: absolute;
 			inset: 0;
@@ -373,8 +387,8 @@
 
 		.hero__model-label img {
 			display: block;
-			height: 34px;
-			width: auto;
+			width: 70%;
+			height: 70%;
 		}
 
 		.hero__logo,
@@ -388,8 +402,7 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			width: 100px;
-			min-height: 66px;
+			width: 80px;
 			padding: 0;
 			box-sizing: border-box;
 			margin-bottom: 20vh;
@@ -402,7 +415,7 @@
 		}
 
 		.hero__title {
-			margin: 0 0 0 32px;
+			margin: 0 0 0 30px;
 			line-height: 0;
 		}
 
@@ -449,10 +462,10 @@
 		}
 
 		.hero__subtitle {
+			padding-top: 6px;
 			max-width: 440px;
 			margin: 56px 0 0 32px;
-			font-size: 24px;
-			font-weight: 500;
+			font-size: 20px;
 			line-height: 1.15;
 			letter-spacing: -0.01em;
 			text-transform: capitalize;
@@ -463,8 +476,8 @@
 			flex-direction: column;
 			align-items: center;
 			gap: 10px;
-			margin: auto 0 0 56px;
-			font-size: 24px;
+			margin: 65px 0 0 100px;
+			font-size: 20px;
 			font-weight: 300;
 			line-height: 1;
 			letter-spacing: 0.01em;
@@ -472,14 +485,14 @@
 		}
 
 		.hero__arrow {
+			padding-top: 4px;
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			width: 24px;
-			height: 24px;
+			width: 16px;
+			height: 16px;
 			font-size: 24px;
 			line-height: 1;
-			transform: translateY(-1px);
 		}
 
 		.hero__arrow-icon {
@@ -526,7 +539,7 @@
 			outline: 0;
 			border-right: 1px solid #efefef;
 			background: #FDFDFD;
-			font-size: 20px;
+			font-size: 18px;
 			padding: 149px 40px 40px 56px;
 			box-sizing: border-box;
 			position: relative;
@@ -612,6 +625,10 @@
 			opacity: 0;
 			transform: translate3d(0, 22px, 0);
 			transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+		}
+
+		.text-bold {
+			font-weight: 700;
 		}
 
 		#infographic .infographic-title {
@@ -813,6 +830,24 @@
 			object-position: center center;
 		}
 
+		#model-1,
+		#model-2 {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}	
+
+		#model-1 img,
+		#model-2 img {
+    		width: 60%;
+    		height: 60%;
+			padding-top: 100px;
+    		margin-right: 70px;
+    		object-fit: contain;
+		}
+
+
 		.factor-panel {
 			position: relative;
 			width: 100%;
@@ -835,26 +870,26 @@
 		.factor-panel__icons {
 			display: flex;
 			align-items: flex-start;
-			gap: 4px;
+			gap: 9px;
 			flex-wrap: nowrap;
 		}
 
 		.factor-panel__icon {
-			display: block;
-			width: 8px;
-			height: 8px;
-			object-fit: contain;
-		}
+    	display: block;
+		width: 50px !important;
+		height: 50px !important;
+		object-fit: contain;
+	}
 
 		.factor-panel__count {
 			display: inline-flex;
 			align-items: flex-end;
-			gap: 6px;
+			gap: 9px;
 			padding-top: 0;
-			font-size: 30px;
+			font-size: 36px;
 			font-weight: 300;
 			line-height: 1;
-			color: #2d2d2d;
+			color: #000000;
 			white-space: nowrap;
 			position: relative;
 			z-index: 4;
@@ -864,10 +899,10 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			min-width: 30px;
-			height: 30px;
-			padding: 0 4px;
-			border: 1px solid rgba(5, 5, 5, 0.48);
+			min-width: 36px;
+			height: 36px;
+			padding: 5px;
+			border: 1.5px solid #000000;
 			background: transparent;
 			box-sizing: border-box;
 		}
@@ -875,7 +910,7 @@
 		.factor-panel__cases {
 			position: absolute;
 			left: 43%;
-			top: 60%;
+			top: 70%;
 			width: min(62%, 640px);
 			height: min(45%, 470px);
 			transform: translate(-50%, -50%);
@@ -917,15 +952,15 @@
 		}
 
 		#model-7 .factor-panel__cases {
-			--cases-start-x: -20%;
-			--cases-start-y: -50%;
+			--cases-start-x: 10%;
+			--cases-start-y: -100%;
 			--cases-start-scale: 2.2;
 			--cases-end-x: -50%;
 			--cases-end-y: -50%;
 		}
 		#model-8 .factor-panel__cases {
-			--cases-start-x: -20%;
-			--cases-start-y: -50%;
+			--cases-start-x: 20%;
+			--cases-start-y: -100%;
 			--cases-start-scale: 2.2;
 			--cases-end-x: -50%;
 			--cases-end-y: -50%;
@@ -933,7 +968,7 @@
 
 		#model-9 .factor-panel__cases {
 			--cases-start-x: -10%;
-			--cases-start-y: 10%;
+			--cases-start-y: -10%;
 			--cases-start-scale: 2.2;
 			--cases-end-x: -50%;
 			--cases-end-y: -50%;
@@ -944,7 +979,7 @@
 		#model-7 .factor-panel__cases.is-revealed,
 		#model-8 .factor-panel__cases.is-revealed,
 		#model-9 .factor-panel__cases.is-revealed {
-			transform: translate(var(--cases-end-x), var(--cases-end-y)) scale(1);
+			transform: translate(var(--cases-end-x), var(--cases-end-y)) scale(1.2);
 		}
 
 		.factor-panel__cases img {
@@ -968,7 +1003,7 @@
 			top: 14%;
 			left: 8.5%;
 			max-width: 460px;
-			font-size: 20px;
+			font-size: 18px;
 			font-weight: 500;
 			line-height: 1.06;
 			letter-spacing: -0.02em;
@@ -999,8 +1034,9 @@
 		}
 
 		.land-use-panel__label {
-			font-size: 20px;
+			font-size: 16px;
 			font-weight: 400;
+			padding-top: 10px;
 			line-height: 1;
 			letter-spacing: -0.01em;
 		}
@@ -1045,7 +1081,7 @@
 			top: 14%;
 			left: 8.5%;
 			max-width: 460px;
-			font-size: 20px;
+			font-size: 18px;
 			font-weight: 500;
 			line-height: 1.06;
 			letter-spacing: -0.02em;
@@ -1088,20 +1124,32 @@
 			bottom: 42px;
 			display: inline-flex;
 			align-items: center;
-			gap: 8px;
+			gap: 12px;
 			padding: 0;
-			border: 0;
+			border: none;
 			background: transparent;
+			font-family: inherit;
+			font-size: 14px;
+			color: #000000;
 			cursor: pointer;
 			pointer-events: auto;
 		}
 
-		.neighborhood-model .factor-overview-trigger img {
-			width: auto;
-			height: 18px;
-			max-width: none;
-			max-height: none;
+		.neighborhood-model .factor-overview-trigger .factor-info-icon {
+			width: 25px;
+			height: 25px;
+			display: block;
+			flex: 0 0 25px;
 			object-fit: contain;
+		}
+
+		.neighborhood-model .factor-overview-trigger-label {
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+
+		.neighborhood-model .factor-overview-trigger:hover .factor-overview-trigger-label {
+			text-decoration-thickness: 2px;
 		}
 
 		.factor-modal {
@@ -1230,9 +1278,6 @@
 			color: #222;
 		}
 
-		.factor-section p strong {
-			font-weight: 700;
-		}
 
 		.factor-modal-close {
 			position: absolute;
@@ -1252,7 +1297,7 @@
 		}
 
 		.factor-modal-close:hover {
-			color: #555;
+			color: #555555;
 		}
 
 		#content .model-view::before {
@@ -1627,24 +1672,24 @@
 			min-width: 112px;
 			padding: 10px 18px;
 			margin: 0 auto;
-			background: #050505;
+			background: #000000;
 			color: #fdfdfd;
 			text-decoration: none;
 			font-size: 16px;
 			line-height: 1;
 			border: 0;
+			border-radius: 2px;
 			cursor: pointer;
 		}
 
-		.explore-case-link:hover {
-			background: #222;
-		}
 
 		.explore-case-wrap {
 			display: flex;
 			justify-content: center;
 			margin-top: -10px;
 		}
+
+		
 
 	</style>
 
@@ -1732,7 +1777,7 @@
 				<!-- CAMERA SHOT 3 --> 
 			 	<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">The Quarter Life Cycle Assessment (Q-LCA) model addresses this gap with a modular structure.</div>
+						<div class="step-part step-part--1">The <span class="text-bold">Quarter Life Cycle Assessment</span> (Q-LCA) model addresses this gap with a modular structure.</div>
 						<div class="step-part step-part--2">It evaluates the Global Warming Potential (GWP) of entire residential neighbourhoods.</div>
 					</div>
 				</div>	
@@ -1741,7 +1786,7 @@
 				<div class="step">
 					<div class="step-flow">
 					<h2 class="infographic-title">The Building Blocks of the Neighbourhood</h2>
-						<div class="step-part step-part--1">Every neighbourhood begins with its buildings, including components, construction methods, and density.</div>
+						<div class="step-part step-part--1">Every neighbourhood begins with its buildings, including <span class="text-bold">building components</span>, <span class="text-bold">construction methods</span>, and <span class="text-bold">density</span>.</div>
 						<div class="step-part step-part--2">However, buildings are only one part of the neighbourhood system.</div>
 					</div>
 				</div>
@@ -1749,31 +1794,29 @@
 				<!-- CAMERA SHOT 5 --> 
 				<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">The neighbourhood structure is shaped by urban elements such as streets and parking areas.</div>
-						<div class="step-part step-part--2">Underground parking and circulation layouts also influence the overall system.</div>
+						<div class="step-part step-part--1">It's structure is also shaped by urban elements such as <span class="text-bold">streets</span> and <span class="text-bold">parking areas</span> and <span class="text-bold">underground parking</span></div>
 					</div>
 				</div>
 			
 				<!-- CAMERA SHOT 6 --> 
 				<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">Another layer is formed by interconnected energy infrastructure across the district.</div>
-						<div class="step-part step-part--2">This includes electricity, utility lines, space heating, and warm water systems.</div>
+						<div class="step-part step-part--1">Another layer is formed by interconnected energy infrastructure.</div>
+						<div class="step-part step-part--2">This includes <span class="text-bold">electricity</span>, <span class="text-bold">utility lines</span>, <span class="text-bold">space heating</span>, and <span class="text-bold">warm water</span>.</div>
 					</div>
 				</div>
 			
 				<!-- CAMERA SHOT 7 --> 
 				<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">Finally, open spaces complete the neighbourhood system.</div>
-						<div class="step-part step-part--2">Green spaces and unbuilt areas are essential system components.</div>
+						<div class="step-part step-part--1">Finally, open spaces such as <span class="text-bold">green spaces</span> and <span class="text-bold">unbuilt areas</span> complete the neighbourhood system.</div>
 					</div>
 				</div>
 			
 				<!-- CAMERA SHOT 8 --> 
 				<div class="step">
 					<div class="step-flow">
-						<div class="step-part step-part--1">Together, these interconnected elements are assessed over a 50-year life cycle using the Q-LCA model, revealing their contribution to global warming potential.</div>
+						<div class="step-part step-part--1">Together, these interconnected elements are assessed over a 50-year life cycle using the <span class="text-bold">Q-LCA</span> model, revealing their contribution to global warming potential.</div>
 					</div>
 				</div>
 			</article>
@@ -1794,7 +1837,7 @@
 				<div class="concept-flow">
 					<h2 class="concept-title">From Building Blocks to Scenarios</h2>
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">To make the impact of different planning decisions visible, the <strong>Q-LCA model</strong> breaks down urban complexity into building blocks.</div>
+						<div class="step-part step-part--1">To make the impact of different planning decisions visible, the <span class="text-bold">Q-LCA model</span> breaks down urban complexity into building blocks.</div>
 						<div class="step-part step-part--2">This allows global warming potential to be evaluated at neighbourhood scale.</div>
 					</div>
 				</div>
@@ -1802,21 +1845,21 @@
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">The model starts with a standardised one-hectare unit as a basic building block.</div>
+						<div class="step-part step-part--1">The model starts with a standardised <span class="text-bold">one-hectare unit</span> as a basic building block.</div>
 					</div>
 				</div>
 			</div>
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">These units can be combined to create a complete 6-hectare neighbourhood and explore different planning scenarios.</div>
+						<div class="step-part step-part--1">These units can be combined to create a complete <span class="text-bold">6-hectare neighbourhood</span> and explore different planning scenarios.</div>
 					</div>
 				</div>
 			</div>
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">Each unit is defined by six key factors: Building type, Density, Road layout, Construction method, Heat supply and Energy efficiency level.</div>
+						<div class="step-part step-part--1">Each unit is defined by six key factors: <span class="text-bold">Building type</span>, <span class="text-bold">Density</span>, <span class="text-bold">Road layout</span>, <span class="text-bold">Construction method</span>, <span class="text-bold">Heat supply</span> and <span class="text-bold">Energy efficiency level</span>.</div>
 					</div>
 				</div>
 			</div>
@@ -1824,7 +1867,7 @@
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Each factor represents a specific planning decision. </div>
-						<div class="step-part step-part--2">For example, Building type describes the configuration of residential units and the overall building volume.</div>
+						<div class="step-part step-part--2">For example, <span style="background-color: #224E7A; color: #FFFFFF;">Building type</span> describes the configuration of residential units and the overall building volume.</div>
 						<div class="step-part step-part--3">The factor Building type includes six possible typologies: block, line, point, row, duplex and single.</div>
 
 					</div>
@@ -1833,7 +1876,7 @@
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">When combined with the factor Density, these choices already create 18 different settlement structures. </div>
+						<div class="step-part step-part--1">When combined with the factor <span style="background-color: #CDA13B; color: #FFFFFF;">Density</span>, these choices already create 18 different settlement structures. </div>
 						<div class="step-part step-part--2">High, medium and low densities are the three possible values.</div>
 					</div>
 				</div>
@@ -1841,7 +1884,7 @@
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">Adding Road layout introduces another layer of variation by including different ways of organising the street network, resulting in 54 possible combinations.</div>
+						<div class="step-part step-part--1">Adding <span style="background-color: #A7AAAE; color: #FFFFFF;">Road layout</span> introduces another layer of variation by including different ways of organising the street network, resulting in 54 possible combinations.</div>
 						<div class="step-part step-part--2">This factor distinguishes between grid, curve and cul-de-sac.</div>
 					</div>
 				</div>
@@ -1849,21 +1892,21 @@
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">When the Construction method factor is added, with mineral and timber construction as possible values, the number of variations increases to 108.</div>
+						<div class="step-part step-part--1">When the <span style="background-color: #A1A926; color: #FFFFFF;">Construction method</span> factor is added, with mineral and timber construction as possible values, the number of variations increases to 108.</div>
 					</div>
 				</div>
 			</div>
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">Adding the Heat supply factor with the three possible values  natural gas, local energy and heat pumps results in 324 variations.</div>
+						<div class="step-part step-part--1">Adding the <span style="background-color: #AF1740; color: #FFFFFF;">Heat supply</span> factor with the three possible values  natural gas, local energy and heat pumps results in 324 variations.</div>
 					</div>
 				</div>
 			</div>
 			<div class="step" data-chapter="concept">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">The final factor, Energy efficiency level , with values of 15, 30 and 70 kWh, expands the model to 972 possible neighbourhood variations, each of which can be evaluated based on its global warming potential.</div>
+						<div class="step-part step-part--1">The final factor, <span style="background-color: #FED703; color: #FFFFFF;">Energy efficiency level</span>, with values of 15, 30 and 70 kWh, expands the model to 972 possible neighbourhood variations, each of which can be evaluated based on its global warming potential.</div>
 					</div>
 				</div>
 			</div>
@@ -1888,7 +1931,7 @@
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">Changing selected urban development factors reveals shifts in environmental impact, including GWP hotspots and the contribution of different cost groups.</div>
 						<div class="step-part step-part--2">In the Q-LCA model, GWP is structured along the following cost groups:</div>
-						<div class="step-part step-part--3">Building (CG 300) <br> Building services (CG 400) <br> Infrastructure (CG 500) <br> Operational energy (B6) <br> *Including household electricity</div>
+						<div class="step-part step-part--3"><span style="background-color: #3A86FF; color: #FFFFFF;">Building (CG 300)</span> <br> <span style="background-color: #FD2B3B; color: #FFFFFF;">Building services (CG 400)</span> <br> <span style="background-color: #10B61D; color: #FFFFFF;">Infrastructure (CG 500)</span> <br> <span style="background-color: #FFB20B; color: #FFFFFF;">Operational energy (B6)</span> <br> <span style= "color: #FFB20B;">*Including household electricity</span></div>
 					</div>
 				</div>
 			</div>
@@ -1921,7 +1964,7 @@
 						</div>
 						<div class="factor-panel__count" aria-label="Six of nine hundred seventy-two combinations">
 							<span class="factor-panel__count-box">6</span>
-							<span>/972</span>
+							<span>/ 972</span>
 						</div>
 					</div>
 					<div class="factor-panel__cases">
@@ -2019,11 +2062,11 @@
 				</div>
 			</div>
 			<div class="model-view" id="model-10">
-                <img src="./GIF/GWP.gif" alt="GWP" style="transform: scale(1.6); padding: 0 100px 60px 0;">
+                <img src="./GIF/GWP.gif" alt="GWP" style="transform: scale(1.8); padding: 30px 100px 60px 0;">
             </div>
 			<div class="model-view" id="model-11">
 				<div class="land-use-panel" aria-label="Land use comparison per one thousand inhabitants">
-					<div class="land-use-panel__title">Comparison of land use per 1.000 inhabitants [medium density]</div>
+					<div class="land-use-panel__title">Comparison of land use per 1.000 inhabitants <br>[medium density]</div>
 					<div class="land-use-panel__metrics" aria-hidden="true">
 						<div class="land-use-panel__metric">
 							<span class="land-use-panel__value">3 ha</span>
@@ -2042,7 +2085,7 @@
             </div>
 			<div class="model-view" id="model-12">
 				<div class="gwp-panel" aria-label="GWP composition overview">
-					<div class="gwp-panel__title">Average GWP composition across all 972 settlement variations</div>
+					<div class="gwp-panel__title">Average GWP composition <br>across all 972 settlement variations</div>
 					<div class="gwp-panel__cases">
 						<img src="./svgs/Concept/GWP_Composition/GWPComposition.svg" alt="GWP composition by cost groups">
 					</div>
@@ -2059,7 +2102,7 @@
 				<div class="concept-flow">
 					<h2 class="concept-title">The Model in Practice</h2>
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">The Q-LCA model connects neighbourhood design choices with life cycle impacts.</div>
+						<div class="step-part step-part--1">The <span class="text-bold">Q-LCA model</span> connects neighbourhood design choices with life cycle impacts.</div>
 						<div class="step-part step-part--2">To see how the model works in practice, we explore one case in detail.</div>
 					</div>
 				</div>
@@ -2085,7 +2128,7 @@
 			<div class="step" data-chapter="compare">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">Neighbourhood A represents a compact, high-density urban structure where land is used efficiently and urban functions are closely connected.</div>
+						<div class="step-part step-part--1"><span class="text-bold">Neighbourhood A</span> represents a compact, high-density urban structure where land is used efficiently and urban functions are closely connected.</div>
 						<div class="step-part step-part--2">Most parking is provided underground to accommodate many vehicles within a limited area, requiring more complex construction and additional materials.</div>
 						
 						<section class="figures">
@@ -2111,7 +2154,7 @@
 			<div class="step" data-chapter="compare">
 				<div class="concept-flow">
 					<div class="concept-text-blocks">
-						<div class="step-part step-part--1">Neighbourhood B represents a low-density suburban structure with detached housing, larger private spaces and more dispersed urban functions. </div>
+						<div class="step-part step-part--1"><span class="text-bold">Neighbourhood B</span> represents a low-density suburban structure with detached housing, larger private spaces and more dispersed urban functions. </div>
 						<div class="step-part step-part--2">Its lower density requires more land per person, but creates more open and green spaces within the neighbourhood.</div>
 						<div class="step-part step-part--3">Parking is typically provided above ground.</div>
 							<section class="figures">
@@ -2155,13 +2198,15 @@
 			<div class="model-view neighborhood-model" id="model-16">
 				<img class="model-main" src="./svgs/NeighborhoodA.svg" alt="Model 16 Neighborhood A">
 				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerA" aria-controls="factorOverviewModal" aria-expanded="false">
-					<img src="./svgs/FactorOverview.svg" alt="Open factor overview">
+					<img class="factor-info-icon" src="./svgs/factor_icon.svg" alt="" aria-hidden="true">
+					<span class="factor-overview-trigger-label">Factor Overview</span>
 				</button>
 			</div>
 			<div class="model-view neighborhood-model" id="model-17">
 				<img class="model-main" src="./svgs/NeighborhoodB.svg" alt="Model 17 Neighborhood B">
 				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerB" aria-controls="factorOverviewModal" aria-expanded="false">
-					<img src="./svgs/FactorOverview.svg" alt="Open factor overview">
+					<img class="factor-info-icon" src="./svgs/factor_icon.svg" alt="" aria-hidden="true">
+					<span class="factor-overview-trigger-label">Factor Overview</span>
 				</button>
 			</div>
         
@@ -2274,8 +2319,7 @@
 		const heroModelFallback = document.getElementById("heroModelFallback");
 
 		if (heroModelCanvas) {
-			// Beginner-friendly controls: most future visual adjustments
-			// can be done by editing this settings object.
+			
 			const INFOGRAPHIC_SETTINGS = {
 				assetPath: "./Neighbourhood_Model/Infographic.png",
 				referenceSize: { width: 7440, height: 6520 },
@@ -2347,6 +2391,60 @@
 			infographicImage.style.height = `${INFOGRAPHIC_SETTINGS.referenceSize.height}px`;
 			heroModelCanvas.appendChild(infographicImage);
 
+			// Highlight overlays render at their own intrinsic size and are
+			// positioned manually (via CSS) rather than matching the PNG's reference size.
+			// Each highlight gets its own top/left placement (independent of the
+			// shared centered default) since it isn't projected from a 3D anchor.
+			const HIGHLIGHT_ASSETS = {
+				"house.svg": {
+					src: "./Neighbourhood_Model/Highlights/Step1_(House).svg",
+					top: "98.4%",
+					left: "-13.6%",
+				},
+				"buildingtype.svg": {
+					src: "./Neighbourhood_Model/Highlights/BuildingType_Highlight.svg",
+					top: "71.2%",
+					left: "28.25%",
+				},
+				"parking.svg": {
+					src: "./Neighbourhood_Model/Highlights/Step4_Parking.svg",
+					top: "62.35%",
+					left: "66.8%",
+				},
+				"electricity.svg": {
+					src: "./Neighbourhood_Model/Highlights/Step5_Electricity.svg",
+					top: "22%",
+					left: "76.5%",
+				},
+				"greenarea.svg": {
+					src: "./Neighbourhood_Model/Highlights/Step5_GreenArea.svg",
+					top: "69.5%",
+					left: "44.6%",
+				},
+			};
+
+			Object.entries(HIGHLIGHT_ASSETS).forEach(([id, cfg]) => {
+				const img = document.createElement("img");
+				img.id = id;
+				img.className = "hero__model-highlight building-highlight";
+				img.src = cfg.src;
+				img.alt = "";
+				img.decoding = "async";
+				img.draggable = false;
+				img.style.top = cfg.top;
+				img.style.left = cfg.left;
+				heroModelCanvas.appendChild(img);
+			});
+
+			function updateHighlights(active = []) {
+				document.querySelectorAll(".building-highlight").forEach((el) => {
+					const isActive = active.includes(el.id);
+					el.classList.toggle("is-highlighted", isActive);
+					el.style.opacity = isActive ? "1" : "0";
+					el.style.display = isActive ? "block" : "none";
+				});
+			}
+
 			const CAMERA_SHOTS = [ 
 			// Step 0 — Overview 
 			{ 
@@ -2357,8 +2455,8 @@
 			// Step 1 — House (camera 1)
 			{
 				position: [20, 20, 20],
-				target: [-12, -1, -11],
-				zoom: 4 },
+				target: [-4.6, -0.4, -3.9],
+				zoom: 3.2 },
 
 			// Step 2 — Overview 
 			{
@@ -2477,46 +2575,53 @@
 			// world coordinate system as the previous 3D setup.
 			const stepFeatures = [
 				null, // step 0 — overview, no feature
-				null, // step 1 — camera-only (House (camera 1))
+				{
+					// step 1 — camera-only (House (camera 1))
+					highlight: ["house.svg"],
+				},
 				null, // step 2 — overview, no feature labels yet
 				{
 					// step 3 — Density / Building Components & Construction
 					labels: [
-						{ svg: "./svgs/Labels/building_components.svg", anchor: [0, 1, 0] },
-						{ svg: "./svgs/Labels/Density.svg", anchor: [1, 3, 0] },
+						{ svg: "./svgs/Labels/building_components.svg", anchor: [0, 1.5, 0] },
+						{ svg: "./svgs/Labels/Density.svg", anchor: [1, 3.5, 0] },
 					],
+					highlight: ["buildingtype.svg"],
 				},
 				{
 					// step 4 — Street & Parking Areas / Underground Parking
 					labels: [
-						{ svg: "./svgs/Labels/Street_&_Parking Areas.svg", anchor: [3.3, 3, 0] },
-						{ svg: "./svgs/Labels/Underground_Parking.svg", anchor: [6, 2, 0] },
+						{ svg: "./svgs/Labels/Street_&_Parking Areas.svg", anchor: [3.3, 3.5, 0] },
+						{ svg: "./svgs/Labels/Underground_Parking.svg", anchor: [6.5, 2.2, 0] },
 					],
+					highlight: ["parking.svg"],
 				},
 				{
 					// step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
 					labels: [
-						{ svg: "./svgs/Labels/Electricity.svg", anchor: [2, 0.5, 0] },
-						{ svg: "./svgs/Labels/Pipe_& Utility_Lines.svg", anchor: [0.2, -1.4, 0] },
-						{ svg: "./svgs/Labels/Heating.svg", anchor: [4, -0.5, 0] },
+						{ svg: "./svgs/Labels/Electricity.svg", anchor: [1.3, 0.5, 0] },
+						{ svg: "./svgs/Labels/Pipe_& Utility_Lines.svg", anchor: [0.2, -1, 0] },
+						{ svg: "./svgs/Labels/Heating.svg", anchor: [4, 0.1, 0] },
 					],
+					highlight: ["electricity.svg"],
 				},
 				{
 					// step 6 — Green Space & Unbuilt Area
 					labels: [
-						{ svg: "./svgs/Labels/Green_Space.svg", anchor: [2.2, 2, 0] },
+						{ svg: "./svgs/Labels/Green_Space.svg", anchor: [2.2, 2.3, 0] },
 					],
+					highlight: ["greenarea.svg"],
 				},
 				{
 					// step 7 — summary: every feature highlighted + labeled at once
 					labels: [
-					{ svg: "./svgs/Labels/__Building.svg", anchor: [6, 5.5, 0] },
-						{ svg: "./svgs/Labels/__Heating_Density.svg", anchor: [1, 2.3, 0] },
-						{ svg: "./svgs/Labels/__Street.svg", anchor: [6.5, 4.3, 0] },
-						{ svg: "./svgs/Labels/__UndergroundParking.svg", anchor: [8.05, 3.15, 0] },
-						{ svg: "./svgs/Labels/__Electricity.svg", anchor: [6, 7, 0] },
-						{ svg: "./svgs/Labels/__Pipeline.svg", anchor: [6, 1.3, 0] },
-						{ svg: "./svgs/Labels/__Green_Space.svg", anchor: [4.46, 1.5, 0] },
+					{ svg: "./svgs/Labels/__Building.svg", anchor: [8, 6.8, 0] },
+						{ svg: "./svgs/Labels/__Heating_Density.svg", anchor: [0.5, 3.3, 0] },
+						{ svg: "./svgs/Labels/__Street.svg", anchor: [8, 5.2, 0] },
+						{ svg: "./svgs/Labels/__UndergroundParking.svg", anchor: [9.2, 4, 0] },
+						{ svg: "./svgs/Labels/__Electricity.svg", anchor: [6.1, 7.7, 0] },
+						{ svg: "./svgs/Labels/__Pipeline.svg", anchor: [8, 2, 0] },
+						{ svg: "./svgs/Labels/__Green_Space.svg", anchor: [4.9, 0.9, 0] },
 					],
 				},
 			];
@@ -2557,6 +2662,7 @@
 				currentFeatureIndex = index;
 
 				const feature = stepFeatures[index];
+				updateHighlights((feature && feature.highlight) || []);
 
 				if (feature && feature.summary) {
 					const allLabels = stepFeatures.filter((f) => f && !f.summary).flatMap((f) => f.labels);
@@ -2612,7 +2718,11 @@
 					+ cameraLookAtCurrent.z * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookZ
 					+ cameraLookAtCurrent.y * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookY;
 
-				infographicImage.style.transform = `translate3d(calc(-50% + ${panX.toFixed(2)}px), calc(-50% + ${panY.toFixed(2)}px), 0) scale(${scale.toFixed(4)})`;
+				const sharedTransform = `translate3d(calc(-50% + ${panX.toFixed(2)}px), calc(-50% + ${panY.toFixed(2)}px), 0) scale(${scale.toFixed(4)})`;
+				infographicImage.style.transform = sharedTransform;
+				document.querySelectorAll(".building-highlight").forEach((el) => {
+					el.style.transform = sharedTransform;
+				});
 			}
 
 			function animate() {
@@ -2813,16 +2923,18 @@
 
 	function syncIntroCamera(index, progress = 1) {
 		let modelIndex = index + INTRO_MODEL_STEP_OFFSET;
-		if (index === 0 && (window.scrollY <= 2 || progress < INTRO_FIRST_PARAGRAPH_CAMERA_PROGRESS)) {
+		if (index === 0 && window.scrollY <= 2) {
 			modelIndex = 0;
 		}
-		if (modelIndex === currentIntroCameraIndex) return;
-		if (typeof window.setIntroCamera === "function") {
+
+		const featureIndex = modelIndex;
+
+		if (modelIndex !== currentIntroCameraIndex && typeof window.setIntroCamera === "function") {
 			window.setIntroCamera(modelIndex);
 			currentIntroCameraIndex = modelIndex;
 		}
 		if (typeof window.setIntroFeature === "function") {
-			window.setIntroFeature(modelIndex);
+			window.setIntroFeature(featureIndex);
 		}
 	}
 

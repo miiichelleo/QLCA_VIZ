@@ -110,6 +110,32 @@ body {
     height: 100vh;
 }
 
+.restart-story-link {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    z-index: 1500;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #000000;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.restart-story-link__icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.restart-story-link:hover {
+    color: #555555;
+}
+
 /* =====================================================
    INTRO MODAL
 ===================================================== */
@@ -226,7 +252,7 @@ body {
 
 .intro-modal-close:hover {
 
-    color: #666;
+    color: #555555;
 
 }
 
@@ -319,7 +345,7 @@ body {
 
 .metric span {
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
     color: #666;
 }
@@ -335,8 +361,8 @@ body {
 }
 
 .unit-button {
-    width: 80px;
-    height: 40px;
+    width: 90px;
+    height: 30px;
 
     background: white;
     color: black;
@@ -344,7 +370,7 @@ body {
     border: 2px solid black;
 
     font-family: inherit;
-    font-size: 20px;
+    font-size: 16px;
 
     cursor: pointer;
 }
@@ -478,16 +504,11 @@ body {
     width: 25px;
     height: 25px;
 
-    display: flex;
+    display: block;
 
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 25px;
 
-    background: #000;
-    color: white;
-
-    font-size: 18px;
-    line-height: 1;
+    object-fit: contain;
 }
 
 
@@ -964,8 +985,8 @@ body {
 }
 
 .parking-button {
-    width: 80px;
-    height: 40px;
+    width: 60px;
+    height: 30px;
 
     background: white;
     color: black;
@@ -973,7 +994,7 @@ body {
     border: 2px solid black;
 
     font-family: inherit;
-    font-size: 20px;
+    font-size: 16px;
 
     cursor: pointer;
 }
