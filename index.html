@@ -330,11 +330,6 @@ body {
 			transition: opacity 0.2s ease, visibility 0.2s ease;
 		}
 
-		/* The canvas stays full-viewport at all times — #infographic's opaque
-		   article column already covers the left side visually, so the model
-		   never resizes/reflows between the landing page and the scrolly
-		   steps. This keeps the camera framing pixel-identical throughout. */
-
 		.hero__title,
 		.hero__subtitle,
 		.hero__scroll {
@@ -809,7 +804,7 @@ body {
 		#compare .concept-text-blocks .step-part {
 			opacity: 0;
 			transform: translate3d(0, 22px, 0);
-			padding: 12px 14px;
+			padding: 12px 0;
 			line-height: 1.55;
 			transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 		}
@@ -954,11 +949,14 @@ body {
 			align-items: center;
 			justify-content: center;
 			min-width: 36px;
-			height: 36px;
-			padding: 5px;
+			min-height: 36px;
+			padding-block: 0;
+			padding-inline: 6px;
 			border: 1.5px solid #000000;
 			background: transparent;
 			box-sizing: border-box;
+			line-height: 1;
+			white-space: nowrap;
 		}
 
 		.factor-panel__cases {
@@ -1104,11 +1102,11 @@ body {
 
 		.land-use-panel__cases {
 			position: absolute;
-			left: 51.5%;
+			left: 8.5%;
 			top: 67.5%;
 			width: min(79%, 1100px);
 			height: min(62%, 700px);
-			transform: translate(-50%, -50%);
+			transform: translate(0, -50%);
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -1144,11 +1142,11 @@ body {
 
 		.gwp-panel__cases {
 			position: absolute;
-			left: 51.5%;
+			left: 8.5%;
 			top: 67.5%;
 			width: min(79%, 1100px);
 			height: min(62%, 700px);
-			transform: translate(-50%, -50%);
+			transform: translate(0, -50%);
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -1491,17 +1489,17 @@ body {
 	    <div class="Chapters">
 			<div class="menu-group" data-group="introduction">
 				<a href="#intro" class="group-link" data-menu-group-link="introduction">Introduction</a>
-				<a href="#infographic" class="item-link" data-menu-item="system-boundaries">The Building Blocks Of A Neighbourhood</a>
+				<a href="#building-blocks-of-a-neighbourhood" class="item-link" data-menu-item="system-boundaries">The Building Blocks Of A Neighbourhood</a>
 			</div>
 			<div class="menu-group" data-group="concept">
 				<a href="#content" class="group-link" data-menu-group-link="concept">Concept</a>
-				<a href="#content" class="item-link" data-menu-item="modular-approach">From Building Blocks to Scenarios</a>
-				<a href="#content" class="item-link" data-menu-item="key-factors">How Climate Impact Is Measured</a>
+				<a href="#from-building-blocks-to-scenarios" class="item-link" data-menu-item="modular-approach">From Building Blocks to Scenarios</a>
+				<a href="#how-climate-impact-is-measured" class="item-link" data-menu-item="key-factors">How Climate Impact Is Measured</a>
 			</div>
 			<div class="menu-group" data-group="compare">
 				<a href="#compare" class="group-link" data-menu-group-link="compare">Compare</a>
-				<a href="#compare" class="item-link" data-menu-item="case-0">The Model in Practice</a>
-				<a href="#compare" class="item-link" data-menu-item="case-1">Urban Form & Private Parking</a>
+				<a href="#the-model-in-practice" class="item-link" data-menu-item="case-0">The Model in Practice</a>
+				<a href="#urban-form-private-parking" class="item-link" data-menu-item="case-1">Urban Form & Private Parking</a>
 			</div>
 	    </div>
   </header>
@@ -1568,7 +1566,7 @@ body {
 				</div>	
 				
 				<!-- CAMERA SHOT 4 --> 
-				<div class="step">
+				<div class="step" id="building-blocks-of-a-neighbourhood">
 					<div class="step-flow">
 					<h2 class="infographic-title">The Building Blocks of the Neighbourhood</h2>
 						<div class="step-part step-part--1">Every neighbourhood begins with its buildings, including <span class="text-bold">building components</span>, <span class="text-bold">construction methods</span>, and <span class="text-bold">density</span>.</div>
@@ -1618,7 +1616,7 @@ body {
 	<div id="content">
 
 		<article>
-			<div class="step" data-chapter="concept">
+			<div class="step" data-chapter="concept" id="from-building-blocks-to-scenarios">
 				<div class="concept-flow">
 					<h2 class="concept-title">From Building Blocks to Scenarios</h2>
 					<div class="concept-text-blocks">
@@ -1695,7 +1693,7 @@ body {
 					</div>
 				</div>
 			</div>
-			<div class="step" data-chapter="concept">
+			<div class="step" data-chapter="concept" id="how-climate-impact-is-measured">
 				<div class="concept-flow">
 					<h2 class="concept-title">How Climate Impact is measured</h2>
 					<div class="concept-text-blocks">
@@ -1882,7 +1880,7 @@ body {
 	<div id="compare">
 
 		<article>
-			<div class="step" data-chapter="compare">
+			<div class="step" data-chapter="compare" id="the-model-in-practice">
 				<div class="concept-flow">
 					<h2 class="concept-title">The Model in Practice</h2>
 					<div class="concept-text-blocks">
@@ -1891,13 +1889,13 @@ body {
 					</div>
 				</div>
 			</div>
-			<div class="step" data-chapter="compare">
+			<div class="step" data-chapter="compare" id="urban-form-private-parking">
 				<div class="concept-flow">
 					<h2 class="concept-title">Urban Form & Private Parking</h2>
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">This case compares two neighbourhoods with contrasting urban densities and typologies.</div>
 						<div class="step-part step-part--2">All other factors - road layout, construction method, heat supply and energy efficiency level - remain constant.</div>
-						<div class="step-part step-part--3">In addition, the case examines the influence of private parking infrastructure on global warming potential: <br>
+						<div class="step-part step-part--3">In addition, the case examines the influence of private parking infrastructure on global warming potential:
 						<span class="text-bold">Urban Form & Private Parking</span></div>
 					</div>
 				</div>
@@ -3255,6 +3253,33 @@ async function initializeModel() {
 		document.body.classList.toggle("menu-open", isOpen);
 	}
 
+	function scrollToSectionStart(groupKey) {
+		if (groupKey === "introduction") {
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+			window.scrollTo(0, 0);
+			return true;
+		}
+
+		if (groupKey === "concept" && conceptSection) {
+			const y = Math.max(0, Math.round(conceptSection.getBoundingClientRect().top + window.pageYOffset));
+			document.documentElement.scrollTop = y;
+			document.body.scrollTop = y;
+			window.scrollTo(0, y);
+			return true;
+		}
+
+		if (groupKey === "compare" && compareSection) {
+			const y = Math.max(0, Math.round(compareSection.getBoundingClientRect().top + window.pageYOffset));
+			document.documentElement.scrollTop = y;
+			document.body.scrollTop = y;
+			window.scrollTo(0, y);
+			return true;
+		}
+
+		return false;
+	}
+
 	function updateMenuHighlight() {
 		let activeGroup = "introduction";
 		let activeItem = "system-boundaries";
@@ -3292,6 +3317,10 @@ async function initializeModel() {
     	if (!item) return;
 
 		if (item.dataset.menuGroupLink) {
+			const didScroll = scrollToSectionStart(item.dataset.menuGroupLink);
+			if (didScroll) {
+				e.preventDefault();
+			}
 			menuTitle.textContent = item.textContent.trim();
 		}
 	    	setMenuOpenState(false);
