@@ -340,9 +340,9 @@
 			position: relative;
 			width: 100%;
 			height: 100%;
+			overflow: hidden;
 			background: transparent;
-			opacity: 1;
-			transition: opacity 0.24s linear;
+			isolation: isolate;
 		}
 
 		.hero__model-canvas canvas {
@@ -351,32 +351,50 @@
 			height: 100%;
 		}
 
+		.hero__model-scene {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 7440px;
+			height: 6520px;
+			transform-origin: 0 0;
+			will-change: transform;
+			pointer-events: none;
+		}
+
 		.hero__model-infographic {
 			position: absolute;
-			top: 50%;
-			left: 50%;
+			left: 0;
+			top: 0;
+			width: 7440px;
+			height: 6520px;
 			max-width: none;
 			max-height: none;
 			pointer-events: none;
 			user-select: none;
-			transform-origin: center center;
-			will-change: transform;
+			transform: translate3d(0, 0, 0);
 		}
-
 		.hero__model-highlight {
 			position: absolute;
-			top: 50%;
-			left: 50%;
+
+			left: 0;
+			top: 0;
 			opacity: 0;
+			max-width: none;
+			max-height: none;
 			pointer-events: none;
-			will-change: transform;
+			user-select: none;
+			transform-origin: 0 0;
+			will-change: transform, opacity;
 			transition: opacity 0.24s ease;
 		}
+		
 
 		.hero__model-highlight.is-highlighted {
 			opacity: 1;
 		}
 
+		/* Label layer stays in the same scene coordinate system */
 		.hero__model-labels {
 			position: absolute;
 			inset: 0;
@@ -386,31 +404,40 @@
 			opacity: 1;
 			transition: opacity 0.24s linear;
 		}
+		.hero__model-label {
+			position: absolute;
+			left: 0;
+			top: 0;
+			opacity: 0;
+			transform: translate3d(-10000px, -10000px, 0);
+			transform-origin: 0 0;
+			pointer-events: none;
+			will-change: transform, opacity;
+			transition: opacity 0.35s ease;
+		}
+
+		.hero__model-label img {
+			display: block;
+			width: auto;
+			height: auto;
+			max-width: none;
+			max-height: none;
+			scale: 3;
+			transform-origin: center center;
+			pointer-events: none;
+			user-select: none;
+		}
+
 
 		body.content-active .hero__model-canvas,
 		body.content-active .hero__model-labels {
 			opacity: 0;
 		}
 
-		.hero__model-label {
-			position: absolute;
-			top: 0;
-			left: 0;
-			transform: translate3d(-1000px, -1000px, 0);
-			opacity: 0;
-			transition: opacity 0.35s ease;
-			will-change: transform, opacity;
-		}
-
 		.hero__model-label.is-visible {
 			opacity: 1;
 		}
 
-		.hero__model-label img {
-			display: block;
-			width: 70%;
-			height: 70%;
-		}
 
 		.hero__logo,
 		.hero__title,
@@ -957,15 +984,15 @@
 		}
 
 		#model-5 .factor-panel__cases {
-			--cases-start-x: -10%;
-			--cases-start-y: 30%;
-			--cases-start-scale: 2.2;
+			--cases-start-x: 0%;
+			--cases-start-y: 0%;
+			--cases-start-scale: 2;
 			--cases-end-x: -50%;
 			--cases-end-y: -50%;
 		}
 
 		#model-6 .factor-panel__cases {
-			--cases-start-x: -20%;
+			--cases-start-x: 0%;
 			--cases-start-y: -100%;
 			--cases-start-scale: 2.2;
 			--cases-end-x: -50%;
@@ -973,7 +1000,7 @@
 		}
 
 		#model-7 .factor-panel__cases {
-			--cases-start-x: 10%;
+			--cases-start-x: 0%;
 			--cases-start-y: -100%;
 			--cases-start-scale: 2.2;
 			--cases-end-x: -50%;
@@ -1139,6 +1166,41 @@
 			object-fit: contain;
 		}
 
+		.neighborhood-model .neighborhood-factor-panel {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		.neighborhood-model .neighborhood-factor-panel__top {
+			position: absolute;
+			left: 50%;
+			top: 18%;
+			transform: translateX(-50%);
+			width: auto;
+			right: auto;
+		}
+
+		.neighborhood-model .neighborhood-factor-panel__icons {
+			gap: 10px;
+			justify-content: center;
+			margin: 0 auto;
+		}
+
+		.neighborhood-model .factor-panel__icon {
+			width: 42px !important;
+			height: 42px !important;
+		}
+
+		.neighborhood-model .neighborhood-factor-panel__cases {
+			left: 50%;
+			top: 59%;
+			width: min(72%, 760px);
+			height: min(46%, 420px);
+			transform: translate(-50%, -50%);
+		}
+
 		.neighborhood-model .factor-overview-trigger {
 			position: absolute;
 			left: 48px;
@@ -1207,7 +1269,7 @@
 
 		.factor-modal-header h2 {
 			margin: 0;
-			font-size: 42px;
+			font-size: 2rem;
 			line-height: 1.1;
 			font-weight: 400;
 		}
@@ -1769,9 +1831,15 @@
 			</div>
 			<div class="hero__visual-shell" aria-hidden="true">
 				<div class="intro-model-shell">
-					<div class="hero__model-canvas" id="heroModelCanvas"></div>
-					<div class="hero__model-labels" id="heroModelLabels" aria-hidden="true"></div>
-				</div>
+					<div class="hero__model-canvas" id="heroModelCanvas">
+    				<div class="hero__model-scene" id="heroModelScene">
+					<div
+						class="hero__model-labels"
+						id="heroModelLabels"
+						aria-hidden="true">
+					</div>
+    			</div>
+
 			</div>
 		</section>
 
@@ -1960,7 +2028,6 @@
 		</article>
 
 		<figure> 
-            <!--Model O as a starting page (?)-->
             <div class="model-view active" id="model-0">
             </div>
             <div class="model-view" id="model-1">
@@ -2155,17 +2222,17 @@
 						<section class="figures">
 							<div class="figure">
 								<span>Population</span> 
-								<span id="populationValueA">1141</span>
+								<span id="populationValueA">1729</span>
 							</div>
 
 							<div class="figure">
 								<span>Buildings</span>
-								<span id="buildingsValueA">6</span>
+								<span id="buildingsValueA">7</span>
 							</div>
 
 							<div class="figure">
 								<span>Hectares</span>
-								<span id="hectaresValueA">7</span>
+								<span id="hectaresValueA">6</span>
 							</div>
 						</section>
 
@@ -2181,21 +2248,21 @@
 							<section class="figures">
 								<div class="figure">
 									<span>Population</span> 
-									<span id="populationValueB">183</span>
+									<span id="populationValueB">119</span>
 								</div>
 
 								<div class="figure">
 									<span>Buildings</span>
-									<span id="buildingsValueB">6</span>
+									<span id="buildingsValueB">52</span>
 								</div>
 
 								<div class="figure">
 									<span>Hectares</span>
-									<span id="hectaresValueB">60</span>
+									<span id="hectaresValueB">6</span>
 								</div>
 							</section>
 							<div class="explore-case-wrap">
-								<a class="explore-case-link" href="./Compare_Section/index.html">Explore Case</a>
+								<a class="explore-case-link" href="./QLCA_Compare_section/index.html">Explore Case</a>
 							</div>
 
 					</div>
@@ -2217,14 +2284,40 @@
             <img src="./svgs/UrbanForm.svg" alt="Model 15">
             </div>
 			<div class="model-view neighborhood-model" id="model-16">
-				<img class="model-main" src="./svgs/NeighborhoodA.svg" alt="Model 16 Neighborhood A">
+				<div class="factor-panel neighborhood-factor-panel" aria-label="Neighborhood A factor overview">
+					<div class="factor-panel__top neighborhood-factor-panel__top">
+						<div class="factor-panel__icons neighborhood-factor-panel__icons" aria-hidden="true">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodA/Block_icon.svg" alt="Neighborhood A block icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodA/Curve_icon.svg" alt="Neighborhood A curve icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodA/High_icon.svg" alt="Neighborhood A high density icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodA/LocalEnergy_icon.svg" alt="Neighborhood A local energy icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodA/Wood_icon.svg" alt="Neighborhood A wood icon">
+						</div>
+					</div>
+					<div class="factor-panel__cases neighborhood-factor-panel__cases">
+						<img src="./svgs/NeighborhoodA/Case.svg" alt="Neighborhood A case overview">
+					</div>
+				</div>
 				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerA" aria-controls="factorOverviewModal" aria-expanded="false">
 					<img class="factor-info-icon" src="./svgs/factor_icon.svg" alt="" aria-hidden="true">
 					<span class="factor-overview-trigger-label">Factor Overview</span>
 				</button>
 			</div>
 			<div class="model-view neighborhood-model" id="model-17">
-				<img class="model-main" src="./svgs/NeighborhoodB.svg" alt="Model 17 Neighborhood B">
+				<div class="factor-panel neighborhood-factor-panel" aria-label="Neighborhood B factor overview">
+					<div class="factor-panel__top neighborhood-factor-panel__top">
+						<div class="factor-panel__icons neighborhood-factor-panel__icons" aria-hidden="true">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodB/Low_Icon.svg" alt="Neighborhood B low density icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodB/Single_icon.svg" alt="Neighborhood B single detached icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodB/Wood_icon.svg" alt="Neighborhood B wood icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodB/Curve_icon.svg" alt="Neighborhood B curve icon">
+							<img class="factor-panel__icon" src="./svgs/NeighborhoodB/LocalEnergy_icon.svg" alt="Neighborhood B local energy icon">
+						</div>
+					</div>
+					<div class="factor-panel__cases neighborhood-factor-panel__cases">
+						<img src="./svgs/NeighborhoodB/Case.svg" alt="Neighborhood B case overview">
+					</div>
+				</div>
 				<button type="button" class="factor-overview-trigger" id="factorOverviewTriggerB" aria-controls="factorOverviewModal" aria-expanded="false">
 					<img class="factor-info-icon" src="./svgs/factor_icon.svg" alt="" aria-hidden="true">
 					<span class="factor-overview-trigger-label">Factor Overview</span>
@@ -2341,462 +2434,1117 @@
 
 		if (heroModelCanvas) {
 			
-			const INFOGRAPHIC_SETTINGS = {
-				assetPath: "./Neighbourhood_Model/Infographic.png",
-				referenceSize: { width: 7440, height: 6520 },
-				camera: {
-					orthoSize: 2.9,
-					easeLambda: 12,
-					startPosition: [20, 20, 20],
-					startTarget: [0, 0, 0],
-					startZoom: 1,
-				},
-				placement: {
-					baseOffsetX: 120,
-					baseOffsetY: 40,
-					panPerLookX: 140,
-					panPerLookZ: 0.62,
-					panPerLookY: 0.35,
-				},
-				labelPadding: 16,
-			};
+// MODEL + LABELS 
+	const heroModelScene =
+    	document.getElementById("heroModelScene");
 
-			const startWidth = heroModelCanvas.clientWidth || window.innerWidth;
-			const startHeight = heroModelCanvas.clientHeight || window.innerHeight;
-			const size = INFOGRAPHIC_SETTINGS.camera.orthoSize;
-			let cameraAspect = startWidth / startHeight;
+	const heroModelLabels =
+    	document.getElementById("heroModelLabels");
 
-			function vec3(x = 0, y = 0, z = 0) {
-				return { x, y, z };
-			}
 
-			function vecSub(a, b) {
-				return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
-			}
+// INFOGRAPHIC SIZE SETTINGS
+const INFOGRAPHIC_SETTINGS = {
 
-			function vecDot(a, b) {
-				return a.x * b.x + a.y * b.y + a.z * b.z;
-			}
+    assetPath: "./Neighbourhood_Model/Infographic.png",
+    referenceSize: {
+        width: 7440,
+        height: 6520
+    },
 
-			function vecCross(a, b) {
-				return vec3(
-					a.y * b.z - a.z * b.y,
-					a.z * b.x - a.x * b.z,
-					a.x * b.y - a.y * b.x
-				);
-			}
+    camera: {
+    	orthoSize: 2.9,
+    	easeLambda: 12,
+    	startPosition: [20, 20, 20],
+        startTarget: [0, 0, 0],
+        startZoom: 1
+    },
 
-			function vecLength(v) {
-				return Math.hypot(v.x, v.y, v.z);
-			}
+    placement: {
+        baseOffsetX: 120,
+        baseOffsetY: 40,
+        panPerLookX: 140,
+        panPerLookZ: 0.62,
+        panPerLookY: 0.35
+    },
 
-			function vecNormalize(v) {
-				const len = vecLength(v);
-				if (len < 1e-6) return vec3(0, 0, 0);
-				return vec3(v.x / len, v.y / len, v.z / len);
-			}
+    labelPadding: 16
+};
 
-			function vecLerp(current, target, t) {
-				current.x += (target.x - current.x) * t;
-				current.y += (target.y - current.y) * t;
-				current.z += (target.z - current.z) * t;
-			}
 
-			const infographicImage = document.createElement("img");
-			infographicImage.className = "hero__model-infographic";
-			infographicImage.src = INFOGRAPHIC_SETTINGS.assetPath;
-			infographicImage.alt = "";
-			infographicImage.decoding = "async";
-			infographicImage.draggable = false;
-			infographicImage.style.width = `${INFOGRAPHIC_SETTINGS.referenceSize.width}px`;
-			infographicImage.style.height = `${INFOGRAPHIC_SETTINGS.referenceSize.height}px`;
-			heroModelCanvas.appendChild(infographicImage);
+// VIEWPORT
 
-			// Highlight overlays render at their own intrinsic size and are
-			// positioned manually (via CSS) rather than matching the PNG's reference size.
-			// Each highlight gets its own top/left placement (independent of the
-			// shared centered default) since it isn't projected from a 3D anchor.
-			const HIGHLIGHT_ASSETS = {
-				"house.svg": {
-					src: "./Neighbourhood_Model/Highlights/Step1_(House).svg",
-					top: "98.4%",
-					left: "-13.6%",
-				},
-				"buildingtype.svg": {
-					src: "./Neighbourhood_Model/Highlights/BuildingType_Highlight.svg",
-					top: "71.2%",
-					left: "28.25%",
-				},
-				"parking.svg": {
-					src: "./Neighbourhood_Model/Highlights/Step4_Parking.svg",
-					top: "62.35%",
-					left: "66.8%",
-				},
-				"electricity.svg": {
-					src: "./Neighbourhood_Model/Highlights/Step5_Electricity.svg",
-					top: "22%",
-					left: "76.5%",
-				},
-				"greenarea.svg": {
-					src: "./Neighbourhood_Model/Highlights/Step5_GreenArea.svg",
-					top: "69.5%",
-					left: "44.6%",
-				},
-			};
+	let viewportWidth = 1;
+	let viewportHeight = 1;
 
-			Object.entries(HIGHLIGHT_ASSETS).forEach(([id, cfg]) => {
-				const img = document.createElement("img");
-				img.id = id;
-				img.className = "hero__model-highlight building-highlight";
-				img.src = cfg.src;
-				img.alt = "";
-				img.decoding = "async";
-				img.draggable = false;
-				img.style.top = cfg.top;
-				img.style.left = cfg.left;
-				heroModelCanvas.appendChild(img);
-			});
+	let sceneScale = 1;
 
-			function updateHighlights(active = []) {
-				document.querySelectorAll(".building-highlight").forEach((el) => {
-					const isActive = active.includes(el.id);
-					el.classList.toggle("is-highlighted", isActive);
-					el.style.opacity = isActive ? "1" : "0";
-					el.style.display = isActive ? "block" : "none";
-				});
-			}
+	let sceneOffsetX = 0;
+	let sceneOffsetY = 0;
 
-			const CAMERA_SHOTS = [ 
-			// Step 0 — Overview 
-			{ 
-				position: [20, 20, 20],
-				target: [-2, 0, -1.5],
-				zoom: 1 }, 
+	let cameraAspect =
+		INFOGRAPHIC_SETTINGS.referenceSize.width /
+		INFOGRAPHIC_SETTINGS.referenceSize.height;
 
-			// Step 1 — House (camera 1)
-			{
-				position: [20, 20, 20],
-				target: [-4.6, -0.4, -3.9],
-				zoom: 3.2 },
 
-			// Step 2 — Overview 
-			{
-				position: [20, 20, 20],
-				target: [-2, 0, -1.5],
-				zoom: 1 },
+// VECTORS FOR LABEL POSITIONS
 
-			// Step 3 — Density / Building Components & Construction
-			{
-				position: [20, 20, 20],
-				target: [-2, 0, -1.5],
-				zoom: 1 },
+	function vec3(x = 0, y = 0, z = 0) {
+		return { x, y, z };
+	}
 
-			// Step 4 — Street & Parking Areas / Underground Parking
-			{
-				position: [20, 20, 20],
-				target: [2, 0, -2],
-				zoom: 1 },
+	function vecSub(a, b) {
+		return vec3(
+			a.x - b.x,
+			a.y - b.y,
+			a.z - b.z
+		);
+	}
 
-			// Step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
-			{
-				position: [20, 20, 20],
-				target: [2, 0, 2],
-				zoom: 1.5 },
+	function vecDot(a, b) {
+		return (
+			a.x * b.x +
+			a.y * b.y +
+			a.z * b.z
+		);
+	}
 
-			// Step 6 — Green Space & Unbuilt Area
-			{
-				position: [20, 20, 20],
-				target: [-1, 0, -2],
-				zoom: 1.5 },
+	function vecCross(a, b) {
+		return vec3(
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x
+		);
+	}
 
-			// Step 7 — Summary overview (all layers visible)
-			{
-				position: [20, 20, 20],
-				target: [-0.8, 0, -1],
-				zoom: 0.7 },
+	function vecLength(v) {
+		return Math.hypot(
+			v.x,
+			v.y,
+			v.z
+		);
+	}
 
-			// Step 8 — Return to overview
-			{ 
-				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 1 },
-
-			// Step 9 —  Overview 
-			{ 
-				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 1 }, 
-
-			// Step 10 —  Overview 
-			{ 
-				position: [20, 20, 20],
-				target: [0, 0, 0],
-				zoom: 6 }, 
-
-			// Step 11 — Concept intro bridge (before PNG models appear)
-			{
-				position: [20, 20, 20],
-				target: [-3, 0, -8],
-				zoom: 2,
-			},
-			];
-
-			// Smoothly-animated camera state: setIntroCamera only updates the
-			// target values below — the render loop eases the live camera
-			// toward them every frame instead of snapping instantly, so
-			// scroll-triggered shot changes read as a dynamic pan/zoom
-			// rather than an abrupt cut.
-			const cameraPositionCurrent = vec3(20, 20, 20);
-			const cameraPositionTarget = vec3(20, 20, 20);
-			const cameraLookAtCurrent = vec3(0, 0, 0);
-			const cameraLookAtTarget = vec3(0, 0, 0);
-			let cameraZoomCurrent = INFOGRAPHIC_SETTINGS.camera.startZoom;
-			let cameraZoomTarget = INFOGRAPHIC_SETTINGS.camera.startZoom;
-			const cameraEaseLambda = INFOGRAPHIC_SETTINGS.camera.easeLambda;
-
-			cameraPositionCurrent.x = INFOGRAPHIC_SETTINGS.camera.startPosition[0];
-			cameraPositionCurrent.y = INFOGRAPHIC_SETTINGS.camera.startPosition[1];
-			cameraPositionCurrent.z = INFOGRAPHIC_SETTINGS.camera.startPosition[2];
-			cameraPositionTarget.x = INFOGRAPHIC_SETTINGS.camera.startPosition[0];
-			cameraPositionTarget.y = INFOGRAPHIC_SETTINGS.camera.startPosition[1];
-			cameraPositionTarget.z = INFOGRAPHIC_SETTINGS.camera.startPosition[2];
-			cameraLookAtCurrent.x = INFOGRAPHIC_SETTINGS.camera.startTarget[0];
-			cameraLookAtCurrent.y = INFOGRAPHIC_SETTINGS.camera.startTarget[1];
-			cameraLookAtCurrent.z = INFOGRAPHIC_SETTINGS.camera.startTarget[2];
-			cameraLookAtTarget.x = INFOGRAPHIC_SETTINGS.camera.startTarget[0];
-			cameraLookAtTarget.y = INFOGRAPHIC_SETTINGS.camera.startTarget[1];
-			cameraLookAtTarget.z = INFOGRAPHIC_SETTINGS.camera.startTarget[2];
-
-			window.setIntroCamera = (index) => {
-				const shot = CAMERA_SHOTS[index];
-				if (!shot) return;
-
-				cameraPositionTarget.x = shot.position[0];
-				cameraPositionTarget.y = shot.position[1];
-				cameraPositionTarget.z = shot.position[2];
-				cameraLookAtTarget.x = shot.target[0];
-				cameraLookAtTarget.y = shot.target[1];
-				cameraLookAtTarget.z = shot.target[2];
-				cameraZoomTarget = shot.zoom;
-			};
-
-			let lastFrameTime = performance.now();
-			function updateCameraEasing() {
-				const now = performance.now();
-				const delta = Math.min((now - lastFrameTime) / 1000, 0.1);
-				lastFrameTime = now;
-				const ease = 1 - Math.exp(-cameraEaseLambda * delta);
-
-				vecLerp(cameraPositionCurrent, cameraPositionTarget, ease);
-				vecLerp(cameraLookAtCurrent, cameraLookAtTarget, ease);
-				cameraZoomCurrent += (cameraZoomTarget - cameraZoomCurrent) * ease;
-			}
-
-			// Per-step label configuration. Label anchors stay in the same
-			// world coordinate system as the previous 3D setup.
-			const stepFeatures = [
-				null, // step 0 — overview, no feature
-				{
-					// step 1 — camera-only (House (camera 1))
-					highlight: ["house.svg"],
-				},
-				null, // step 2 — overview, no feature labels yet
-				{
-					// step 3 — Density / Building Components & Construction
-					labels: [
-						{ svg: "./svgs/Labels/building_components.svg", anchor: [0, 1.5, 0] },
-						{ svg: "./svgs/Labels/Density.svg", anchor: [1, 3.5, 0] },
-					],
-					highlight: ["buildingtype.svg"],
-				},
-				{
-					// step 4 — Street & Parking Areas / Underground Parking
-					labels: [
-						{ svg: "./svgs/Labels/Street_&_Parking Areas.svg", anchor: [3.3, 3.5, 0] },
-						{ svg: "./svgs/Labels/Underground_Parking.svg", anchor: [6.5, 2.2, 0] },
-					],
-					highlight: ["parking.svg"],
-				},
-				{
-					// step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
-					labels: [
-						{ svg: "./svgs/Labels/Electricity.svg", anchor: [1.3, 0.5, 0] },
-						{ svg: "./svgs/Labels/Pipe_& Utility_Lines.svg", anchor: [0.2, -1, 0] },
-						{ svg: "./svgs/Labels/Heating.svg", anchor: [4, 0.1, 0] },
-					],
-					highlight: ["electricity.svg"],
-				},
-				{
-					// step 6 — Green Space & Unbuilt Area
-					labels: [
-						{ svg: "./svgs/Labels/Green_Space.svg", anchor: [2.2, 2.3, 0] },
-					],
-					highlight: ["greenarea.svg"],
-				},
-				{
-					// step 7 — summary: every feature highlighted + labeled at once
-					labels: [
-					{ svg: "./svgs/Labels/__Building.svg", anchor: [8, 6.8, 0] },
-						{ svg: "./svgs/Labels/__Heating_Density.svg", anchor: [0.5, 3.3, 0] },
-						{ svg: "./svgs/Labels/__Street.svg", anchor: [8, 5.2, 0] },
-						{ svg: "./svgs/Labels/__UndergroundParking.svg", anchor: [9.2, 4, 0] },
-						{ svg: "./svgs/Labels/__Electricity.svg", anchor: [6.1, 7.7, 0] },
-						{ svg: "./svgs/Labels/__Pipeline.svg", anchor: [8, 2, 0] },
-						{ svg: "./svgs/Labels/__Green_Space.svg", anchor: [4.9, 0.9, 0] },
-					],
-				},
-			];
-
-			// Screen-space label overlay: each label is an <img> of an
-			// existing svgs/ callout asset, positioned every frame by
-			// projecting its 3D world anchor through the live camera.
-			const heroModelLabels = document.getElementById("heroModelLabels");
-			const labelElementCache = new Map();
-			let activeLabelEntries = [];
-
-			function getLabelElement(svgPath) {
-				if (labelElementCache.has(svgPath)) return labelElementCache.get(svgPath);
-				const el = document.createElement("div");
-				el.className = "hero__model-label";
-				const img = document.createElement("img");
-				img.src = svgPath;
-				img.alt = "";
-				el.appendChild(img);
-				heroModelLabels.appendChild(el);
-				labelElementCache.set(svgPath, el);
-				return el;
-			}
-
-			function setActiveLabels(labelConfigs) {
-				labelElementCache.forEach((el) => el.classList.remove("is-visible"));
-				activeLabelEntries = labelConfigs.map((cfg) => {
-					const el = getLabelElement(cfg.svg);
-					el.classList.add("is-visible");
-					return { el, anchor: cfg.anchor };
-				});
-			}
-
-			let currentFeatureIndex = -1;
-
-			window.setIntroFeature = (index) => {
-				if (index === currentFeatureIndex) return;
-				currentFeatureIndex = index;
-
-				const feature = stepFeatures[index];
-				updateHighlights((feature && feature.highlight) || []);
-
-				if (feature && feature.summary) {
-					const allLabels = stepFeatures.filter((f) => f && !f.summary).flatMap((f) => f.labels);
-					setActiveLabels(allLabels);
-					return;
-				}
-
-				if (feature) {
-					setActiveLabels(feature.labels || []);
-				} else {
-					setActiveLabels([]);
-				}
-			};
-
-			function projectAnchorToScreen(anchor, width, height) {
-				const worldPoint = vec3(anchor[0], anchor[1], anchor[2]);
-				const forward = vecNormalize(vecSub(cameraLookAtCurrent, cameraPositionCurrent));
-				let right = vecNormalize(vecCross(forward, vec3(0, 1, 0)));
-				if (vecLength(right) < 1e-6) {
-					right = vec3(1, 0, 0);
-				}
-				const up = vecNormalize(vecCross(right, forward));
-				const toPoint = vecSub(worldPoint, cameraPositionCurrent);
-
-				const xCamera = vecDot(toPoint, right);
-				const yCamera = vecDot(toPoint, up);
-
-				const safeZoom = Math.max(0.01, cameraZoomCurrent);
-				const halfWidth = (size * cameraAspect) / safeZoom;
-				const halfHeight = size / safeZoom;
-
-				const ndcX = xCamera / halfWidth;
-				const ndcY = yCamera / halfHeight;
-
-				return {
-					x: (ndcX * 0.5 + 0.5) * width,
-					y: (-ndcY * 0.5 + 0.5) * height,
-				};
-			}
-
-			function updateInfographicTransform() {
-				const width = heroModelCanvas.clientWidth || window.innerWidth;
-				const height = heroModelCanvas.clientHeight || window.innerHeight;
-				const naturalWidth = INFOGRAPHIC_SETTINGS.referenceSize.width;
-				const naturalHeight = INFOGRAPHIC_SETTINGS.referenceSize.height;
-
-				const fitScale = Math.max(width / naturalWidth, height / naturalHeight);
-				const zoomScale = Math.max(0.01, cameraZoomCurrent);
-				const scale = fitScale * zoomScale;
-
-				const panX = INFOGRAPHIC_SETTINGS.placement.baseOffsetX - cameraLookAtCurrent.x * INFOGRAPHIC_SETTINGS.placement.panPerLookX;
-				const panY = INFOGRAPHIC_SETTINGS.placement.baseOffsetY
-					+ cameraLookAtCurrent.z * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookZ
-					+ cameraLookAtCurrent.y * INFOGRAPHIC_SETTINGS.placement.panPerLookX * INFOGRAPHIC_SETTINGS.placement.panPerLookY;
-
-				const sharedTransform = `translate3d(calc(-50% + ${panX.toFixed(2)}px), calc(-50% + ${panY.toFixed(2)}px), 0) scale(${scale.toFixed(4)})`;
-				infographicImage.style.transform = sharedTransform;
-				document.querySelectorAll(".building-highlight").forEach((el) => {
-					el.style.transform = sharedTransform;
-				});
-			}
-
-			function animate() {
-				updateCameraEasing();
-				updateInfographicTransform();
-				updateStepLabels();
-				requestAnimationFrame(animate);
-			}
-
-			function resizeRenderer() {
-				const width = heroModelCanvas.clientWidth || window.innerWidth;
-				const height = heroModelCanvas.clientHeight || window.innerHeight;
-				cameraAspect = width / height;
-				updateInfographicTransform();
-				updateStepLabels();
-			}
-
-			function updateStepLabels() {
-				if (!activeLabelEntries.length) return;
-				const width = heroModelCanvas.clientWidth;
-				const height = heroModelCanvas.clientHeight;
-				activeLabelEntries.forEach(({ el, anchor }) => {
-					const projected = projectAnchorToScreen(anchor, width, height);
-					const x = projected.x;
-					const y = projected.y;
-					const labelW = el.offsetWidth || 0;
-					const labelH = el.offsetHeight || 0;
-					const halfW = labelW / 2;
-					const halfH = labelH / 2;
-					const padding = INFOGRAPHIC_SETTINGS.labelPadding;
-					const clampedX = Math.max(padding + halfW, Math.min(width - padding - halfW, x));
-					const clampedY = Math.max(padding + halfH, Math.min(height - padding - halfH, y));
-					el.style.transform = `translate3d(${clampedX - halfW}px, ${clampedY - halfH}px, 0)`;
-				});
-			}
-
-			infographicImage.addEventListener("error", () => {
-				if (heroModelFallback) {
-					heroModelFallback.style.display = "block";
-				}
-			});
-
-			window.addEventListener("resize", () => {
-				resizeRenderer();
-			});
-
-			window.setIntroCamera(0);
-			window.setIntroFeature(0);
-			resizeRenderer();
-			animate();
+	function vecNormalize(v) {
+		const len = vecLength(v);
+		if (len < 1e-6) {
+			return vec3(0, 0, 0);
 		}
-	</script>
-	<script>
+
+		return vec3(
+			v.x / len,
+			v.y / len,
+			v.z / len
+		);
+	}
+
+	function vecLerp(current, target, t) {
+		current.x +=
+			(target.x - current.x) * t;
+		current.y +=
+			(target.y - current.y) * t;
+		current.z +=
+			(target.z - current.z) * t;
+	}
+
+
+// INFOGRAPHIC BASE
+
+	const infographicImage =
+		document.createElement("img");
+
+	infographicImage.className =
+		"hero__model-infographic";
+
+	infographicImage.src =
+		INFOGRAPHIC_SETTINGS.assetPath;
+
+	infographicImage.alt = "";
+
+	infographicImage.decoding = "async";
+
+	infographicImage.draggable = false;
+
+	infographicImage.width =
+		INFOGRAPHIC_SETTINGS.referenceSize.width;
+
+	infographicImage.height =
+		INFOGRAPHIC_SETTINGS.referenceSize.height;
+
+	heroModelScene.appendChild(
+		infographicImage
+	);
+
+
+// HIGHLIGHTS
+	const HIGHLIGHT_ASSETS = {
+
+		"house.svg": {
+			src:
+				"./Neighbourhood_Model/Highlights/Step1_(House).svg",
+				x: -7240,
+				y: 7463, 
+				width: 258
+		},
+
+		"buildingtype.svg": {
+			src:
+				"./Neighbourhood_Model/Highlights/BuildingType_Highlight.svg",
+				x: 575,
+				y: 2850,
+				width: 3055
+		},
+
+		"parking.svg": {
+			src:
+				"./Neighbourhood_Model/Highlights/Step4_Parking.svg",
+				x: 4107,
+				y: 3023,
+				width: 1795
+		},
+
+		"electricity.svg": {
+			src:
+				"./Neighbourhood_Model/Highlights/Step5_Electricity.svg",
+				x: 3150,
+				y: -150,
+				width: 3750
+
+		},
+
+		"greenarea.svg": {
+			src:
+				"./Neighbourhood_Model/Highlights/Step5_GreenArea.svg",
+			x: 1960,
+			y: 3188,
+			width: 1810
+
+		}
+	};
+
+	Object.entries(HIGHLIGHT_ASSETS)
+		.forEach(([id, cfg]) => {
+			const img =
+				document.createElement("img");
+			img.id = id;
+			img.className =
+				"hero__model-highlight building-highlight";
+			img.src = cfg.src;
+			img.alt = "";
+			img.decoding = "async";
+			img.draggable = false;
+
+			img.style.left = `${cfg.x}px`;
+			img.style.top = `${cfg.y}px`;
+			img.style.width = `${cfg.width}px`;
+			img.style.height = "auto";
+
+			heroModelScene.appendChild(img);
+		});
+
+
+	function updateHighlights(active = []) {
+
+		document
+			.querySelectorAll(".building-highlight")
+			.forEach((el) => {
+
+				const isActive =
+					active.includes(el.id);
+
+				el.classList.toggle(
+					"is-highlighted",
+					isActive
+				);
+
+				el.style.opacity =
+					isActive ? "1" : "0";
+
+				el.style.display =
+					isActive ? "block" : "none";
+			});
+	}
+
+
+// CAMERA SHOTS
+	const CAMERA_SHOTS = [
+
+	// Step 0 — Overview
+		{
+			position: [20, 20, 20],
+			target: [-14, 0, -7],
+			zoom: 1.1
+		},
+
+	// Step 1 — House (camera 1)
+		{
+			position: [20, 20, 20],
+			target: [-80, -80, -3.9],
+			zoom: 4.5
+		},
+
+	// Step 2 — Overview 
+		{
+			position: [20, 20, 20],
+			target: [-14, 0, -7],
+			zoom: 1
+		},
+
+	// Step 3 — Density / Building Components & Construction
+		{
+			position: [20, 20, 20],
+			target: [-14, 0, -7],
+			zoom: 1
+		},
+
+	// Step 4 — Street & Parking Areas / Underground Parking
+		{
+			position: [20, 20, 20],
+			target: [2, -10, -2],
+			zoom: 1.1
+		},
+	//Step 5 — Electricity / Pipe & Utility Lines / Space Heating & Warm Water
+		{
+			position: [20, 20, 20],
+			target: [10, 30, 2],
+			zoom: 1.5
+		}, //position: [20, 20, 20],
+			//target: [10, 30, 2],
+			//zoom: 1.5
+
+
+	//Step 6 — Green Space & Unbuilt Area
+		{
+			position: [20, 20, 20],
+			target: [-10, -10, -2],
+			zoom: 1.5
+		},
+
+	//Step 7 — Summary overview (all layers visible)
+
+		{
+			position: [20, 20, 20],
+			target: [-8, 10, -7],
+			zoom: 0.7
+		},
+
+	//Step 8 — Return to overview
+		{
+			position: [20, 20, 20],
+			target: [0, 0, 0],
+			zoom: 1.1
+		},
+
+	// Step 9 —  Overview
+		{
+			position: [20, 20, 20],
+			target: [-14, 0, -7],
+			zoom: 1.1
+		},
+
+	//Step 10 —  Overview
+		{
+			position: [20, 20, 20],
+			target: [0, 0, 0],
+			zoom: 6
+		},
+
+	//Step 11 — Concept intro bridge (before PNG models appear)
+		{
+			position: [20, 20, 20],
+			target: [-20, -43, -8],
+			zoom: 1.9
+		}
+	];
+
+// CAMERA
+	const cameraPositionCurrent =
+		vec3(20, 20, 20);
+
+	const cameraPositionTarget =
+		vec3(20, 20, 20);
+
+	const cameraLookAtCurrent =
+		vec3(0, 0, 0);
+
+	const cameraLookAtTarget =
+		vec3(0, 0, 0);
+
+	let cameraZoomCurrent =
+		INFOGRAPHIC_SETTINGS.camera.startZoom;
+
+	let cameraZoomTarget =
+		INFOGRAPHIC_SETTINGS.camera.startZoom;
+
+	const cameraEaseLambda =
+		INFOGRAPHIC_SETTINGS.camera.easeLambda;
+
+
+
+
+	cameraPositionCurrent.x =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[0];
+
+	cameraPositionCurrent.y =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[1];
+
+	cameraPositionCurrent.z =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[2];
+
+	cameraPositionTarget.x =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[0];
+
+	cameraPositionTarget.y =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[1];
+
+	cameraPositionTarget.z =
+		INFOGRAPHIC_SETTINGS.camera.startPosition[2];
+
+	cameraLookAtCurrent.x =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[0];
+
+	cameraLookAtCurrent.y =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[1];
+
+	cameraLookAtCurrent.z =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[2];
+
+	cameraLookAtTarget.x =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[0];
+
+	cameraLookAtTarget.y =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[1];
+
+	cameraLookAtTarget.z =
+		INFOGRAPHIC_SETTINGS.camera.startTarget[2];
+
+
+// CAMERA POSITIONS
+	window.setIntroCamera = (index) => {
+
+		const shot = CAMERA_SHOTS[index];
+
+		if (!shot) return;
+
+		cameraPositionTarget.x =
+			shot.position[0];
+
+		cameraPositionTarget.y =
+			shot.position[1];
+
+		cameraPositionTarget.z =
+			shot.position[2];
+
+		cameraLookAtTarget.x =
+			shot.target[0];
+
+		cameraLookAtTarget.y =
+			shot.target[1];
+
+		cameraLookAtTarget.z =
+			shot.target[2];
+
+		cameraZoomTarget =
+			shot.zoom;
+	};
+
+
+// CAMERA EASING
+	let lastFrameTime =
+		performance.now();
+
+	function updateCameraEasing() {
+		const now =
+			performance.now();
+
+		const delta =
+			Math.min(
+				(now - lastFrameTime) / 1000,
+				0.1
+			);
+
+		lastFrameTime = now;
+		const ease =
+			1 -
+			Math.exp(
+				-cameraEaseLambda * delta
+			);
+
+		vecLerp(
+			cameraPositionCurrent,
+			cameraPositionTarget,
+			ease
+		);
+
+		vecLerp(
+			cameraLookAtCurrent,
+			cameraLookAtTarget,
+			ease
+		);
+
+		cameraZoomCurrent +=
+			(
+				cameraZoomTarget -
+				cameraZoomCurrent
+			) * ease;
+	}
+
+
+// LABELS
+	const stepFeatures = [
+
+		null,
+		{
+			highlight: ["house.svg"]
+		},
+
+		null,
+		{
+			labels: [
+				{
+					svg: "./svgs/Labels/building_components.svg",
+					anchor: [5.1, 11.25, 8]
+				},
+				{
+					svg: "./svgs/Labels/Density.svg",
+					anchor: [6, 12.4, 8]
+				}
+			],
+
+			highlight: ["buildingtype.svg"]
+		},
+
+		{
+			labels: [
+				{
+					svg: "./svgs/Labels/Street_&_Parking Areas.svg",
+					anchor: [10.8, 5.2, 8]
+				},
+				{
+					svg: "./svgs/Labels/Underground_Parking.svg",
+					anchor: [12.2, 4.2, 8]
+				}
+			],
+
+			highlight: ["parking.svg"]
+		},
+
+		{
+			labels: [
+				{
+					svg: "./svgs/Labels/Electricity.svg",
+					anchor: [14.1, 27.15, 8]
+				},
+				{
+					svg: "./svgs/Labels/Pipe_& Utility_Lines.svg",
+					anchor: [13, 26.85, 8]
+				},
+				{
+					svg: "./svgs/Labels/Heating.svg",
+					anchor: [14.8, 25.9, 8]
+				}
+			],
+
+			highlight: ["electricity.svg"]
+		},
+
+		{
+			labels: [
+				{
+					svg: "./svgs/Labels/Green_Space.svg",
+					anchor: [-6.2, -6.6, 0]
+				}
+			],
+
+			highlight: ["greenarea.svg"]
+		},
+
+		{
+			labels: [
+
+				{
+					svg: "./svgs/Labels/__Building.svg",
+					anchor: [3.3, 14.2, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__Heating_Density.svg",
+					anchor: [-0.55, 13.5, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__Street.svg",
+					anchor: [3.3, 13.4, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__UndergroundParking.svg",
+					anchor: [3.65, 12.83, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__Electricity.svg",
+					anchor: [2.65, 14.9, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__Pipeline.svg",
+					anchor: [3.4, 12, 0]
+				},
+
+				{
+					svg: "./svgs/Labels/__Green_Space.svg",
+					anchor: [1.95, 11.75, 0]
+				}
+			]
+		}
+	];
+
+
+const labelElementCache =
+    new Map();
+
+let activeLabelEntries = [];
+
+
+function getLabelElement(svgPath) {
+
+    if (
+        labelElementCache.has(svgPath)
+    ) {
+        return labelElementCache.get(
+            svgPath
+        );
+    }
+
+    const el =
+        document.createElement("div");
+
+    el.className =
+        "hero__model-label";
+
+    const img =
+        document.createElement("img");
+
+    img.src = svgPath;
+
+    img.alt = "";
+
+    img.decoding = "async";
+
+    img.draggable = false;
+
+    el.appendChild(img);
+
+    heroModelLabels.appendChild(el);
+
+    labelElementCache.set(
+        svgPath,
+        el
+    );
+
+    return el;
+}
+
+
+function setActiveLabels(labelConfigs) {
+
+    labelElementCache.forEach(
+        (el) => {
+            el.classList.remove(
+                "is-visible"
+            );
+        }
+    );
+
+    activeLabelEntries =
+        labelConfigs.map((cfg) => {
+
+            const el =
+                getLabelElement(
+                    cfg.svg
+                );
+
+            el.classList.add(
+                "is-visible"
+            );
+
+            return {
+                el,
+                anchor: cfg.anchor
+            };
+        });
+
+    requestAnimationFrame(
+        updateStepLabels
+    );
+}
+
+
+let currentFeatureIndex = -1;
+
+window.setIntroFeature = (index) => {
+    if (
+        index === currentFeatureIndex
+    ) {
+        return;
+    }
+
+    currentFeatureIndex = index;
+    const feature =
+        stepFeatures[index];
+
+    updateHighlights(
+        (feature &&
+            feature.highlight) ||
+        []
+    );
+
+    if (
+        feature &&
+        feature.summary
+    ) {
+
+        const allLabels =
+            stepFeatures
+                .filter(
+                    (f) =>
+                        f &&
+                        !f.summary
+                )
+                .flatMap(
+                    (f) =>
+                        f.labels || []
+                );
+
+        setActiveLabels(
+            allLabels
+        );
+
+        return;
+    }
+
+    if (feature) {
+
+        setActiveLabels(
+            feature.labels || []
+        );
+
+    } else {
+
+        setActiveLabels([]);
+    }
+};
+
+
+function projectAnchorToReference(anchor) {
+
+    const worldPoint =
+        vec3(
+            anchor[0],
+            anchor[1],
+            anchor[2]
+        );
+
+    const forward =
+        vecNormalize(
+            vecSub(
+                cameraLookAtCurrent,
+                cameraPositionCurrent
+            )
+        );
+
+    let right =
+        vecNormalize(
+            vecCross(
+                forward,
+                vec3(0, 1, 0)
+            )
+        );
+
+    if (
+        vecLength(right) < 1e-6
+    ) {
+        right = vec3(1, 0, 0);
+    }
+
+    const up =
+        vecNormalize(
+            vecCross(
+                right,
+                forward
+            )
+        );
+
+    const toPoint =
+        vecSub(
+            worldPoint,
+            cameraPositionCurrent
+        );
+
+    const xCamera =
+        vecDot(
+            toPoint,
+            right
+        );
+
+    const yCamera =
+        vecDot(
+            toPoint,
+            up
+        );
+
+    const safeZoom =
+        Math.max(
+            0.01,
+            cameraZoomCurrent
+        );
+
+	// FIXED VIEWPOINT
+    const referenceWidth =
+        INFOGRAPHIC_SETTINGS.referenceSize.width;
+
+    const referenceHeight =
+        INFOGRAPHIC_SETTINGS.referenceSize.height;
+
+    const referenceAspect =
+        referenceWidth /
+        referenceHeight;
+
+    const halfHeight =
+        INFOGRAPHIC_SETTINGS.camera.orthoSize /
+        safeZoom;
+
+    const halfWidth =
+        halfHeight *
+        referenceAspect;
+
+    const ndcX =
+        xCamera / halfWidth;
+
+    const ndcY =
+        yCamera / halfHeight;
+
+    return {
+        x:
+            (
+                ndcX * 0.5 +
+                0.5
+            ) * referenceWidth,
+
+        y:
+            (
+                -ndcY * 0.5 +
+                0.5
+            ) * referenceHeight
+    };
+}
+
+
+function updateSceneViewport() {
+
+    viewportWidth =
+        heroModelCanvas.clientWidth ||
+        window.innerWidth;
+
+    viewportHeight =
+        heroModelCanvas.clientHeight ||
+        window.innerHeight;
+
+    const referenceWidth =
+        INFOGRAPHIC_SETTINGS.referenceSize.width;
+
+    const referenceHeight =
+        INFOGRAPHIC_SETTINGS.referenceSize.height;
+
+
+    const fitScale =
+        Math.max(
+            viewportWidth / referenceWidth,
+            viewportHeight / referenceHeight
+        );
+
+
+    sceneScale =
+        fitScale;
+
+    sceneOffsetX =
+        Math.round(
+            (
+                viewportWidth -
+                referenceWidth *
+                sceneScale
+            ) / 2
+        );
+
+    sceneOffsetY =
+        Math.round(
+            (
+                viewportHeight -
+                referenceHeight *
+                sceneScale
+            ) / 2
+        );
+
+    cameraAspect =
+        referenceWidth /
+        referenceHeight;
+}
+
+function updateInfographicTransform() {
+
+    const zoom =
+        Math.max(
+            0.01,
+            cameraZoomCurrent
+        );
+
+    const panX =
+        INFOGRAPHIC_SETTINGS.placement.baseOffsetX -
+        cameraLookAtCurrent.x *
+        INFOGRAPHIC_SETTINGS.placement.panPerLookX;
+
+    const panY =
+        INFOGRAPHIC_SETTINGS.placement.baseOffsetY +
+
+        cameraLookAtCurrent.z *
+        INFOGRAPHIC_SETTINGS.placement.panPerLookX *
+        INFOGRAPHIC_SETTINGS.placement.panPerLookZ +
+
+        cameraLookAtCurrent.y *
+        INFOGRAPHIC_SETTINGS.placement.panPerLookX *
+        INFOGRAPHIC_SETTINGS.placement.panPerLookY;
+
+
+    const transform = `
+        translate3d(
+            ${sceneOffsetX}px,
+            ${sceneOffsetY}px,
+            0
+        )
+        scale(
+            ${sceneScale}
+        )
+    `;
+
+    heroModelScene.style.transform =
+        transform;
+
+
+    const artworkTransform = `
+        translate3d(
+            ${Math.round(panX)}px,
+            ${Math.round(panY)}px,
+            0
+        )
+        scale(
+            ${zoom}
+        )
+    `;
+
+    infographicImage.style.transform =
+        artworkTransform;
+
+    document
+        .querySelectorAll(
+            ".building-highlight"
+        )
+        .forEach((el) => {
+
+            el.style.transform =
+                artworkTransform;
+        });
+}
+
+
+/* =========================================================
+   UPDATE LABEL POSITIONS
+   ========================================================= */
+
+function updateStepLabels() {
+
+    if (
+        !activeLabelEntries.length
+    ) {
+        return;
+    }
+
+    const referenceWidth =
+        INFOGRAPHIC_SETTINGS.referenceSize.width;
+
+    const referenceHeight =
+        INFOGRAPHIC_SETTINGS.referenceSize.height;
+
+    activeLabelEntries.forEach(
+        ({ el, anchor }) => {
+
+            const projected =
+                projectAnchorToReference(
+                    anchor
+                );
+
+            const labelW =
+                el.offsetWidth || 0;
+
+            const labelH =
+                el.offsetHeight || 0;
+
+            const halfW =
+                labelW / 2;
+
+            const halfH =
+                labelH / 2;
+
+            const padding =
+                INFOGRAPHIC_SETTINGS.labelPadding;
+
+
+        
+            const clampedX =
+                Math.max(
+                    padding + halfW,
+
+                    Math.min(
+                        referenceWidth -
+                            padding -
+                            halfW,
+
+                        projected.x
+                    )
+                );
+
+            const clampedY =
+                Math.max(
+                    padding + halfH,
+
+                    Math.min(
+                        referenceHeight -
+                            padding -
+                            halfH,
+
+                        projected.y
+                    )
+                );
+
+            const x =
+                Math.round(
+                    clampedX -
+                    halfW
+                );
+
+            const y =
+                Math.round(
+                    clampedY -
+                    halfH
+                );
+
+
+            el.style.transform =
+                `translate3d(${x}px, ${y}px, 0)`;
+        }
+    );
+}
+
+
+//RESIZE
+
+function resizeRenderer() {
+
+    updateSceneViewport();
+
+    updateInfographicTransform();
+
+    updateStepLabels();
+}
+
+
+// RESIZE OBSERVER
+
+const modelResizeObserver =
+    new ResizeObserver(() => {
+
+        resizeRenderer();
+    });
+
+modelResizeObserver.observe(
+    heroModelCanvas
+);
+
+
+// ASSET LOADING
+
+function waitForImage(img) {
+
+    if (img.complete) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+
+        img.addEventListener(
+            "load",
+            resolve,
+            { once: true }
+        );
+
+        img.addEventListener(
+            "error",
+            resolve,
+            { once: true }
+        );
+    });
+}
+
+
+async function initializeModel() {
+
+    await waitForImage(
+        infographicImage
+    );
+
+    const highlights =
+        Array.from(
+            document.querySelectorAll(
+                ".building-highlight"
+            )
+        );
+
+    await Promise.all(
+        highlights.map(
+            waitForImage
+        )
+    );
+		updateSceneViewport();
+		updateInfographicTransform();
+		updateStepLabels();
+	}
+
+	function animate() {
+			updateCameraEasing();
+			updateInfographicTransform();
+			updateStepLabels();
+			requestAnimationFrame(
+				animate
+			);
+	}
+
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+		window.setIntroCamera(0);
+		window.setIntroFeature(0);
+		resizeRenderer();
+		initializeModel();
+		animate();
+		}
+</script>
+<script>
+
+
+
+//MENU
 
 	const dropdown = document.getElementById("headerDropdown");
 	const button = dropdown.querySelector(".Dropdownbutton");
@@ -2880,10 +3628,10 @@
 	const conceptSection = document.getElementById("content");
 	const compareSection = document.getElementById("compare");
 
-// scrollbar
+// SCROLLBAR
 	const progressThumb = document.getElementById("chapterProgressThumb");
 
-// models
+// MODELS
 	const models = [
 		document.getElementById("model-0"),
 		document.getElementById("model-1"),
@@ -2914,7 +3662,7 @@
 	const factorModalClose = document.getElementById("factorModalClose");
 	const factorModalBody = factorOverviewModal ? factorOverviewModal.querySelector(".factor-modal-body") : null;
 
-// Scrollama
+// SCROLLAMA
 	const introScroller = scrollama();
 	const conceptScroller = scrollama();
 	const compareScroller = scrollama();
@@ -3269,7 +4017,6 @@
 	}
 
 	function handleResize() {
-		// Layout sizing is handled by CSS; resize only keeps scroll calculations in sync.
 		syncMenuState();
 		introScroller.resize();
 		conceptScroller.resize();
