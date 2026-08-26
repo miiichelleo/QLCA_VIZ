@@ -782,7 +782,7 @@ function updateNeighbourhood(updateImage = true) {
             );
 
             highestComponent.textContent =
-                "Underground Garages";
+                "Underground garages";
 
             highestComponent.style.color =
                 "#18AD24";
