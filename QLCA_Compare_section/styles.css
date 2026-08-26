@@ -113,7 +113,7 @@ body {
 
 .restart-story-link {
     position: absolute;
-    top: 50px;
+    top: 40px;
     right: 50px;
     z-index: 900;
     display: inline-flex;
@@ -294,7 +294,7 @@ body {
 
 .title h1 {
 
-    font-size: 2rem;
+    font-size: 2.5rem;
 
     line-height: 1.2;
 
@@ -326,7 +326,7 @@ body {
 
 .metric span {
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
     color: #666;
 }
@@ -343,7 +343,7 @@ body {
 
 .unit-button {
     width: 80px;
-    height: 40px;
+    height: 35px;
 
     background: white;
     color: black;
@@ -389,11 +389,13 @@ body {
 
 .highest-component p {
     margin-bottom: 6px;
+    font-size: 18px;
 }
 
 #highestComponent {
     color: #10B61D;
     font-weight: 500;
+    font-size: 18px;
 }
 
 
@@ -953,7 +955,7 @@ body {
     min-width: 0;
     max-width: 481px;
 
-    padding: 50px 40px 40px 56px;
+    padding: 40px 40px 40px 56px;
 
     background: #FDFDFD;
     border-right: none;
@@ -977,7 +979,7 @@ body {
     position: absolute;
 
     left: 15px;
-    bottom: 190px;
+    bottom: 185px;
 
     z-index: 100;
 }
@@ -995,7 +997,7 @@ body {
 
 .parking-button {
     width: 80px;
-    height: 40px;
+    height: 35px;
 
     background: white;
     color: black;
@@ -1036,7 +1038,7 @@ body {
     position: absolute;
 
     right: 95px;
-    top: 550px;
+    top: 560px;
 
     display: flex;
     align-items: center;
@@ -1114,7 +1116,7 @@ body {
 #percentChart {
     position: relative;
 
-    top: -30px;
+    top: -20px;
 
     width: 100%;
     height: 140px;
