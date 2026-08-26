@@ -55,26 +55,30 @@
 			font-style: normal;
 		}
 
-
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+		/* =====================================================
+   RESET
+===================================================== */
 
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-		html {
-			background-color: #FDFDFD;
-		}
 
-		body {
-			width: 100%;
-			height: 100%;
-			font-family: 'Inter', Helvetica, sans-serif;
-			overflow: hidden;
-			background-color: #FDFDFD;
-		}
+
+html {
+    background-color: #FDFDFD;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', Helvetica, sans-serif;
+    overflow: hidden;
+    background-color: #FDFDFD;
+}
 
 		
 
@@ -1271,7 +1275,7 @@
 
 		.factor-modal-header h2 {
 			margin: 0;
-			font-size: 2rem;
+			font-size: 2.5rem;
 			line-height: 1.1;
 			font-weight: 400;
 		}
@@ -1422,317 +1426,7 @@
 			scrollbar-color: #999 #ededed;
 		}
 
-		@media (max-width: 1446px) {
-			#intro.hero {
-				padding-right: 3.8vw;
-				padding-left: 3.8vw;
-			}
-
-			.factor-modal-content {
-				width: min(640px, calc(100vw - 16px));
-			}
-		}
-
-		@media (max-width: 1297px) {
-			.hero__title-line--small {
-				font-size: 3.7vw;
-			}
-		}
-
-		@media (max-width: 1079px) {
-			.hero__inner {
-				flex-basis: 620px;
-			}
-
-			.hero__visual-shell {
-				left: 0;
-			}
-
-			.header,
-			.Chapters {
-				width: 360px;
-			}
-
-			#infographic,
-			#content,
-			#compare {
-				grid-template-columns: 360px minmax(0, 1fr);
-			}
-
-			.chapter-progress {
-				left: 360px;
-			}
-
-			#infographic article,
-			#content article,
-			#compare article {
-				max-width: 360px;
-			}
-		}
-
-		@media (max-width: 999px) {
-			.hero__title-box {
-				min-height: 56px;
-			}
-		}
-
-		@media (max-width: 973px) {
-			.hero__title-line--small {
-				font-size: 36px;
-			}
-		}
-
-		@media (max-width: 830px) {
-			.hero__title-box {
-				font-size: 44px;
-			}
-		}
-
-		@media (max-width: 789px) {
-			.hero__logo {
-				margin-bottom: 19vh;
-			}
-		}
-
-		@media (max-width: 736px) {
-			#intro.hero {
-				padding-right: 28px;
-				padding-left: 28px;
-			}
-		}
-
-		@media (max-height: 789px) {
-			.hero__logo {
-				margin-bottom: 19vh;
-			}
-		}
-
-		@media (max-height: 578px) {
-			.hero__logo {
-				margin-bottom: 110px;
-			}
-		}
-
-		@media (max-width: 1714px) {
-			.hero__title-box {
-				min-height: 5.6vw;
-			}
-		}
-
-		@media (max-width: 1509px) {
-			.hero__title-box {
-				font-size: 5.3vw;
-			}
-		}
-
-		@media (max-width: 640px) {
-			.header {
-				width: 100vw;
-			}
-
-			.Chapters {
-				width: 100vw;
-				padding: 24px 32px;
-			}
-
-			.group-link {
-				min-width: 0;
-				max-width: 100%;
-			}
-
-			.item-link {
-				gap: 12px;
-				font-size: 18px;
-			}
-
-			.Dropdownbutton {
-				padding: 0 24px 0 16px;
-			}
-
-			#intro {
-				padding: 24px 28px 40px;
-				background-image: linear-gradient(90deg, rgba(5, 5, 5, 0.035) 0, rgba(5, 5, 5, 0.035) 84px, transparent 84px);
-			}
-
-			#intro > * {
-				margin-left: 0;
-				margin-right: 0;
-			}
-
-			.hero__inner {
-				width: 100%;
-				flex: 1 1 auto;
-			}
-
-			.hero__visual-shell {
-				left: 0;
-			}
-
-			.hero__logo {
-				width: 86px;
-				min-height: 56px;
-				margin-bottom: 88px;
-			}
-
-			.hero__title {
-				margin-left: 0;
-			}
-
-			.hero__title-img {
-				width: 100%;
-				max-width: 420px;
-			}
-
-			.hero__title-line--small {
-				font-size: 40px;
-				margin-bottom: 10px;
-			}
-
-			.hero__title-box {
-				min-height: 54px;
-				padding: 0 10px;
-				font-size: 54px;
-			}
-
-			.hero__subtitle {
-				max-width: 320px;
-				margin-left: 0;
-				font-size: 18px;
-			}
-
-			.hero__scroll {
-				margin-left: 0;
-				margin-top: 56px;
-				font-size: 20px;
-			}
-
-			#infographic,
-			#content,
-			#compare {
-				grid-template-columns: 1fr;
-				min-height: auto;
-			}
-
-			#infographic article,
-			#content article,
-			#compare article {
-				max-width: none;
-				border-right: 0;
-				padding: 115px 32px 20px;
-			}
-
-			.chapter-progress {
-				display: none;
-			}
-
-			#infographic figure,
-			#content figure,
-			#compare figure {
-				position: relative;
-				top: 0;
-				height: 62vh;
-			}
-
-			.intro-model-shell {
-				padding: 0;
-			}
-
-			.model-view {
-				padding: 32px;
-			}
-
-			.neighborhood-model .factor-overview-trigger {
-				left: 36px;
-				bottom: 34px;
-			}
-
-			.neighborhood-model .factor-overview-trigger {
-				left: 18px;
-				bottom: 20px;
-			}
-
-			.hero__subtitle,
-			.hero__scroll,
-			#infographic .step,
-			#content .step,
-			#compare .step {
-				max-width: 100%;
-			}
-
-			.step-flow {
-				top: 96px;
-			}
-
-			.land-use-panel__title {
-				top: 10%;
-				left: 7%;
-				max-width: 86%;
-				font-size: 20px;
-			}
-
-			.land-use-panel__metrics {
-				top: 24%;
-				left: 7%;
-				gap: 20px;
-			}
-
-			.land-use-panel__value {
-				font-size: 34px;
-			}
-
-			.land-use-panel__label {
-				font-size: 22px;
-			}
-
-			.land-use-panel__equals {
-				font-size: 34px;
-				margin-top: 0;
-			}
-
-			.land-use-panel__cases {
-				left: 52%;
-				top: 65%;
-				width: min(92%, 620px);
-				height: min(58%, 420px);
-			}
-
-			.gwp-panel__title {
-				top: 10%;
-				left: 7%;
-				max-width: 86%;
-				font-size: 20px;
-			}
-
-			.gwp-panel__cases {
-				left: 52%;
-				top: 65%;
-				width: min(92%, 620px);
-				height: min(58%, 420px);
-			}
-		}
-
-		@media (max-width: 568px) {
-			.hero__title-box {
-				font-size: 9.5vw;
-			}
-		}
-
-		@media (max-width: 513px) {
-			.hero__title-line--small {
-				font-size: 7.8vw;
-			}
-		}
-
-		@media (max-width: 358px) {
-			.hero__title-line--small {
-				font-size: 28px;
-			}
-
-			.hero__title-box {
-				font-size: 34px;
-			}
-		}
-
+		
 		#outro {
 			height: 100vh;
 		}
@@ -2203,13 +1897,13 @@
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">This case compares two neighbourhoods with contrasting urban densities and typologies.</div>
 						<div class="step-part step-part--2">All other factors - road layout, construction method, heat supply and energy efficiency level - remain constant.</div>
-						<div class="step-part step-part--3">In addition, the case examines the influence of private parking infrastructure on global warming potential.</div>
+						<div class="step-part step-part--3">In addition, the case examines the influence of private parking infrastructure on global warming potential: <br>
+						<span class="text-bold">Urban Form & Private Parking</span></div>
 					</div>
 				</div>
 			</div>
 			<div class="step" data-chapter="compare">
 				<div class="concept-flow">
-					<h2 class="concept-title">Urban Form & Private Parking</h2>
 					<div class="concept-text-blocks">
 						<div class="step-part step-part--1">The scenarios are represented at neighbourhood scale, using two six-hectare settlements.</div>
 					</div>
